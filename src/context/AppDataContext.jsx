@@ -6,7 +6,7 @@
 import React, { createContext, useContext, useMemo, useState } from 'react';
 import { useUsers, useUserByUID } from "@/features/users/usersApi";
 import { useReporters } from "@/features/reporters/reportersApi";
-import { useDeliverablesApi } from '@/features/deliverables/useDeliverablesApi';
+import { useDeliverables } from '@/features/deliverables/useDeliverablesApi';
 import { useTasks } from "@/features/tasks/tasksApi";
 import { useCurrentMonth, useAvailableMonths } from "@/features/months/monthsApi";
 import { useAuth } from "@/context/AuthContext";
@@ -38,23 +38,26 @@ export const AppDataProvider = ({ children }) => {
   const [isInitialized, setIsInitialized] = useState(false);
   
   // Get auth data
-  const { user, isLoading: authLoading } = useAuth();
+  const { user, isLoading: authLoading, isAuthChecking } = useAuth();
   const userUID = getUserUID(user);
   const userIsAdmin = isUserAdmin(user);
   
   // Initialize the provider once auth is ready
   React.useEffect(() => {
-    if (!authLoading && user) {
+    if (!authLoading && !isAuthChecking) {
       setIsInitialized(true);
     }
-  }, [authLoading, user]);
+  }, [authLoading, isAuthChecking]);
+  
+  // Only fetch data if user is authenticated
+  const shouldFetchData = !authLoading && !isAuthChecking && user;
   
   // Get user data - only fetch if not admin to reduce unnecessary calls
   const { 
     user: userData, 
     isLoading: userLoading, 
     error: userError 
-  } = useUserByUID(userIsAdmin ? null : userUID);
+  } = useUserByUID(shouldFetchData && !userIsAdmin ? userUID : null);
   
   const { 
     users: allUsers = [], 
@@ -62,18 +65,14 @@ export const AppDataProvider = ({ children }) => {
     error: usersError 
   } = useUsers();
   
-  // Get month data
+  // Get month data - role and userUID don't affect the fetch, so use stable values
   const { 
     currentMonth: currentMonthData = {}, 
     boardExists,
     currentMonthBoard,
     isLoading: currentMonthLoading, 
     error: currentMonthError
-  } = useCurrentMonth(
-    userIsAdmin ? undefined : userUID,
-    userIsAdmin ? 'admin' : 'user',
-    user
-  );
+  } = useCurrentMonth(null, 'user', user); // Use stable values to prevent re-fetches
   
   const { 
     availableMonths = [], 
@@ -87,11 +86,20 @@ export const AppDataProvider = ({ children }) => {
     error: reportersError
   } = useReporters();
   
-  const { deliverables: deliverablesData, isLoading: deliverablesLoading, error: deliverablesError } = useDeliverablesApi();
+  const { deliverables: deliverablesData, isLoading: deliverablesLoading, error: deliverablesError } = useDeliverables();
   
   // Get tasks data
+  // Use month data from database if available, otherwise use calculated current month
+  const monthFromDB = currentMonthBoard || {};
   const currentMonthFromData = currentMonthData || {};
-  const { monthId, monthName, daysInMonth, startDate, endDate } = currentMonthFromData;
+  
+  // Extract month info from database metadata if available, otherwise use calculated values
+  const monthId = monthFromDB.monthId || currentMonthFromData.monthId;
+  const monthName = monthFromDB.monthName || currentMonthFromData.monthName;
+  const daysInMonth = monthFromDB.daysInMonth || currentMonthFromData.daysInMonth;
+  const startDate = monthFromDB.startDate || currentMonthFromData.startDate;
+  const endDate = monthFromDB.endDate || currentMonthFromData.endDate;
+  
   const targetMonthId = selectedMonthId || monthId;
   
   const { 
@@ -214,7 +222,37 @@ export const AppDataProvider = ({ children }) => {
       startDate: startDate ? normalizeTimestamp(startDate) : null,
       endDate: endDate ? normalizeTimestamp(endDate) : null,
       boardExists: boardExists || false,
-      availableMonths: serializeTimestamps(availableMonths || []),
+      availableMonths: (() => {
+        // Always include current month in available months, even if board doesn't exist yet
+        const months = serializeTimestamps(availableMonths || []);
+        const currentMonthId = monthId;
+        const currentMonthName = monthName;
+        
+        // Check if current month is already in the list
+        const currentMonthExists = months.some(m => m.monthId === currentMonthId);
+        
+        if (currentMonthId && currentMonthName && !currentMonthExists) {
+          // Add current month to the list if it's not already there
+          return [
+            {
+              monthId: currentMonthId,
+              monthName: currentMonthName,
+              startDate: startDate ? normalizeTimestamp(startDate) : null,
+              endDate: endDate ? normalizeTimestamp(endDate) : null,
+              daysInMonth: daysInMonth || null,
+              boardExists: boardExists || false,
+              isCurrent: true
+            },
+            ...months
+          ];
+        }
+        
+        // Mark current month in the list if it exists
+        return months.map(m => ({
+          ...m,
+          isCurrent: m.monthId === currentMonthId
+        }));
+      })(),
       
       // Month selection
       currentMonth,

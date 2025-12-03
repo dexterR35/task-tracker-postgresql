@@ -12,25 +12,13 @@ export const APP_CONFIG = {
 };
 
 // ============================================================================
-// EMAILJS CONFIGURATION
+// RESEND EMAIL CONFIGURATION
 // ============================================================================
 
-export const EMAILJS_CONFIG = {
-  // Get these from https://www.emailjs.com/
-  SERVICE_ID: import.meta.env.VITE_EMAILJS_SERVICE_ID || 'YOUR_SERVICE_ID',
-  TEMPLATE_ID: import.meta.env.VITE_EMAILJS_TEMPLATE_ID || 'YOUR_TEMPLATE_ID',
-  PUBLIC_KEY: import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'YOUR_PUBLIC_KEY',
+export const RESEND_CONFIG = {
+  // API endpoint for sending emails (Vercel serverless function)
+  API_ENDPOINT: import.meta.env.VITE_RESEND_API_ENDPOINT || '/api/send-email',
   HR_EMAIL: import.meta.env.VITE_HR_EMAIL || 'hr@company.com',
-};
-
-// ============================================================================
-// FIREBASE CONFIGURATION
-// ============================================================================
-
-export const FIREBASE_CONFIG = {
-  REQUIRED_FIELDS: ['apiKey', 'authDomain', 'projectId'],
-  PERSISTENCE_RETRIES: 3,
-  PERSISTENCE_RETRY_DELAY: 1000, // milliseconds
 };
 
 // ============================================================================
@@ -594,7 +582,6 @@ export const DEV_CONFIG = {
 
 export default {
   APP_CONFIG,
-  FIREBASE_CONFIG,
   AUTH,
   VALIDATION,
   FORM_OPTIONS,

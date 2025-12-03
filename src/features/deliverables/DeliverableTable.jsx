@@ -41,7 +41,7 @@ const DeliverableTable = ({
 
   // Real-time listener is handled by useDeliverablesApi hook
 
-  // Use data directly from Firebase (already sorted in real-time listener)
+  // Use data directly from API (already sorted)
   const allDeliverablesData = propDeliverables || globalDeliverables || [];
 
   // Filter deliverables by selected department
@@ -61,7 +61,10 @@ const DeliverableTable = ({
   // Delete wrapper for useTableActions
   const handleDeleteDeliverable = async (deliverable) => {
     try {
-      await deleteDeliverable(deliverable.name, user);
+      if (!deliverable?.id) {
+        throw new Error('Deliverable ID is required for deletion');
+      }
+      await deleteDeliverable(deliverable.id, user);
       // Success toast is handled by useTableActions hook
       // Real-time listener will automatically update the UI
     } catch (error) {
@@ -166,6 +169,23 @@ const DeliverableTable = ({
         return (
           <Badge variant="pink" size="sm">
             {variationsTime} {timeUnit}
+          </Badge>
+        );
+      },
+      size: 120,
+    },
+    {
+      accessorKey: "declinariTime",
+      header: "Declinari Time",
+      cell: ({ getValue, row }) => {
+        const declinariTime = getValue();
+        const timeUnit = row.original.declinariTimeUnit || 'min';
+        if (!declinariTime || declinariTime === 0) {
+          return <span className="text-gray-500 dark:text-gray-400 text-xs">None</span>;
+        }
+        return (
+          <Badge variant="orange" size="sm">
+            {declinariTime} {timeUnit}
           </Badge>
         );
       },

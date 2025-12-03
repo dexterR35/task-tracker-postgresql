@@ -84,16 +84,11 @@ const DeliverableCalculationCell = ({
     <div className="space-y-1">
       {deliverablesList.map((deliverable, index) => (
         <div key={index} className="text-xs">
-          <div className="font-medium text-gray-800 dark:text-gray-200 ">
+          <div className="font-medium text-gray-800 dark:text-gray-200">
             {deliverable.quantity}x{deliverable.name}
-            {(deliverable.variationsQuantity || deliverable.declinariQuantity) >
-              0 && (
+            {(deliverable.variationsQuantity || deliverable.declinariQuantity) > 0 && (
               <span style={{ color: CARD_SYSTEM.COLOR_HEX_MAP.amber }}>
-                {" "}
-                +{" "}
-                {deliverable.variationsQuantity ||
-                  deliverable.declinariQuantity}{" "}
-                variations
+                {" "}+ {deliverable.variationsQuantity || deliverable.declinariQuantity} variations
               </span>
             )}
           </div>
@@ -104,17 +99,10 @@ const DeliverableCalculationCell = ({
                 <div className="block">
                   {deliverable.timePerUnit}
                   {deliverable.timeUnit} × {deliverable.quantity}
-                  {(deliverable.variationsQuantity ||
-                    deliverable.declinariQuantity) > 0 &&
-                    deliverable.variationsTimeInMinutes > 0 && (
+                  {(deliverable.variationsQuantity || deliverable.declinariQuantity) > 0 &&
+                    (Number(deliverable.variationsTimeInMinutes) || 0) > 0 && (
                       <span>
-                        {" "}
-                        +{" "}
-                        {deliverable.variationsQuantity ||
-                          deliverable.declinariQuantity}{" "}
-                        ×{" "}
-                        {(deliverable.variationsTimeInMinutes || 0).toFixed(0)}
-                        min
+                        {" "}+ {deliverable.variationsQuantity || deliverable.declinariQuantity} × {Number(deliverable.variationsTimeInMinutes || 0).toFixed(0)}min
                       </span>
                     )}
                 </div>
@@ -122,8 +110,7 @@ const DeliverableCalculationCell = ({
                   className="block font-semibold"
                   style={{ color: CARD_SYSTEM.COLOR_HEX_MAP.amber }}
                 >
-                  Total: {deliverable.time.toFixed(2)}h (
-                  {((deliverable.time * 60) / 480).toFixed(2)} days)
+                  Total: {Number(deliverable.time || 0).toFixed(2)}h ({((Number(deliverable.time || 0) * 60) / 480).toFixed(2)} days)
                 </div>
               </div>
             ) : deliverable.notConfigured ? (

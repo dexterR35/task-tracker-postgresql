@@ -55,53 +55,56 @@ export const createErrorResponse = (type, message, details = null, severity = ER
 };
 
 /**
- * Parse Firebase/Firestore errors into standardized format
+ * Parse API errors into standardized format
  * @param {Error} error - The error object
  * @returns {Object} - Standardized error response
  */
 export const parseFirebaseError = (error) => {
+  // Keep function name for backward compatibility, but now handles API errors
   if (!error) {
     return createErrorResponse(ERROR_TYPES.UNKNOWN, 'An unknown error occurred');
   }
 
   const errorCode = error.code || error.error?.code;
   const errorMessage = error.message || error.error?.message || 'An error occurred';
+  const status = error.status || error.error?.status;
 
-  // Firebase Auth errors
-  if (errorCode?.startsWith('auth/')) {
-    switch (errorCode) {
-      case 'auth/user-not-found':
-        return createErrorResponse(ERROR_TYPES.AUTHENTICATION, 'No account found with this email address.', null, ERROR_SEVERITY.MEDIUM);
-      case 'auth/wrong-password':
-        return createErrorResponse(ERROR_TYPES.AUTHENTICATION, 'Incorrect password. Please try again.', null, ERROR_SEVERITY.MEDIUM);
-      case 'auth/too-many-requests':
-        return createErrorResponse(ERROR_TYPES.AUTHENTICATION, 'Too many failed attempts. Please try again later.', null, ERROR_SEVERITY.HIGH);
-      case 'auth/user-disabled':
-        return createErrorResponse(ERROR_TYPES.AUTHENTICATION, 'This account has been disabled.', null, ERROR_SEVERITY.HIGH);
-      case 'auth/invalid-email':
-        return createErrorResponse(ERROR_TYPES.VALIDATION, 'Invalid email address format.', null, ERROR_SEVERITY.LOW);
-      case 'auth/weak-password':
-        return createErrorResponse(ERROR_TYPES.VALIDATION, 'Password is too weak. Please choose a stronger password.', null, ERROR_SEVERITY.LOW);
+  // HTTP status code errors
+  if (status) {
+    switch (status) {
+      case 401:
+        return createErrorResponse(ERROR_TYPES.AUTHENTICATION, 'Authentication required. Please log in again.', null, ERROR_SEVERITY.HIGH);
+      case 403:
+        return createErrorResponse(ERROR_TYPES.AUTHORIZATION, 'You do not have permission to perform this action.', null, ERROR_SEVERITY.HIGH);
+      case 404:
+        return createErrorResponse(ERROR_TYPES.NOT_FOUND, 'The requested resource was not found.', null, ERROR_SEVERITY.MEDIUM);
+      case 409:
+        return createErrorResponse(ERROR_TYPES.VALIDATION, 'This resource already exists or conflicts with existing data.', null, ERROR_SEVERITY.MEDIUM);
+      case 400:
+        return createErrorResponse(ERROR_TYPES.VALIDATION, errorMessage || 'Invalid request. Please check your input.', null, ERROR_SEVERITY.LOW);
+      case 500:
+      case 502:
+      case 503:
+        return createErrorResponse(ERROR_TYPES.SERVER, 'Server error. Please try again later.', null, ERROR_SEVERITY.HIGH);
       default:
-        return createErrorResponse(ERROR_TYPES.AUTHENTICATION, errorMessage, { code: errorCode }, ERROR_SEVERITY.MEDIUM);
+        if (status >= 400 && status < 500) {
+          return createErrorResponse(ERROR_TYPES.VALIDATION, errorMessage, { status }, ERROR_SEVERITY.MEDIUM);
+        }
+        if (status >= 500) {
+          return createErrorResponse(ERROR_TYPES.SERVER, errorMessage, { status }, ERROR_SEVERITY.HIGH);
+        }
     }
   }
 
-  // Firestore errors
-  if (errorCode?.startsWith('firestore/')) {
+  // PostgreSQL error codes
+  if (errorCode) {
     switch (errorCode) {
-      case 'firestore/permission-denied':
-        return createErrorResponse(ERROR_TYPES.AUTHORIZATION, 'You do not have permission to perform this action.', null, ERROR_SEVERITY.HIGH);
-      case 'firestore/unavailable':
-        return createErrorResponse(ERROR_TYPES.NETWORK, 'Service temporarily unavailable. Please try again later.', null, ERROR_SEVERITY.HIGH);
-      case 'firestore/not-found':
-        return createErrorResponse(ERROR_TYPES.NOT_FOUND, 'The requested resource was not found.', null, ERROR_SEVERITY.MEDIUM);
-      case 'firestore/already-exists':
+      case '23505': // Unique violation
         return createErrorResponse(ERROR_TYPES.VALIDATION, 'This resource already exists.', null, ERROR_SEVERITY.MEDIUM);
-      case 'firestore/failed-precondition':
-        return createErrorResponse(ERROR_TYPES.VALIDATION, 'Operation failed due to a precondition.', null, ERROR_SEVERITY.MEDIUM);
-      default:
-        return createErrorResponse(ERROR_TYPES.SERVER, errorMessage, { code: errorCode }, ERROR_SEVERITY.MEDIUM);
+      case '23503': // Foreign key violation
+        return createErrorResponse(ERROR_TYPES.VALIDATION, 'Referenced record does not exist.', null, ERROR_SEVERITY.MEDIUM);
+      case '23502': // Not null violation
+        return createErrorResponse(ERROR_TYPES.VALIDATION, 'Required field is missing.', null, ERROR_SEVERITY.LOW);
     }
   }
 

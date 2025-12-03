@@ -1,7 +1,7 @@
 import { logger } from "@/utils/logger";
 
 /**
- * Simple Data Cache for Firestore Operations
+ * Simple Data Cache for API Operations
  * Reduces redundant reads by caching static data
  */
 

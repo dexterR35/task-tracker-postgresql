@@ -180,7 +180,10 @@ const DeliverableForm = ({
         if (mode === 'create') {
           await createDeliverable(preparedData, userData);
         } else {
-          await updateDeliverable(deliverable.name, preparedData, userData);
+          if (!deliverable?.id) {
+            throw new Error('Deliverable ID is required for update');
+          }
+          await updateDeliverable(deliverable.id, preparedData, userData);
         }
         
         // Show success toast manually to avoid double toast

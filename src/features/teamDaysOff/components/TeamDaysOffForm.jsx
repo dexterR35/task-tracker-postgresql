@@ -98,7 +98,7 @@ const TeamDaysOffForm = ({
   className = "",
 }) => {
   const { user: authUser } = useAuth();
-  const { createTeamDaysOff, updateTeamDaysOff } = useTeamDaysOff();
+  const { createTeamDaysOff } = useTeamDaysOff();
   const appData = useAppDataContext();
   const { users: contextUsers = [] } = appData || {};
   // Fallback to direct API call if context doesn't have users (for non-admins)
@@ -120,9 +120,9 @@ const TeamDaysOffForm = ({
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      userUID: teamDaysOff?.userUID || teamDaysOff?.userId || initialUserId || '',
-      baseDays: teamDaysOff?.baseDays || 0,
-      daysOff: teamDaysOff?.daysOff || 0,
+      userUID: teamDaysOff?.userUID || teamDaysOff?.user_UID || teamDaysOff?.userId || initialUserId || '',
+      baseDays: teamDaysOff?.baseDays || teamDaysOff?.base_days || 0,
+      daysOff: teamDaysOff?.daysOff || teamDaysOff?.days_off || 0,
     },
     mode: 'onSubmit',
     reValidateMode: 'onChange'
@@ -167,11 +167,9 @@ const TeamDaysOffForm = ({
           daysOff: parseFloat(preparedData.daysOff) || 0,
         };
         
-        if (mode === 'create') {
-          await createTeamDaysOff(userData, authUser);
-        } else {
-          await updateTeamDaysOff(teamDaysOff.id, userData, authUser);
-        }
+        // Always use create - it handles updates via ON CONFLICT using user_UID
+        // This way we don't need to worry about having the id
+        await createTeamDaysOff(userData, authUser);
         
         showSuccess(mode === 'create' ? CONFIG.MESSAGES.CREATE_SUCCESS : CONFIG.MESSAGES.UPDATE_SUCCESS);
         

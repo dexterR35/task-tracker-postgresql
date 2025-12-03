@@ -369,7 +369,7 @@ const TaskTable = ({
             }
 
             try {
-              // Parse task createdAt date - handle multiple formats (Firestore Timestamp, Date, string)
+              // Parse task createdAt date - handle multiple formats (ISO string, Date, string)
               let taskCreatedDate;
               if (task.createdAt instanceof Date) {
                 taskCreatedDate = new Date(task.createdAt);
@@ -474,11 +474,11 @@ const TaskTable = ({
 
     // Sort by createdAt in descending order (newest first)
     return filtered.sort((a, b) => {
-      // Handle Firebase Timestamps and different date formats
+      // Handle ISO timestamps and different date formats
       let dateA, dateB;
 
       if (a.createdAt) {
-        // Handle Firebase Timestamp objects
+        // Handle timestamp objects (backward compatibility)
         if (a.createdAt.seconds) {
           dateA = new Date(a.createdAt.seconds * 1000);
         } else if (a.createdAt.toDate) {
@@ -491,7 +491,7 @@ const TaskTable = ({
       }
 
       if (b.createdAt) {
-        // Handle Firebase Timestamp objects
+        // Handle timestamp objects (backward compatibility)
         if (b.createdAt.seconds) {
           dateB = new Date(b.createdAt.seconds * 1000);
         } else if (b.createdAt.toDate) {

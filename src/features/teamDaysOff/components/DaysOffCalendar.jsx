@@ -12,8 +12,7 @@ import { formatDateString } from '@/utils/dateUtils';
 import TeamDaysOffFormModal from './TeamDaysOffFormModal';
 import Modal from '@/components/ui/Modal/Modal';
 import DynamicCalendar, { getUserColor, generateMultiColorGradient, useCalendarUsers, filterUsersByRole, ColorLegend } from '@/components/Calendar/DynamicCalendar';
-import { send } from '@emailjs/browser';
-import { EMAILJS_CONFIG } from '@/constants';
+import { RESEND_CONFIG } from '@/constants';
 
 /**
  * Calendar component to display and manage days off for users
@@ -381,21 +380,19 @@ ${userName}`;
       return;
     }
 
-    // Check if EmailJS is configured
-    if (EMAILJS_CONFIG.SERVICE_ID === 'YOUR_SERVICE_ID' || 
-        EMAILJS_CONFIG.TEMPLATE_ID === 'YOUR_TEMPLATE_ID' || 
-        EMAILJS_CONFIG.PUBLIC_KEY === 'YOUR_PUBLIC_KEY') {
-      showError('EmailJS is not configured. Please contact administrator.');
-      logger.error('EmailJS configuration missing');
+    // Check if HR email is configured
+    if (!RESEND_CONFIG.HR_EMAIL || RESEND_CONFIG.HR_EMAIL === 'hr@company.com') {
+      showError('HR email is not configured. Please contact administrator.');
+      logger.error('Resend configuration missing: HR email not set');
       return;
     }
 
     setSendingEmail(true);
 
     try {
-      // Prepare template parameters for EmailJS
-      const templateParams = {
-        to_email: EMAILJS_CONFIG.HR_EMAIL,
+      // Prepare email data for Resend API
+      const emailData = {
+        to_email: RESEND_CONFIG.HR_EMAIL,
         from_email: userEmail,
         from_name: userName,
         subject: `Days Off Request - ${userName}`,
@@ -406,13 +403,20 @@ ${userName}`;
         employee_email: userEmail
       };
 
-      // Send email using EmailJS
-      await send(
-        EMAILJS_CONFIG.SERVICE_ID,
-        EMAILJS_CONFIG.TEMPLATE_ID,
-        templateParams,
-        EMAILJS_CONFIG.PUBLIC_KEY
-      );
+      // Send email using Resend API endpoint
+      const response = await fetch(RESEND_CONFIG.API_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(emailData),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to send email');
+      }
 
       logger.log('Email sent successfully to HR');
       showSuccess('Email sent successfully to HR!');

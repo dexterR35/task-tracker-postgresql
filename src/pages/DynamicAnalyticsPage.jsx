@@ -85,7 +85,7 @@ const generateRealData = (tasks, userName, reporterName, monthId, weekParam = nu
             const taskDate = task.createdAt;
             if (!taskDate) return false;
             
-            // Handle Firestore Timestamp
+            // Handle timestamp (backward compatibility)
             let taskDateObj;
             if (taskDate && typeof taskDate === 'object' && taskDate.seconds) {
               taskDateObj = new Date(taskDate.seconds * 1000);
@@ -485,7 +485,7 @@ const DynamicAnalyticsPage = () => {
     ));
   };
 
-  // Helper function to convert Firestore Timestamp to Date
+  // Helper function to convert timestamp to Date (backward compatibility)
   const convertToDate = (timestamp) => {
     return normalizeTimestamp(timestamp);
   };

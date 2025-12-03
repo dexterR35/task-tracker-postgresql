@@ -32,12 +32,12 @@ const FeaturesSummaryPage = () => {
               <h3 className="font-bold text-xl mb-4 text-gray-900 dark:text-white">How Everything Works Together</h3>
               <p className="text-sm leading-relaxed mb-4">
                 SYNC is built around a <strong>month-based organization system</strong> where work is tracked in monthly cycles. 
-                Each month requires an active board document in Firestore before tasks can be created. Tasks are stored in a hierarchical 
+                Each month requires an active board document in PostgreSQL before tasks can be created. Tasks are stored in a hierarchical 
                 structure organized by department, year, and month, ensuring clean data organization and efficient querying.
               </p>
               <p className="text-sm leading-relaxed mb-4">
                 <strong>Real-time synchronization</strong> is the backbone of the system. When any user creates, updates, or deletes a task, 
-                Firestore listeners automatically detect the change and push updates to all connected clients. This means all users see 
+                WebSocket events automatically detect the change and push updates to all connected clients. This means all users see 
                 changes instantly without manual page refreshes. The same real-time mechanism applies to deliverables, ensuring the system 
                 stays synchronized across all users.
               </p>
@@ -114,7 +114,7 @@ const FeaturesSummaryPage = () => {
               <p className="text-sm leading-relaxed mb-4">
                 <strong>Board creation flow</strong>: Admin selects month → validates monthId format (YYYY-MM) → checks if board already exists 
                 → parses monthId to Date object → calculates month info (monthName, daysInMonth, startDate, endDate) → generates unique boardId 
-                (board_YYYY-MM_timestamp) → creates Firestore document at departments/{"{department}"}/{"{year}"}/{"{monthId}"} → sets status='active'.
+                (board_YYYY-MM_timestamp) → creates PostgreSQL record in months table → sets status='active'.
               </p>
               <p className="text-sm leading-relaxed mb-4">
                 <strong>Board validation</strong> occurs before task creation: Check if month document exists → verify boardId exists → verify 
@@ -123,7 +123,7 @@ const FeaturesSummaryPage = () => {
               </p>
               <p className="text-sm leading-relaxed mb-4">
                 <strong>Month info calculation</strong>: Uses date-fns utilities to calculate month start (first day), month end (last day), 
-                daysInMonth, and monthName. All dates are converted to ISO strings for Firestore compatibility. The system handles timezone 
+                daysInMonth, and monthName. All dates are converted to ISO strings for PostgreSQL compatibility. The system handles timezone 
                 conversions and ensures consistent date representation.
               </p>
             </div>
@@ -169,7 +169,7 @@ const FeaturesSummaryPage = () => {
             <div className="border-b border-gray-200 dark:border-gray-700 pb-6 mb-6">
               <h3 className="font-bold text-xl mb-4 text-gray-900 dark:text-white">Performance & Caching Strategy</h3>
               <p className="text-sm leading-relaxed mb-4">
-                The system uses <strong>caching to reduce Firestore reads</strong> and improve performance. Static data 
+                The system uses <strong>caching to reduce API calls</strong> and improve performance. Static data 
                 like users, reporters, and deliverables are cached since they change infrequently. Month data is cached for 30 days 
                 since it only changes once per month. Tasks are never cached and always fetched in real-time to ensure accuracy.
               </p>
@@ -249,7 +249,7 @@ const FeaturesSummaryPage = () => {
               <p className="text-sm leading-relaxed mb-4">
                 <strong>Data isolation</strong> ensures users only see their own tasks unless they are admins. Task queries automatically filter 
                 by user ID for regular users, while admin queries return all tasks. This isolation is applied both client-side and server-side 
-                through Firestore security rules, providing double-layer protection.
+                through JWT authentication and role-based access control, providing double-layer protection.
               </p>
                 </div>
                 
@@ -287,17 +287,17 @@ const FeaturesSummaryPage = () => {
             <div className="border-b border-gray-200 dark:border-gray-700 pb-6 mb-6">
               <h3 className="font-bold text-xl mb-4 text-gray-900 dark:text-white">API & Data Fetching</h3>
               <p className="text-sm leading-relaxed mb-4">
-                SYNC uses <strong>Firebase Firestore</strong> as the backend API. Data fetching is handled through custom hooks and context 
-                providers that manage real-time listeners. When data changes in Firestore, listeners automatically update SYNC state.
+                SYNC uses <strong>PostgreSQL + Express REST API</strong> as the backend. Data fetching is handled through custom hooks and context 
+                providers that manage API calls and WebSocket subscriptions. When data changes, WebSocket events automatically update SYNC state.
               </p>
               <p className="text-sm leading-relaxed mb-4">
                 <strong>API functions</strong> are organized by feature (tasks, months, deliverables, users). Each feature has create, read, update, 
-                and delete operations. API calls handle errors, loading states, and success notifications. The system uses Firestore security rules 
-                to control access at the database level.
+                and delete operations. API calls handle errors, loading states, and success notifications. The system uses JWT authentication and 
+                role-based access control to secure endpoints.
               </p>
               <p className="text-sm leading-relaxed mb-4">
-                <strong>Real-time synchronization</strong> means all users see updates immediately without page refreshes. Listeners are set up when 
-                components mount and cleaned up when they unmount to prevent memory leaks. The system handles connection issues and reconnects automatically.
+                <strong>Real-time synchronization</strong> means all users see updates immediately without page refreshes. WebSocket connections are 
+                established on login and managed automatically. The system handles connection issues and reconnects automatically.
               </p>
             </div>
 
@@ -337,8 +337,8 @@ const FeaturesSummaryPage = () => {
             <div className="pb-6">
               <h3 className="font-bold text-xl mb-4 text-gray-900 dark:text-white">Technical Stack & Future Plans</h3>
               <p className="text-sm leading-relaxed mb-4">
-                SYNC was built with <strong>Vite</strong>, <strong>React</strong>, <strong>Tailwind CSS</strong>, and <strong>Firebase</strong> (Firestore). 
-                The current database uses Firestore for real-time data synchronization and storage.
+                SYNC was built with <strong>Vite</strong>, <strong>React</strong>, <strong>Tailwind CSS</strong>, <strong>PostgreSQL</strong>, and <strong>Express</strong>. 
+                The current database uses PostgreSQL for storage and WebSockets for real-time data synchronization.
               </p>
               <p className="text-sm leading-relaxed mb-4">
                 <strong>Next update:</strong> The system will be migrated to <strong>PostgreSQL</strong> for improved data management, query performance, 

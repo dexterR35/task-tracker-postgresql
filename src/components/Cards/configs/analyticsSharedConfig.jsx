@@ -178,7 +178,7 @@ export const getUserObject = (userId, users) => {
       }
     }
     
-    // Fallback: check id field if userUID doesn't exist (but only if it's not the Firestore doc ID)
+    // Fallback: check id field if userUID doesn't exist
     if (u.id && u.id !== u.userUID) {
       const userIdFromId = typeof u.id === 'string' ? u.id.trim() : String(u.id);
       if (userIdFromId === normalizedUserId) {
@@ -655,7 +655,7 @@ export const getUserName = (userId, users) => {
       }
     }
     
-    // Fallback: check id field if userUID doesn't exist (but only if it's not the Firestore doc ID)
+    // Fallback: check id field if userUID doesn't exist
     // Note: Firestore doc IDs are usually different from userUID, so this is a last resort
     if (u.id && u.id !== u.userUID) {
       const userIdFromId = typeof u.id === 'string' ? u.id.trim() : String(u.id);

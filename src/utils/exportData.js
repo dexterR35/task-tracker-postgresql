@@ -110,17 +110,9 @@ const formatValueForCSV = (
     return value || "-";
   }
 
-  // Handle date created with simple format - properly handle seconds/nanoseconds
+  // Handle date created with simple format - handle ISO timestamps
   if (columnId === "createdAt") {
-    // Handle Firebase timestamp with seconds/nanoseconds
-    if (value && typeof value === "object" && "seconds" in value) {
-      const milliseconds =
-        value.seconds * 1000 + (value.nanoseconds || 0) / 1000000;
-      const date = new Date(milliseconds);
-      // Use CSV date format constant
-      const formattedDate = formatDate(date, CSV_DATE_FORMAT, false);
-      return formattedDate !== "N/A" ? formattedDate : "-";
-    }
+    // Handle PostgreSQL timestamp (ISO string or Date object)
     const normalizedDate = normalizeTimestamp(value);
     if (normalizedDate) {
       // Use CSV date format constant

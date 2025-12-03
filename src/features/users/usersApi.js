@@ -1,46 +1,16 @@
 /**
- * Users API (Direct Firestore with Snapshots)
+ * Users API (REST API with WebSocket)
  *
- * @fileoverview Direct Firestore hooks for users with real-time updates
+ * @fileoverview REST API hooks for users with real-time updates via WebSocket
  * @author Senior Developer
- * @version 3.0.0
+ * @version 4.0.0
  */
 
 import { useState, useEffect, useCallback } from "react";
-import {
-  collection,
-  query,
-  orderBy,
-  onSnapshot,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  doc,
-  serverTimestamp,
-  where,
-  getDocs,
-} from "firebase/firestore";
-import { db } from "@/app/firebase";
+import apiClient from "@/services/apiClient";
+import wsClient from "@/services/websocketClient";
 import { logger } from "@/utils/logger";
-import dataCache from "@/utils/dataCache";
-import listenerManager from "@/features/utils/firebaseListenerManager";
-
-/**
- * Check if user email already exists
- * @param {string} email - Email to check
- * @returns {Promise<boolean>} - True if email exists
- */
-const checkUserEmailExists = async (email) => {
-  try {
-    const usersRef = collection(db, 'users');
-    const q = query(usersRef, where('email', '==', email.toLowerCase().trim()));
-    const snapshot = await getDocs(q);
-    return !snapshot.empty;
-  } catch (error) {
-    logger.error('Error checking user email:', error);
-    return false;
-  }
-};
+// No cache - always fetch fresh data
 
 // Global fetch lock to prevent concurrent fetches (handles StrictMode double renders)
 const fetchLocks = new Map();
@@ -55,23 +25,21 @@ export const useUsers = () => {
 
   useEffect(() => {
     const fetchUsers = async () => {
+      // Check if user is authenticated before making API calls
+      const token = apiClient.getToken();
+      if (!token) {
+        setIsLoading(false);
+        setUsers([]);
+        setError(null);
+        return;
+      }
+
       try {
         const cacheKey = 'users_list';
 
-        // Check cache first
-        const cachedData = dataCache.get(cacheKey);
-        if (cachedData) {
-          logger.log('🔍 [useUsers] Using cached users data');
-          setUsers(cachedData);
-          setIsLoading(false);
-          setError(null);
-          return;
-        }
-
-        // Check if fetch is already in progress (prevents duplicate fetches in StrictMode)
+        // Check if fetch is already in progress
         if (fetchLocks.has(cacheKey)) {
           logger.log('🔍 [useUsers] Fetch already in progress, waiting...');
-          // Wait for the existing fetch to complete
           const existingPromise = fetchLocks.get(cacheKey);
           try {
             const result = await existingPromise;
@@ -80,45 +48,48 @@ export const useUsers = () => {
             setError(null);
             return;
           } catch (err) {
+            // Handle 401 gracefully
+            if (err.isUnauthorized) {
+              setUsers([]);
+              setIsLoading(false);
+              setError(null);
+              return;
+            }
             setError(err);
             setIsLoading(false);
             return;
           }
         }
 
-        logger.log('🔍 [useUsers] Fetching users from Firestore');
+        logger.log('🔍 [useUsers] Fetching users from API');
         setIsLoading(true);
         setError(null);
 
         // Create fetch promise and lock
         const fetchPromise = (async () => {
           try {
-            const usersRef = collection(db, 'users');
-            const q = query(usersRef, orderBy('createdAt', 'desc'));
-
-            const snapshot = await getDocs(q);
-            const usersData = snapshot.docs.map(doc => ({
-              id: doc.id,
-              ...doc.data()
-            }));
-
-            // Cache the data indefinitely (users are manually managed and never change)
-            dataCache.set(cacheKey, usersData, Infinity);
+            const usersData = await apiClient.get('/users');
             return usersData;
           } finally {
-            // Remove lock when done
             fetchLocks.delete(cacheKey);
           }
         })();
 
         fetchLocks.set(cacheKey, fetchPromise);
-
         const usersData = await fetchPromise;
+        
         setUsers(usersData);
         setIsLoading(false);
         setError(null);
         logger.log('✅ [useUsers] Users fetched and cached:', usersData.length);
       } catch (err) {
+        // Handle 401 gracefully - user not logged in yet
+        if (err.isUnauthorized) {
+          setUsers([]);
+          setIsLoading(false);
+          setError(null);
+          return;
+        }
         logger.error('❌ [useUsers] Fetch error:', err);
         setError(err);
         setIsLoading(false);
@@ -126,33 +97,32 @@ export const useUsers = () => {
     };
 
     fetchUsers();
-  }, []);
+
+    // Subscribe to WebSocket updates
+    const handleUserChange = (data) => {
+      if (data.event === 'created' || data.event === 'updated') {
+        // Refetch users
+        fetchUsers();
+      } else if (data.event === 'deleted') {
+        setUsers(prev => prev.filter(u => u.id !== data.user.id));
+      }
+    };
+
+    wsClient.on('user_change', handleUserChange);
+    wsClient.subscribe(['users']);
+
+    return () => {
+      wsClient.off('user_change', handleUserChange);
+    };
+  }, []); // Empty deps - only run once on mount
 
   // Create user
   const createUser = useCallback(async (userData, adminUserData) => {
     try {
-      // Check if email already exists
-      const emailExists = await checkUserEmailExists(userData.email);
-      if (emailExists) {
-        throw new Error("User with this email already exists");
-      }
-
-      const usersRef = collection(db, 'users');
-      const newUser = {
-        ...userData,
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-        createdBy: adminUserData?.userUID,
-        createdByName: adminUserData?.name
-      };
-
-      const docRef = await addDoc(usersRef, newUser);
-
-      // Invalidate cache when data changes
-      dataCache.delete('users_list');
-
-      logger.log('User created successfully:', docRef.id);
-      return { success: true, id: docRef.id };
+      const newUser = await apiClient.post('/users', userData);
+      
+      logger.log('User created successfully:', newUser.id);
+      return { success: true, id: newUser.id };
     } catch (err) {
       logger.error('Error creating user:', err);
       throw err;
@@ -162,27 +132,8 @@ export const useUsers = () => {
   // Update user
   const updateUser = useCallback(async (userId, updateData, adminUserData) => {
     try {
-      // Check if email is being updated and if it already exists
-      if (updateData.email) {
-        const emailExists = await checkUserEmailExists(updateData.email);
-        if (emailExists) {
-          throw new Error("User with this email already exists");
-        }
-      }
-
-      const userRef = doc(db, 'users', userId);
-      const updates = {
-        ...updateData,
-        updatedAt: serverTimestamp(),
-        updatedBy: adminUserData?.userUID,
-        updatedByName: adminUserData?.name
-      };
-
-      await updateDoc(userRef, updates);
-
-      // Invalidate cache when data changes
-      dataCache.delete('users_list');
-
+      const updatedUser = await apiClient.put(`/users/${userId}`, updateData);
+      
       logger.log('User updated successfully:', userId);
       return { success: true };
     } catch (err) {
@@ -194,12 +145,8 @@ export const useUsers = () => {
   // Delete user
   const deleteUser = useCallback(async (userId, adminUserData) => {
     try {
-      const userRef = doc(db, 'users', userId);
-      await deleteDoc(userRef);
-
-      // Invalidate cache when data changes
-      dataCache.delete('users_list');
-
+      await apiClient.delete(`/users/${userId}`);
+      
       logger.log('User deleted successfully:', userId);
       return { success: true };
     } catch (err) {
@@ -222,7 +169,7 @@ export const useUsers = () => {
 };
 
 /**
- * User by UID Hook (Direct Firestore with Snapshots)
+ * User by UID Hook (REST API with WebSocket)
  */
 export const useUserByUID = (userUID) => {
   const [user, setUser] = useState(null);
@@ -236,46 +183,40 @@ export const useUserByUID = (userUID) => {
       return;
     }
 
-    const listenerKey = `user_by_uid_${userUID}`;
-
-    listenerManager.addListener(
-      listenerKey,
-      () => {
+    const fetchUser = async () => {
+      try {
         setIsLoading(true);
         setError(null);
 
-        const usersRef = collection(db, 'users');
-        const q = query(usersRef, where('userUID', '==', userUID));
+        const userData = await apiClient.get(`/users/uid/${userUID}`);
+        setUser(userData);
+        setIsLoading(false);
+        setError(null);
+      } catch (err) {
+        logger.error('User by UID fetch error:', err);
+        setError(err);
+        setIsLoading(false);
+      }
+    };
 
-        return onSnapshot(
-          q,
-          (snapshot) => {
-            if (snapshot.empty) {
-              setUser(null);
-            } else {
-              const userData = snapshot.docs[0].data();
-              setUser({
-                id: snapshot.docs[0].id,
-                ...userData
-              });
-            }
-            setIsLoading(false);
-            setError(null);
-          },
-          (err) => {
-            logger.error('User by UID real-time error:', err);
-            setError(err);
-            setIsLoading(false);
-          }
-        );
-      },
-      false, // Don't preserve - can be paused when tab hidden
-      'users',
-      'user-profile'
-    );
+    fetchUser();
+
+    // Subscribe to WebSocket updates
+    const handleUserChange = (data) => {
+      if (data.user && data.user.userUID === userUID) {
+        if (data.event === 'updated' || data.event === 'created') {
+          fetchUser();
+        } else if (data.event === 'deleted') {
+          setUser(null);
+        }
+      }
+    };
+
+    wsClient.on('user_change', handleUserChange);
+    wsClient.subscribe(['users']);
 
     return () => {
-      listenerManager.removeListener(listenerKey);
+      wsClient.off('user_change', handleUserChange);
     };
   }, [userUID]);
 
@@ -299,7 +240,7 @@ export const useDeleteUserMutation = () => {
 };
 
 /**
- * Fetch user by UID from Firestore (direct function for AuthContext)
+ * Fetch user by UID from API (direct function for AuthContext)
  * @param {string} userUID - User UID to fetch
  * @returns {Promise<Object|null>} - User data or null if not found
  */
@@ -310,23 +251,9 @@ export const fetchUserByUIDFromFirestore = async (userUID) => {
       return null;
     }
 
-    const usersRef = collection(db, 'users');
-    const q = query(usersRef, where('userUID', '==', userUID));
-    const snapshot = await getDocs(q);
-
-    if (snapshot.empty) {
-      logger.log('fetchUserByUIDFromFirestore: No user found with UID:', userUID);
-      return null;
-    }
-
-    const userData = snapshot.docs[0].data();
-    const user = {
-      id: snapshot.docs[0].id,
-      ...userData
-    };
-
-    logger.log('fetchUserByUIDFromFirestore: User found:', user.id);
-    return user;
+    const userData = await apiClient.get(`/users/uid/${userUID}`);
+    logger.log('fetchUserByUIDFromFirestore: User found:', userData.id);
+    return userData;
   } catch (error) {
     logger.error('fetchUserByUIDFromFirestore: Error fetching user:', error);
     return null;

@@ -15,7 +15,7 @@ import { DATE_TIME } from '@/constants';
 
 /**
  * Normalize timestamp to consistent format
- * Handles both Firestore timestamps and regular Date objects
+ * Handles both ISO timestamps and regular Date objects (backward compatibility for old data formats)
  */
 export const normalizeTimestamp = (value) => {
   if (!value) return null;
@@ -25,7 +25,7 @@ export const normalizeTimestamp = (value) => {
     return value;
   }
 
-  // If it's a Firestore timestamp
+  // If it's a timestamp object (backward compatibility)
   if (value && typeof value.toDate === 'function') {
     return value.toDate();
   }
@@ -43,7 +43,7 @@ export const normalizeTimestamp = (value) => {
     }
   }
 
-  // If it's an object with seconds/nanoseconds (Firestore timestamp)
+  // If it's an object with seconds/nanoseconds (backward compatibility)
   if (value && typeof value === 'object' && 'seconds' in value) {
     const milliseconds = value.seconds * 1000 + (value.nanoseconds || 0) / 1000000;
     return new Date(milliseconds);
@@ -58,13 +58,13 @@ export const normalizeTimestamp = (value) => {
 export const toMs = (value) => {
   if (!value) return null;
   try {
-    // Firestore Timestamp - check for toDate method
+    // Timestamp object - check for toDate method (backward compatibility)
     if (value && typeof value.toDate === 'function') {
       const d = value.toDate();
       return isValid(d) ? d.getTime() : null;
     }
 
-    // Firestore Timestamp - check for seconds/nanoseconds structure
+    // Timestamp object - check for seconds/nanoseconds structure (backward compatibility)
     if (value && typeof value === 'object' && 'seconds' in value) {
       const milliseconds = value.seconds * 1000 + (value.nanoseconds || 0) / 1000000;
       return Number.isFinite(milliseconds) ? milliseconds : null;
@@ -225,7 +225,7 @@ export const serializeTimestamps = (data) => {
       // Recursively serialize nested objects
       serialized[key] = serializeTimestamps(value);
     } else if (value && typeof value.toDate === 'function') {
-      // Convert Firestore timestamp to ISO string
+      // Convert timestamp to ISO string
       serialized[key] = value.toDate().toISOString();
     } else if (value instanceof Date) {
       // Convert Date object to ISO string

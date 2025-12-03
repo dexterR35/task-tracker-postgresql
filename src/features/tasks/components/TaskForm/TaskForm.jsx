@@ -177,12 +177,12 @@ const TaskForm = ({
           return new Date(dateValue).toISOString().split('T')[0];
         }
         
-        // If it's a Firestore Timestamp object
+        // If it's a timestamp object (backward compatibility)
         if (dateValue.toDate && typeof dateValue.toDate === 'function') {
           return dateValue.toDate().toISOString().split('T')[0];
         }
         
-        // If it's a Firestore Timestamp-like object with seconds
+        // If it's a timestamp-like object with seconds (backward compatibility)
         if (dateValue.seconds) {
           return new Date(dateValue.seconds * 1000).toISOString().split('T')[0];
         }

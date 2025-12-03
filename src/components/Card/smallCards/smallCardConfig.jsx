@@ -99,10 +99,13 @@ export const SMALL_CARD_CONFIGS = {
             label: "Select Month",
             required: false,
             options:
-              data.availableMonths?.map((month) => ({
-                value: month.monthId,
-                label: `${month.monthName}${month.isCurrent ? " (Current)" : ""}`,
-              })) || [],
+              data.availableMonths?.map((month) => {
+                const isCurrent = month.isCurrent || month.monthId === data.currentMonth?.monthId;
+                return {
+                  value: month.monthId,
+                  label: `${month.monthName || month.monthId}${isCurrent ? " (Current)" : ""}`,
+                };
+              }) || [],
             placeholder: "Search months...",
           }}
           register={() => {}} // Not needed for this use case
@@ -138,7 +141,6 @@ export const SMALL_CARD_CONFIGS = {
         icon: Icons.generic.clock,
         label: "Period",
         value:
-          data.selectedMonth?.monthName ||
           data.currentMonth?.monthName ||
           "None",
       },
@@ -643,7 +645,7 @@ export const SMALL_CARD_CONFIGS = {
             const dayTasks = filteredTasks.filter((task) => {
               if (!task.createdAt) return false;
 
-              // Handle Firestore Timestamp
+              // Handle timestamp (backward compatibility)
               let taskDate;
               if (
                 task.createdAt &&

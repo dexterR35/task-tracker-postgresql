@@ -168,14 +168,23 @@ export const canViewTasks = (user) => {
 
 export const canCreateBoard = (user) => {
   if (!user) return false;
-  // Board creation requires explicit 'create_board' permission - no admin bypass, no has_permission bypass
   if (!isUserActive(user)) {
     return false;
   }
   
-  // Check for explicit 'create_board' permission in permissions array
+  // Admins can always create boards
+  if (isAdmin(user)) {
+    return true;
+  }
+  
+  // Check for explicit 'create_board' or 'create_boards' permission in permissions array
   if (user.permissions && Array.isArray(user.permissions)) {
-    return user.permissions.includes('create_board');
+    return user.permissions.includes('create_board') || user.permissions.includes('create_boards');
+  }
+  
+  // Check has_permission flag (universal admin access)
+  if (user.permissions && Array.isArray(user.permissions) && user.permissions.includes('has_permission')) {
+    return true;
   }
   
   // No default permission for board creation - must be explicitly granted

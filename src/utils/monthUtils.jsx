@@ -411,6 +411,7 @@ export const MonthBoardBanner = () => {
     boardExists,
     startDate,
     endDate,
+    daysInMonth,
     isInitialLoading,
   } = appData || {};
 
@@ -433,7 +434,33 @@ export const MonthBoardBanner = () => {
   const handleGenerateBoard = async () => {
     setIsGenerating(true);
     try {
-      const result = await generateMonthBoard(monthId, appData.user);
+      // Extract yearId, year, and month from monthId (format: YYYY-MM)
+      const [yearStr, monthStr] = monthId ? monthId.split('-') : [null, null];
+      const yearId = yearStr || new Date().getFullYear().toString();
+      const year = parseInt(yearStr, 10);
+      const month = parseInt(monthStr, 10);
+      
+      // Generate boardId like old Firebase: "board_YYYY-MM_timestamp"
+      const boardId = `board_${monthId}_${Date.now()}`;
+      
+      // Prepare month data object for API with all metadata
+      const monthData = {
+        monthId,
+        yearId,
+        department: 'design', // Default department
+        status: 'active',
+        metadata: {
+          boardId,
+          monthName,
+          startDate: startDateStr,
+          endDate: endDateStr,
+          daysInMonth: daysInMonth || null,
+          month,
+          year
+        }
+      };
+
+      const result = await generateMonthBoard(monthData, appData.user);
 
       if (result.success) {
         showSuccess(`Month board for ${monthName} created successfully!`);

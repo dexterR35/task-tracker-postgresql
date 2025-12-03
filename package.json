@@ -9,7 +9,6 @@
     "lint:fix": "eslint src --ext .js --fix"
   },
   "dependencies": {
-    "@emailjs/browser": "^4.4.1",
     "@fontsource/inter": "^5.2.8",
     "@fontsource/roboto": "^5.2.6",
     "@hookform/resolvers": "^3.9.1",
@@ -17,7 +16,6 @@
     "@tanstack/react-table": "^8.21.3",
     "date-fns": "^4.1.0",
     "dompurify": "^3.2.6",
-    "firebase": "^12.1.0",
     "framer-motion": "^12.23.12",
     "react": "^18.3.1",
     "react-day-picker": "^9.9.0",
@@ -29,6 +27,7 @@
     "react-router-dom": "^7.8.0",
     "react-toastify": "^11.0.5",
     "recharts": "^3.2.0",
+    "resend": "^4.0.0",
     "tailwindcss": "^4.1.11",
     "yup": "^1.7.0"
   },

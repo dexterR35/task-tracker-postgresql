@@ -58,7 +58,13 @@ const LoginForm = ({ onSuccess, className = "" }) => {
   );
 
   const onSubmit = async (data) => {
-    await handleFormSubmit(data, { reset, setError: () => {}, clearErrors: () => {} });
+    try {
+      await handleFormSubmit(data, { reset, setError: () => {}, clearErrors: () => {} });
+    } catch (error) {
+      // Error is already handled by AuthContext (shows toast)
+      // Just catch it here to prevent unhandled promise rejection
+      // No need to do anything else as AuthContext handles the error display
+    }
   };
 
   const handleFormError = (errors) => {

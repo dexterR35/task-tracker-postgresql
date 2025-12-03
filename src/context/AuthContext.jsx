@@ -1,22 +1,17 @@
 /**
  * Authentication Context
  * 
- * @fileoverview Context-based authentication state management
+ * @fileoverview Context-based authentication state management with JWT
  * @author Senior Developer
- * @version 1.0.0
+ * @version 2.0.0
  */
 
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
-import {
-  signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged,
-} from "firebase/auth";
-import { auth } from "@/app/firebase";
+import apiClient from '@/services/apiClient';
+import wsClient from '@/services/websocketClient';
 import { logger } from "@/utils/logger";
-import listenerManager from "@/features/utils/firebaseListenerManager";
-import { fetchUserByUIDFromFirestore } from "@/features/users/usersApi";
 import { AUTH } from '@/constants';
+// No cache - always fetch fresh data
 import {
   isUserComplete,
   canAccessRole,
@@ -40,121 +35,6 @@ import {
 } from '@/utils/toast';
 
 const VALID_ROLES = AUTH.VALID_ROLES;
-let authUnsubscribe = null;
-
-// Secure session management with encryption and CSRF protection
-const SESSION_KEY = 'task_tracker_auth_session';
-const CSRF_TOKEN_KEY = 'task_tracker_csrf_token';
-let isSessionActive = false;
-
-// Simple encryption for session data (in production, use proper encryption)
-const encryptSessionData = (data) => {
-  try {
-    const jsonString = JSON.stringify(data);
-    const encoded = btoa(jsonString); // Base64 encoding (not secure, but better than plain text)
-    return encoded;
-  } catch (error) {
-    logger.error('Failed to encrypt session data:', error);
-    return null;
-  }
-};
-
-const decryptSessionData = (encryptedData) => {
-  try {
-    const decoded = atob(encryptedData);
-    return JSON.parse(decoded);
-  } catch (error) {
-    logger.error('Failed to decrypt session data:', error);
-    return null;
-  }
-};
-
-const generateCSRFToken = () => {
-  const array = new Uint8Array(32);
-  crypto.getRandomValues(array);
-  return Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
-};
-
-const SessionManager = {
-  getSession: () => {
-    try {
-      const encryptedData = localStorage.getItem(SESSION_KEY);
-      const csrfToken = localStorage.getItem(CSRF_TOKEN_KEY);
-      
-      if (!encryptedData || !csrfToken) return null;
-      
-      const sessionData = decryptSessionData(encryptedData);
-      if (!sessionData) return null;
-      
-      // Verify CSRF token
-      if (sessionData.csrfToken !== csrfToken) {
-        logger.warn('CSRF token mismatch, clearing session');
-        SessionManager.clearSession();
-        return null;
-      }
-      
-      return sessionData;
-    } catch (error) {
-      logger.error('Failed to get session data:', error);
-      SessionManager.clearSession();
-      return null;
-    }
-  },
-
-  setSession: (sessionData) => {
-    try {
-      const csrfToken = generateCSRFToken();
-      const session = {
-        ...sessionData,
-        timestamp: Date.now(),
-        sessionId: sessionData.sessionId || `session_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`,
-        csrfToken: csrfToken
-      };
-      
-      const encryptedData = encryptSessionData(session);
-      if (!encryptedData) {
-        throw new Error('Failed to encrypt session data');
-      }
-      
-      localStorage.setItem(SESSION_KEY, encryptedData);
-      localStorage.setItem(CSRF_TOKEN_KEY, csrfToken);
-      isSessionActive = true;
-      logger.log('Secure session data stored', { sessionId: session.sessionId });
-    } catch (error) {
-      logger.error('Failed to set session data:', error);
-    }
-  },
-
-  clearSession: () => {
-    try {
-      localStorage.removeItem(SESSION_KEY);
-      localStorage.removeItem(CSRF_TOKEN_KEY);
-      isSessionActive = false;
-      logger.log('Session data cleared');
-    } catch (error) {
-      logger.error('Failed to clear session data:', error);
-    }
-  },
-
-  isSessionValid: () => {
-    const session = SessionManager.getSession();
-    if (!session) return false;
-    
-    const now = Date.now();
-    const sessionAge = now - (session.timestamp || 0);
-    const maxAge = 8 * 60 * 60 * 1000; // 8 hours (reduced from 24 for security)
-    
-    return sessionAge < maxAge;
-  },
-
-  refreshSession: () => {
-    const session = SessionManager.getSession();
-    if (session) {
-      session.timestamp = Date.now();
-      SessionManager.setSession(session);
-    }
-  }
-};
 
 // Create Auth Context
 const AuthContext = createContext();
@@ -166,99 +46,42 @@ export const AuthProvider = ({ children }) => {
   const [isAuthChecking, setIsAuthChecking] = useState(true);
   const [error, setError] = useState(null);
 
-
-  // Initialize auth state listener
+  // Initialize auth state on mount
   useEffect(() => {
-    let isMounted = true;
-
     const initializeAuth = async () => {
       try {
         setIsAuthChecking(true);
         setIsLoading(true);
 
-        // Set up Firebase auth state listener
-        authUnsubscribe = onAuthStateChanged(
-          auth,
-          async (firebaseUser) => {
-            if (!isMounted) return;
-
-            try {
-              if (firebaseUser) {
-                logger.log("User authenticated, fetching user data");
-                
-                const firestoreData = await fetchUserByUIDFromFirestore(firebaseUser.uid);
-                
-                if (!firestoreData) {
-                  throw new Error("Failed to fetch user data from Firestore");
-                }
-
-                // Simple user data - only what you actually have in your database
-                const completeUserData = {
-                  // Firebase auth data (minimal)
-                  email: firebaseUser.email,
-                  
-                  // Your Firestore data (exactly as stored)
-                  ...firestoreData,
-                  
-                  // Only essential Firebase mapping
-                  userUID: firebaseUser.uid
-                };
-
-                if (isMounted) {
-                  setUser(completeUserData);
-                  setIsLoading(false);
-                  setIsAuthChecking(false);
-                  setError(null);
-                }
-              } else {
-                logger.log("User not authenticated, clearing user state");
-                if (isMounted) {
-                  setUser(null);
-                  setIsLoading(false);
-                  setIsAuthChecking(false);
-                  setError(null);
-                }
-              }
-            } catch (error) {
-              logger.error("Error in auth state change:", error);
-              if (isMounted) {
-                setError(error.message || "Authentication error");
-                setUser(null);
-                setIsLoading(false);
-                setIsAuthChecking(false);
-              }
-            }
-          },
-          (error) => {
-            logger.error("Auth state listener error:", error);
-            if (isMounted) {
-              setError(error.message || "Authentication error");
-              setUser(null);
-              setIsLoading(false);
-              setIsAuthChecking(false);
-            }
-          }
-        );
-      } catch (error) {
-        logger.error("Error initializing auth:", error);
-        if (isMounted) {
-          setError(error.message || "Authentication initialization error");
-          setUser(null);
+        const token = apiClient.getToken();
+        if (!token) {
           setIsLoading(false);
           setIsAuthChecking(false);
+          return;
         }
+
+        // Verify token and get user data
+        const response = await apiClient.get('/auth/verify');
+        if (response.user) {
+          setUser(response.user);
+          // Connect WebSocket
+          wsClient.setToken(token);
+          wsClient.connect();
+        } else {
+          // Invalid token, clear it
+          apiClient.setToken(null);
+        }
+      } catch (error) {
+        logger.error("Error initializing auth:", error);
+        apiClient.setToken(null);
+        wsClient.disconnect();
+      } finally {
+        setIsLoading(false);
+        setIsAuthChecking(false);
       }
     };
 
     initializeAuth();
-
-    return () => {
-      isMounted = false;
-      if (authUnsubscribe) {
-        authUnsubscribe();
-        authUnsubscribe = null;
-      }
-    };
   }, []);
 
   // Login function
@@ -273,47 +96,42 @@ export const AuthProvider = ({ children }) => {
         throw new Error("Email and password are required");
       }
 
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const firebaseUser = userCredential.user;
-
-      if (!firebaseUser) {
-        throw new Error("Login failed - no user returned");
-      }
-
-      // Fetch user data from Firestore
-      const firestoreData = await fetchUserByUIDFromFirestore(firebaseUser.uid);
+      const response = await apiClient.post('/auth/login', { email, password });
       
-      if (!firestoreData) {
-        throw new Error("Failed to fetch user data from Firestore");
+      if (!response.token || !response.user) {
+        throw new Error("Login failed - invalid response");
       }
 
-      // Simple user data - only what you actually have in your database
-      const completeUserData = {
-        // Firebase auth data (minimal)
-        email: firebaseUser.email,
-        
-        // Your Firestore data (exactly as stored)
-        ...firestoreData,
-        
-        // Only essential Firebase mapping
-        userUID: firebaseUser.uid
-      };
+      // Set token and user
+      apiClient.setToken(response.token);
+      setUser(response.user);
 
-      setUser(completeUserData);
+      // Connect WebSocket
+      wsClient.setToken(response.token);
+      wsClient.connect();
+
       setIsLoading(false);
 
       // Show welcome message
-      if (completeUserData) {
-        const welcomeMessage = `Welcome, ${completeUserData.name || completeUserData.email}! 👋`;
+      if (response.user) {
+        const welcomeMessage = `Welcome, ${response.user.name || response.user.email}! 👋`;
         showSuccess(welcomeMessage, { 
           autoClose: 3000,
           position: "top-center"
         });
       }
 
-      return { user: completeUserData };
+      return { user: response.user };
     } catch (error) {
       logger.error("Login error:", error);
+      // Handle rate limiting with a better message
+      if (error.isRateLimited) {
+        const message = error.message || 'Too many login attempts. Please wait 15 minutes and try again.';
+        setError(message);
+        setIsLoading(false);
+        showAuthError(message);
+        throw error;
+      }
       setError(error.message || "Login failed");
       setIsLoading(false);
       showAuthError(error?.message || error || 'Login failed');
@@ -327,8 +145,11 @@ export const AuthProvider = ({ children }) => {
       setIsLoading(true);
       setError(null);
 
-      await signOut(auth);
+      // Disconnect WebSocket
+      wsClient.disconnect();
       
+      // Clear token and user
+      apiClient.setToken(null);
       setUser(null);
       setIsLoading(false);
 

@@ -1,131 +1,17 @@
+/**
+ * Tasks API (REST API with WebSocket)
+ *
+ * @fileoverview REST API hooks for tasks with real-time updates via WebSocket
+ * @author Senior Developer
+ * @version 4.0.0
+ */
 
 import { useState, useEffect, useCallback } from "react";
-import {
-  collection,
-  query,
-  onSnapshot,
-  addDoc,
-  updateDoc,
-  deleteDoc,
-  doc,
-  serverTimestamp,
-  where,
-  getDocs,
-  getDoc
-} from "firebase/firestore";
-import { db } from "@/app/firebase";
+import apiClient from "@/services/apiClient";
+import wsClient from "@/services/websocketClient";
 import { logger } from "@/utils/logger";
-import { serializeTimestampsForContext } from "@/utils/dateUtils";
-import { getCurrentYear } from "@/utils/dateUtils";
-import listenerManager from "@/features/utils/firebaseListenerManager";
 import { validateTaskPermissions } from '@/utils/permissionValidation';
 import { getUserUID } from '@/features/utils/authUtils';
-
-
-const getTaskRef = (monthId, taskId = null) => {
-  const yearId = getCurrentYear();
-  const basePath = ["departments", "design", yearId, monthId, "taskdata"];
-
-  if (taskId) {
-    return doc(db, ...basePath, taskId); // Individual task
-  } else {
-    return collection(db, ...basePath); // Task collection
-  }
-};
-
-
-const getMonthRef = (monthId) => {
-  const yearId = monthId.split('-')[0]; // Extract year from monthId
-  return doc(db, "departments", "design", yearId, monthId);
-};
-
-
-const buildTaskQuery = (tasksRef, role, userUID) => {
-  if (role === "user") {
-    // Regular users: fetch only their own tasks
-    return query(tasksRef, where("userUID", "==", userUID));
-  } else if (role === "admin" && userUID) {
-    // Admin users: specific user's tasks when a user is selected
-    return query(tasksRef, where("userUID", "==", userUID));
-  } else {
-    // Admin users: all tasks when no specific user is selected
-    return query(tasksRef);
-  }
-};
-
-/**
- * Helper function to detect if task data has actually changed
- */
-const hasTaskDataChanged = (currentData, newData) => {
-  // Remove timestamp fields from comparison as they will always be different
-  const fieldsToIgnore = ['createdAt', 'updatedAt', 'data_task'];
-
-  // Extract the actual task data from currentData
-  const currentTaskData = currentData?.data_task || currentData;
-
-  // Debug logging only in development mode
-  if (import.meta.env.MODE === 'development') {
-    logger.log('🔍 [hasTaskDataChanged] Comparing data:', {
-      currentTaskData: currentTaskData,
-      newData: newData,
-      fieldsToIgnore: fieldsToIgnore
-    });
-  }
-
-  // Compare relevant fields
-  const relevantFields = Object.keys(newData).filter(key => !fieldsToIgnore.includes(key));
-
-  for (const field of relevantFields) {
-    const currentValue = currentTaskData?.[field];
-    const newValue = newData[field];
-
-    // Debug logging only in development mode
-    if (import.meta.env.MODE === 'development') {
-      logger.log(`🔍 [hasTaskDataChanged] Comparing field "${field}":`, {
-        currentValue: currentValue,
-        newValue: newValue,
-        areEqual: currentValue === newValue
-      });
-    }
-
-    // Handle array comparisons
-    if (Array.isArray(currentValue) && Array.isArray(newValue)) {
-      if (currentValue.length !== newValue.length) {
-        if (import.meta.env.MODE === 'development') {
-          logger.log(`🔍 [hasTaskDataChanged] Array length different for "${field}"`);
-        }
-        return true;
-      }
-      if (!currentValue.every((item, index) => item === newValue[index])) {
-        if (import.meta.env.MODE === 'development') {
-          logger.log(`🔍 [hasTaskDataChanged] Array content different for "${field}"`);
-        }
-        return true;
-      }
-    }
-    // Handle object comparisons
-    else if (typeof currentValue === 'object' && typeof newValue === 'object') {
-      if (JSON.stringify(currentValue) !== JSON.stringify(newValue)) {
-        if (import.meta.env.MODE === 'development') {
-          logger.log(`🔍 [hasTaskDataChanged] Object different for "${field}"`);
-        }
-        return true;
-      }
-    }
-    // Handle primitive comparisons
-    else if (currentValue !== newValue) {
-      if (import.meta.env.MODE === 'development') {
-        logger.log(`🔍 [hasTaskDataChanged] Primitive different for "${field}"`);
-      }
-      return true;
-    }
-  }
-
-  if (import.meta.env.MODE === 'development') {
-    logger.log('🔍 [hasTaskDataChanged] No changes detected');
-  }
-  return false;
-};
 
 /**
  * Helper function to handle reporter name resolution with security validation
@@ -147,8 +33,7 @@ const resolveReporterName = (reporters, reporterId, reporterName) => {
   if (reporterId && !reporterName) {
     const selectedReporter = reporters.find(r => {
       if (!r || typeof r !== 'object') return false;
-      // Use reporterUID field
-      const reporterIdField = r.reporterUID;
+      const reporterIdField = r.reporterUID || r.id;
       return reporterIdField &&
              typeof reporterIdField === 'string' &&
              reporterIdField === sanitizedReporterId;
@@ -167,18 +52,10 @@ const resolveReporterName = (reporters, reporterId, reporterName) => {
   return reporterName;
 };
 
-// Task cache to store previously fetched tasks
-const taskCache = new Map();
+// No cache - always fetch fresh data for real-time updates
 
 /**
- * Get cache key for tasks
- */
-const getCacheKey = (monthId, role, userUID) => {
-  return `${monthId}_${role}_${userUID || 'all'}`;
-};
-
-/**
- * Tasks Hook (Direct Firestore with Snapshots with Caching)
+ * Tasks Hook (REST API with WebSocket real-time updates)
  */
 export const useTasks = (monthId, role = 'user', userUID = null) => {
   const [tasks, setTasks] = useState([]);
@@ -186,154 +63,170 @@ export const useTasks = (monthId, role = 'user', userUID = null) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!monthId) {
-      logger.log('🔍 [useTasks] No monthId provided, skipping tasks fetch');
+    // Check if user is authenticated before making API calls
+    const token = apiClient.getToken();
+    if (!token) {
       setTasks([]);
       setIsLoading(false);
+      setError(null);
       return;
     }
 
-    const cacheKey = getCacheKey(monthId, role, userUID);
-    const listenerKey = `tasks_${monthId}_${role}_${userUID || 'all'}`;
-    
-    // OPTIMIZED: Check cache AND listener first - if both exist, use cache, no fetch needed
-    if (taskCache.has(cacheKey) && listenerManager.hasListener(listenerKey)) {
-      const cachedData = taskCache.get(cacheKey);
-      logger.log('🔍 [useTasks] Using cached data with existing listener (no fetch):', cacheKey);
-      setTasks(cachedData);
-      setIsLoading(false);
-      setError(null);
-      return; // Skip setup entirely - data is cached and listener is active
-    }
-    
-    // Check cache first (but listener doesn't exist yet)
-    if (taskCache.has(cacheKey)) {
-      const cachedData = taskCache.get(cacheKey);
-      logger.log('🔍 [useTasks] Using cached data, setting up listener for updates:', cacheKey);
-      setTasks(cachedData);
-      setIsLoading(false);
-      // Still set up listener to get real-time updates, but data is already loaded
-    } else {
-      setIsLoading(true);
-    }
+    // Always fetch fresh data - no cache
+    setIsLoading(true);
 
-    logger.log('🔍 [useTasks] Starting tasks fetch', { monthId, role, userUID });
-    let unsubscribe = null;
-
-    const setupListener = async () => {
+    const fetchTasks = async () => {
       try {
         setError(null);
-
-        // Check if listener already exists (double-check after cache check)
-        if (listenerManager.hasListener(listenerKey)) {
-          logger.log('Listener already exists, skipping duplicate setup for:', listenerKey);
-          // Get current data from cache if available
-          const existingData = taskCache.get(cacheKey);
-          if (existingData) {
-            setTasks(existingData);
-          }
-          setIsLoading(false);
-          return;
+        const params = {};
+        if (monthId) {
+          params.monthId = monthId;
+        }
+        if (userUID) {
+          params.userUID = userUID;
         }
 
-        // Check if month board exists
-        const monthDocRef = getMonthRef(monthId);
-        const monthDoc = await getDoc(monthDocRef);
-
-        if (!monthDoc.exists()) {
-          logger.warn('Month board does not exist for:', monthId);
-          setTasks([]);
-          taskCache.set(cacheKey, []); // Cache empty result
-          setIsLoading(false);
-          return;
-        }
-
-        const tasksRef = getTaskRef(monthId);
-        const tasksQuery = buildTaskQuery(tasksRef, role, userUID);
-
-        unsubscribe = listenerManager.addListener(
-          listenerKey,
-          () => onSnapshot(
-            tasksQuery,
-            (snapshot) => {
-              if (!snapshot || !snapshot.docs || snapshot.empty) {
-                const emptyTasks = [];
-                setTasks(emptyTasks);
-                taskCache.set(cacheKey, emptyTasks); // Cache empty result
-                setIsLoading(false);
-                return;
-              }
-
-              const validDocs = snapshot.docs.filter(
-                (doc) => doc && doc.exists() && doc.data() && doc.id
-              );
-
-              const tasksData = validDocs
-                .map((d) =>
-                  serializeTimestampsForContext({
-                    id: d.id,
-                    monthId: monthId,
-                    ...d.data(),
-                  })
-                )
-                .filter((task) => task !== null);
-
-              // Update cache
-              taskCache.set(cacheKey, tasksData);
-              setTasks(tasksData);
-              setIsLoading(false);
-              setError(null);
-            },
-            (err) => {
-              logger.error('Tasks real-time error:', err);
-              setError(err);
-              setIsLoading(false);
+        const tasksData = await apiClient.get('/tasks', params);
+        
+        // Parse data_task if it's a string and normalize field names
+        const parsedTasks = tasksData.map(task => {
+          // Ensure data_task exists and is properly parsed
+          let dataTask = task.data_task;
+          if (typeof dataTask === 'string') {
+            try {
+              dataTask = JSON.parse(dataTask);
+            } catch (e) {
+              logger.error('Error parsing data_task:', e);
+              dataTask = {};
             }
-          ),
-          true, // preserve setup function for restoration, but will be paused when tab hidden
-          'tasks', // category
-          'tasks' // page
-        );
+          } else if (!dataTask) {
+            dataTask = {};
+          }
+          
+          return {
+            ...task,
+            monthId: task.month_id || task.monthId, // Normalize month_id to monthId
+            userUID: task.userUID, // Use userUID from backend
+            createbyUID: task.createbyUID || task.userUID, // Use createbyUID from backend
+            createdByName: task.created_by_name || task.createdByName, // Normalize created_by_name
+            data_task: dataTask
+          };
+        });
 
+        // Update state
+        setTasks(parsedTasks);
+        setIsLoading(false);
+        setError(null);
+        logger.log('✅ [useTasks] Tasks fetched:', parsedTasks.length, 'tasks:', parsedTasks.map(t => ({ id: t.id, monthId: t.monthId, userUID: t.userUID })));
       } catch (err) {
-        logger.error('Error setting up tasks listener:', err);
+        // Handle 401 gracefully - user not logged in yet
+        if (err.isUnauthorized) {
+          setTasks([]);
+          setIsLoading(false);
+          setError(null);
+          return;
+        }
+        logger.error('❌ [useTasks] Fetch error:', err);
         setError(err);
         setIsLoading(false);
       }
     };
 
-    setupListener();
+    fetchTasks();
+
+    // Subscribe to WebSocket updates
+    const handleTaskChange = (data) => {
+      logger.log('🔔 [WebSocket] Task change event received:', { event: data.event, monthId: data.monthId, taskMonthId: data.task?.monthId, userUID: data.userUID });
+      
+      // Only process if it's for this month (or all if no monthId) and user
+      const taskMonthId = data.monthId || data.task?.monthId || data.task?.month_id;
+      if (!monthId || taskMonthId === monthId) {
+        // For regular users, only show their own tasks
+        if (role === 'user' && data.userUID !== userUID && data.task?.userUID !== userUID) {
+          logger.log('⏭️ [WebSocket] Skipping task - not for this user');
+          return; // Skip if not for this user
+        }
+        // For admins viewing a specific user, filter by that user
+        if (role === 'admin' && userUID && data.userUID !== userUID && data.task?.userUID !== userUID) {
+          logger.log('⏭️ [WebSocket] Skipping task - admin viewing specific user');
+          return; // Skip if admin viewing specific user
+        }
+
+        if (data.event === 'created' || data.event === 'updated') {
+          logger.log('✅ [WebSocket] Processing task', data.event, 'event');
+          // Ensure data_task exists and is properly parsed
+          let dataTask = data.task.data_task;
+          if (typeof dataTask === 'string') {
+            try {
+              dataTask = JSON.parse(dataTask);
+            } catch (e) {
+              logger.error('Error parsing data_task in WebSocket:', e);
+              dataTask = {};
+            }
+          } else if (!dataTask) {
+            dataTask = {};
+          }
+          
+          const task = {
+            ...data.task,
+            monthId: data.task.month_id || data.task.monthId, // Normalize month_id to monthId
+            userUID: data.task.userUID, // Use userUID from backend
+            createbyUID: data.task.createbyUID || data.task.userUID, // Use createbyUID from backend
+            createdByName: data.task.created_by_name || data.task.createdByName, // Normalize created_by_name
+            data_task: dataTask
+          };
+
+          setTasks(prev => {
+            if (data.event === 'created') {
+              const updated = [...prev, task];
+              logger.log('✅ [WebSocket] Task added, new count:', updated.length);
+              return updated;
+            } else {
+              const updated = prev.map(t => t.id === task.id ? task : t);
+              logger.log('✅ [WebSocket] Task updated, count:', updated.length);
+              return updated;
+            }
+          });
+        } else if (data.event === 'deleted') {
+          setTasks(prev => {
+            const updated = prev.filter(t => t.id !== data.task.id);
+            logger.log('✅ [WebSocket] Task deleted, new count:', updated.length);
+            return updated;
+          });
+        }
+      }
+    };
+
+    wsClient.on('task_change', handleTaskChange);
+    // Subscribe to tasks - if monthId provided, subscribe to specific month, otherwise subscribe to all
+    if (monthId) {
+      wsClient.subscribe([`month:${monthId}`, 'tasks']);
+    } else {
+      wsClient.subscribe(['tasks']);
+    }
 
     return () => {
-      if (unsubscribe) {
-        unsubscribe();
-      }
-      // Don't remove listener on cleanup - keep it active for real-time updates
-      // Only remove if component unmounts completely
+      wsClient.off('task_change', handleTaskChange);
     };
-  }, [monthId, role, userUID]); // Keep dependencies but optimize the hook
+  }, [monthId, role, userUID]); // Dependencies to prevent unnecessary re-renders
 
   return { tasks, isLoading, error };
 };
 
-const checkForDuplicateTask = async (colRef, task, userUID) => {
+const checkForDuplicateTask = async (tasks, task, userUID) => {
   try {
-    // Check if task has gimodear and name for duplicate checking
     if (!task.gimodear || !task.name) {
       return { isDuplicate: false, message: '' };
     }
 
-    // Query for existing tasks with same gimodear and name for this user
-    const duplicateQuery = query(
-      colRef,
-      where("userUID", "==", userUID),
-      where("data_task.gimodear", "==", task.gimodear),
-      where("data_task.name", "==", task.name)
-    );
+    const duplicate = tasks.find(t => {
+      const dataTask = t.data_task || t;
+      return t.userUID === userUID &&
+             dataTask.gimodear === task.gimodear &&
+             dataTask.name === task.name;
+    });
 
-    const duplicateSnapshot = await getDocs(duplicateQuery);
-
-    if (!duplicateSnapshot.empty) {
+    if (duplicate) {
       return {
         isDuplicate: true,
         message: `A task with gimodear "${task.gimodear}" and name "${task.name}" already exists`
@@ -343,7 +236,6 @@ const checkForDuplicateTask = async (colRef, task, userUID) => {
     return { isDuplicate: false, message: '' };
   } catch (error) {
     logger.error('Error checking for duplicate task:', error);
-    // If duplicate check fails, allow creation but log the error
     return { isDuplicate: false, message: '' };
   }
 };
@@ -354,7 +246,6 @@ const checkForDuplicateTask = async (colRef, task, userUID) => {
 export const useCreateTask = () => {
   const createTask = useCallback(async (task, userData, reporters = []) => {
     try {
-      // Validate user permissions using centralized validation
       const permissionValidation = validateTaskPermissions(userData, 'create_tasks');
       if (!permissionValidation.isValid) {
         throw new Error(permissionValidation.errors.join(', '));
@@ -365,32 +256,21 @@ export const useCreateTask = () => {
         throw new Error("Month ID is required");
       }
 
-      // Get month document to retrieve boardId
-      const monthDocRef = getMonthRef(monthId);
-      const monthDoc = await getDoc(monthDocRef);
-      if (!monthDoc.exists()) {
+      // Verify month exists
+      try {
+        await apiClient.get(`/months/${monthId}`);
+      } catch (err) {
         throw new Error(
           "Month board not available. Please contact an administrator to generate the month board for this period, or try selecting a different month."
         );
       }
 
-      const boardData = monthDoc.data();
-      const boardId = boardData?.boardId;
-
-      if (!boardId) {
-        throw new Error(
-          "Month board is missing boardId. Please contact an administrator to regenerate the month board."
-        );
-      }
-
-      const colRef = getTaskRef(monthId);
       const currentUserUID = getUserUID(userData);
       const currentUserName = userData?.name || userData?.displayName || userData?.email || '';
-      const createdAt = serverTimestamp();
-      const updatedAt = createdAt;
 
-      // Check for duplicate tasks before creating
-      const duplicateCheck = await checkForDuplicateTask(colRef, task, currentUserUID);
+      // Get existing tasks to check for duplicates
+      const existingTasks = await apiClient.get('/tasks', { monthId, userUID: currentUserUID });
+      const duplicateCheck = await checkForDuplicateTask(existingTasks, task, currentUserUID);
       if (duplicateCheck.isDuplicate) {
         throw new Error(`Duplicate task found: ${duplicateCheck.message}`);
       }
@@ -405,34 +285,29 @@ export const useCreateTask = () => {
         task.reporterUID = task.reporters;
       }
 
-      // Create final document data
-      const documentData = {
-        data_task: task,
-        userUID: currentUserUID,
-        monthId: monthId,
-        boardId: boardId,
-        createbyUID: currentUserUID,
-        createdByName: currentUserName,
-        updatedAt: updatedAt,
-        createdAt: createdAt,
-      };
-
-      if (!documentData.userUID || !documentData.monthId) {
-        throw new Error(
-          "Invalid task data: missing required fields (userUID or monthId)"
-        );
-      }
-
-      const ref = await addDoc(colRef, documentData);
-
-      const result = {
-        id: ref.id,
+      const taskData = {
         monthId,
-        ...documentData,
+        userUID: currentUserUID,
+        dataTask: task,
+        boardId: monthId, // Can be updated if needed
       };
 
-      logger.log('Task created successfully:', ref.id);
-      return { success: true, data: serializeTimestampsForContext(result) };
+      const result = await apiClient.post('/tasks', taskData);
+
+      logger.log('Task created successfully:', result.id);
+      return { 
+        success: true, 
+        data: {
+          ...result,
+          monthId: result.month_id || result.monthId, // Normalize month_id to monthId
+          userUID: result.userUID, // Use userUID from backend
+          createbyUID: result.createbyUID || result.created_by_UID || result.userUID, // Use createbyUID from backend
+          createdByName: result.created_by_name || result.createdByName, // Normalize created_by_name
+          data_task: typeof result.data_task === 'string' 
+            ? JSON.parse(result.data_task) 
+            : result.data_task
+        }
+      };
     } catch (err) {
       logger.error('Error creating task:', err);
       throw err;
@@ -448,26 +323,15 @@ export const useCreateTask = () => {
 export const useUpdateTask = () => {
   const updateTask = useCallback(async (monthId, taskId, updates, reporters = [], userData) => {
     try {
-      // Validate user permissions using centralized validation
       const permissionValidation = validateTaskPermissions(userData, 'update_tasks');
       if (!permissionValidation.isValid) {
         throw new Error(permissionValidation.errors.join(', '));
       }
 
-      // Fetch current task data to check for changes
-      const currentTaskRef = getTaskRef(monthId, taskId);
-      const currentTaskDoc = await getDoc(currentTaskRef);
-
-      if (!currentTaskDoc.exists()) {
+      // Fetch current task
+      const currentTask = await apiClient.get(`/tasks/${taskId}`);
+      if (!currentTask) {
         throw new Error("Task not found");
-      }
-
-      const currentTaskData = currentTaskDoc.data();
-
-      // Check if there are any actual changes
-      if (!hasTaskDataChanged(currentTaskData, updates)) {
-        logger.log("No changes detected, skipping update");
-        return { success: true, id: taskId, message: "No changes detected" };
       }
 
       // Auto-add reporter name if we have reporter ID but no name
@@ -480,17 +344,26 @@ export const useUpdateTask = () => {
         updates.reporterUID = updates.reporters;
       }
 
-      // Structure the updates with data_task wrapper
-      const updatesWithTimestamp = {
-        data_task: updates,
-        updatedAt: serverTimestamp(),
+      const updateData = {
+        dataTask: updates
       };
 
-      const taskRef = getTaskRef(monthId, taskId);
-      await updateDoc(taskRef, updatesWithTimestamp);
+      const result = await apiClient.put(`/tasks/${taskId}`, updateData);
 
       logger.log('Task updated successfully:', taskId);
-      return { success: true, data: { id: taskId, monthId } };
+      return { 
+        success: true, 
+        data: {
+          ...result,
+          monthId: result.month_id || result.monthId, // Normalize month_id to monthId
+          userUID: result.userUID, // Use userUID from backend
+          createbyUID: result.createbyUID || result.created_by_UID || result.userUID, // Use createbyUID from backend
+          createdByName: result.created_by_name || result.createdByName, // Normalize created_by_name
+          data_task: typeof result.data_task === 'string' 
+            ? JSON.parse(result.data_task) 
+            : result.data_task
+        }
+      };
     } catch (err) {
       logger.error('Error updating task:', err);
       throw err;
@@ -506,14 +379,12 @@ export const useUpdateTask = () => {
 export const useDeleteTask = () => {
   const deleteTask = useCallback(async (monthId, taskId, userData) => {
     try {
-      // Validate user permissions using centralized validation
       const permissionValidation = validateTaskPermissions(userData, 'delete_tasks');
       if (!permissionValidation.isValid) {
         throw new Error(permissionValidation.errors.join(', '));
       }
 
-      const taskRef = getTaskRef(monthId, taskId);
-      await deleteDoc(taskRef);
+      await apiClient.delete(`/tasks/${taskId}`);
 
       logger.log('Task deleted successfully:', taskId);
       return { success: true, data: { id: taskId, monthId } };
