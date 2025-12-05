@@ -12,7 +12,7 @@ export const getReporters = async (req, res, next) => {
   try {
     const { department, country, channel, search } = req.query;
     
-    let query = 'SELECT * FROM reporters WHERE 1=1';
+    let query = 'SELECT id, "reporter_UID", name, email, department, channel, channel_name, country, created_at, updated_at, "created_by_UID", "updated_by_UID" FROM reporters WHERE 1=1';
     const params = [];
     let paramCount = 1;
 
@@ -43,12 +43,13 @@ export const getReporters = async (req, res, next) => {
     const result = await pool.query(query, params);
     // Format response to match Firebase structure
     const formatted = result.rows.map(row => ({
+      id: row.id || row["reporter_UID"], // UUID id (primary key) or fallback to reporter_UID
       name: row.name,
       email: row.email,
       departament: row.department, // Firebase uses "departament" spelling
       channelName: row.channel_name || row.channel,
       country: row.country,
-      reporterUID: row["reporter_UID"],
+      reporterUID: row["reporter_UID"], // Business identifier (VARCHAR)
       createdAt: row.created_at ? new Date(row.created_at).toISOString() : row.createdAt,
       updatedAt: row.updated_at ? new Date(row.updated_at).toISOString() : row.updatedAt,
       createdBy: row.created_by_UID || row.createdBy, // User UID
@@ -62,7 +63,7 @@ export const getReporters = async (req, res, next) => {
 export const getReporterById = async (req, res, next) => {
   try {
     const { id } = req.params; // This is actually reporter_UID now
-    const result = await pool.query('SELECT * FROM reporters WHERE "reporter_UID" = $1', [id]);
+    const result = await pool.query('SELECT id, "reporter_UID", name, email, department, channel, channel_name, country, created_at, updated_at, "created_by_UID", "updated_by_UID" FROM reporters WHERE "reporter_UID" = $1', [id]);
 
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Reporter not found' });
@@ -71,12 +72,13 @@ export const getReporterById = async (req, res, next) => {
     // Format response to match Firebase structure
     const row = result.rows[0];
     const formatted = {
+      id: row.id || row["reporter_UID"], // UUID id (primary key) or fallback to reporter_UID
       name: row.name,
       email: row.email,
       departament: row.department, // Firebase uses "departament" spelling
       channelName: row.channel_name || row.channel,
       country: row.country,
-      reporterUID: row["reporter_UID"],
+      reporterUID: row["reporter_UID"], // Business identifier (VARCHAR)
       createdAt: row.created_at ? new Date(row.created_at).toISOString() : row.createdAt,
       updatedAt: row.updated_at ? new Date(row.updated_at).toISOString() : row.updatedAt,
       createdBy: row.created_by_UID || row.createdBy, // User UID
@@ -134,12 +136,13 @@ export const createReporter = async (req, res, next) => {
     // Format response to match Firebase structure
     const row = result.rows[0];
     const formatted = {
+      id: row.id || row["reporter_UID"], // UUID id (primary key) or fallback to reporter_UID
       name: row.name,
       email: row.email,
       departament: row.department, // Firebase uses "departament" spelling
       channelName: row.channel_name || row.channel,
       country: row.country,
-      reporterUID: row["reporter_UID"],
+      reporterUID: row["reporter_UID"], // Business identifier (VARCHAR)
       createdAt: row.created_at ? new Date(row.created_at).toISOString() : row.createdAt,
       updatedAt: row.updated_at ? new Date(row.updated_at).toISOString() : row.updatedAt,
       createdBy: row.created_by_UID || row.createdBy, // User UID
@@ -220,12 +223,13 @@ export const updateReporter = async (req, res, next) => {
     // Format response to match Firebase structure
     const row = result.rows[0];
     const formatted = {
+      id: row.id || row["reporter_UID"], // UUID id (primary key) or fallback to reporter_UID
       name: row.name,
       email: row.email,
       departament: row.department, // Firebase uses "departament" spelling
       channelName: row.channel_name || row.channel,
       country: row.country,
-      reporterUID: row["reporter_UID"],
+      reporterUID: row["reporter_UID"], // Business identifier (VARCHAR)
       createdAt: row.created_at ? new Date(row.created_at).toISOString() : row.createdAt,
       updatedAt: row.updated_at ? new Date(row.updated_at).toISOString() : row.updatedAt,
       createdBy: row.created_by_UID || row.createdBy, // User UID
@@ -250,7 +254,11 @@ export const deleteReporter = async (req, res, next) => {
 
     const result = await pool.query('DELETE FROM reporters WHERE "reporter_UID" = $1 RETURNING "reporter_UID"', [id]);
 
-    emitReporterChange(req, 'deleted', { reporterUID: result.rows[0]["reporter_UID"] });
+    // Send delete event with both id and reporterUID for compatibility
+    emitReporterChange(req, 'deleted', { 
+      id: result.rows[0]["reporter_UID"],
+      reporterUID: result.rows[0]["reporter_UID"] 
+    });
     res.json({ success: true, message: 'Reporter deleted successfully' });
   } catch (error) {
     next(error);

@@ -134,8 +134,8 @@ class WebSocketManager {
     // Always broadcast to all subscribed clients (admins and task owners)
     // This ensures real-time updates for everyone viewing the tasks
     this.broadcast(data, (ws) => {
-      // Only send to clients subscribed to tasks or this month
-      return !ws.subscriptions || ws.subscriptions.has('tasks') || (monthId && ws.subscriptions.has(`month:${monthId}`));
+      // Send to clients if no subscriptions set, or if subscribed to tasks or this month
+      return !ws.subscriptions || ws.subscriptions.size === 0 || ws.subscriptions.has('tasks') || (monthId && ws.subscriptions.has(`month:${monthId}`));
     });
   }
 
@@ -163,23 +163,31 @@ class WebSocketManager {
 
   // Notify about deliverable changes
   notifyDeliverableChange(type, deliverable) {
-    this.broadcast({
+    const data = {
       type: 'deliverable_change',
       event: type, // 'created', 'updated', 'deleted'
       deliverable
-    }, (ws) => {
-      return !ws.subscriptions || ws.subscriptions.has('deliverables');
+    };
+
+    // Always broadcast to all subscribed clients - same pattern as tasks
+    this.broadcast(data, (ws) => {
+      // Send to clients if no subscriptions set, or if subscribed to deliverables
+      return !ws.subscriptions || ws.subscriptions.size === 0 || ws.subscriptions.has('deliverables');
     });
   }
 
   // Notify about reporter changes
   notifyReporterChange(type, reporter) {
-    this.broadcast({
+    const data = {
       type: 'reporter_change',
       event: type, // 'created', 'updated', 'deleted'
       reporter
-    }, (ws) => {
-      return !ws.subscriptions || ws.subscriptions.has('reporters');
+    };
+
+    // Always broadcast to all subscribed clients - same pattern as tasks
+    this.broadcast(data, (ws) => {
+      // Send to clients if no subscriptions set, or if subscribed to reporters
+      return !ws.subscriptions || ws.subscriptions.size === 0 || ws.subscriptions.has('reporters');
     });
   }
 

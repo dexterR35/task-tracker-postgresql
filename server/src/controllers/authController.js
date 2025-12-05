@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import pool from '../config/database.js';
-import { parsePermissions } from '../utils/permissions.js';
+import { fetchUserPermissions, parsePermissions } from '../utils/permissions.js';
 
 export const login = async (req, res, next) => {
   try {
@@ -13,7 +13,7 @@ export const login = async (req, res, next) => {
 
     // Find user by email (including is_active for security check)
     const result = await pool.query(
-      'SELECT "user_UID", email, name, role, permissions, password_hash, is_active FROM users WHERE email = $1',
+      'SELECT "user_UID", email, name, role, password_hash, is_active FROM users WHERE email = $1',
       [email.toLowerCase().trim()]
     );
 
@@ -34,6 +34,9 @@ export const login = async (req, res, next) => {
       return res.status(403).json({ error: 'Account is inactive. Please contact an administrator.' });
     }
 
+    // Fetch permissions from normalized table
+    const permissions = await fetchUserPermissions(user["user_UID"], pool);
+
     // Generate JWT token
     if (!process.env.JWT_SECRET) {
       return res.status(500).json({ error: 'Server configuration error' });
@@ -44,14 +47,11 @@ export const login = async (req, res, next) => {
         userUID: user["user_UID"],
         email: user.email,
         role: user.role,
-        permissions: parsePermissions(user.permissions)
+        permissions: permissions
       },
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRES_IN || '8h' }
     );
-
-    // Parse permissions
-    const permissions = parsePermissions(user.permissions);
 
     // Return user data (without password)
     const userData = {
@@ -75,7 +75,7 @@ export const verifyToken = async (req, res, next) => {
   try {
     // User is already set by authenticateToken middleware
     const result = await pool.query(
-      'SELECT "user_UID", email, name, role, permissions FROM users WHERE "user_UID" = $1',
+      'SELECT "user_UID", email, name, role FROM users WHERE "user_UID" = $1',
       [req.user.userUID]
     );
 
@@ -85,8 +85,8 @@ export const verifyToken = async (req, res, next) => {
 
     const user = result.rows[0];
     
-    // Parse permissions
-    const permissions = parsePermissions(user.permissions);
+    // Fetch permissions from normalized table
+    const permissions = await fetchUserPermissions(user["user_UID"], pool);
 
     res.json({
       user: {

@@ -119,8 +119,9 @@ export const useTasks = (monthId, role = 'user', userUID = null) => {
         setError(null);
         logger.log('✅ [useTasks] Tasks fetched:', parsedTasks.length, 'tasks:', parsedTasks.map(t => ({ id: t.id, monthId: t.monthId, userUID: t.userUID })));
       } catch (err) {
-        // Handle 401 gracefully - user not logged in yet
-        if (err.isUnauthorized) {
+        // Handle 401/403 gracefully - user not logged in yet or token expired
+        if (err.isUnauthorized || (err.status === 403 && err.message?.toLowerCase().includes('token'))) {
+          logger.warn('⚠️ [useTasks] Authentication error:', err.message);
           setTasks([]);
           setIsLoading(false);
           setError(null);

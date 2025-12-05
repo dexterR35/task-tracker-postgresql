@@ -1,5 +1,34 @@
 import pool from '../config/database.js';
 
+// Helper to build off_days array from normalized table (for backward compatibility)
+const buildOffDaysArray = async (teamDaysOffId) => {
+  const result = await pool.query(
+    'SELECT date_string, day, month, year, timestamp FROM team_days_off_dates WHERE team_days_off_id = $1 ORDER BY date_string',
+    [teamDaysOffId]
+  );
+  
+  return result.rows.map(row => ({
+    dateString: row.date_string,
+    day: row.day,
+    month: row.month,
+    year: row.year,
+    timestamp: row.timestamp
+  }));
+};
+
+// Helper to format team days off response with off_days array
+const formatTeamDaysOff = async (dayOff) => {
+  if (!dayOff) return dayOff;
+  
+  const offDays = await buildOffDaysArray(dayOff.id);
+  
+  return {
+    ...dayOff,
+    off_days: offDays, // For backward compatibility
+    offDays: offDays // Alternative naming
+  };
+};
+
 // Helper to emit WebSocket events
 const emitTeamDaysOffChange = (req, event, teamDaysOff) => {
   const wsManager = req.app.locals.wsManager;
@@ -30,7 +59,8 @@ export const getTeamDaysOff = async (req, res, next) => {
     query += ' ORDER BY "user_UID"';
 
     const result = await pool.query(query, params);
-    res.json(result.rows);
+    const formattedResults = await Promise.all(result.rows.map(dayOff => formatTeamDaysOff(dayOff)));
+    res.json(formattedResults);
   } catch (error) {
     next(error);
   }
@@ -54,7 +84,7 @@ export const getDayOffById = async (req, res, next) => {
       return res.status(403).json({ error: 'Insufficient permissions to view this record' });
     }
 
-    res.json(dayOff);
+    res.json(await formatTeamDaysOff(dayOff));
   } catch (error) {
     next(error);
   }
@@ -62,7 +92,7 @@ export const getDayOffById = async (req, res, next) => {
 
 export const createDayOff = async (req, res, next) => {
   try {
-    const { userUID, userName, baseDays, daysOff, monthlyAccrual } = req.body;
+    const { userUID, userName, baseDays, daysOff, monthlyAccrual, offDays } = req.body;
     const user = req.user;
 
     if (!userUID) {
@@ -99,7 +129,7 @@ export const createDayOff = async (req, res, next) => {
         days_remaining, 
         days_total, 
         monthly_accrual,
-        created_by_UID
+        "created_by_UID"
       )
       VALUES ($1, $2, $3, $4, $5, $6, $7)
       ON CONFLICT ("user_UID") 
@@ -109,7 +139,7 @@ export const createDayOff = async (req, res, next) => {
         days_remaining = EXCLUDED.days_remaining,
         days_total = EXCLUDED.days_total,
         monthly_accrual = EXCLUDED.monthly_accrual,
-        updated_by_UID = EXCLUDED.created_by_UID,
+        "updated_by_UID" = EXCLUDED."created_by_UID",
         updated_at = CURRENT_TIMESTAMP
       RETURNING *`,
       [
@@ -124,9 +154,36 @@ export const createDayOff = async (req, res, next) => {
     );
 
     const dayOff = result.rows[0];
+
+    // Insert off_days into normalized table if provided
+    if (offDays && Array.isArray(offDays)) {
+      // Delete existing dates
+      await pool.query('DELETE FROM team_days_off_dates WHERE team_days_off_id = $1', [dayOff.id]);
+      
+      // Insert new dates
+      for (const dateItem of offDays) {
+        await pool.query(
+          `INSERT INTO team_days_off_dates (team_days_off_id, "user_UID", date_string, day, month, year, timestamp)
+           VALUES ($1, $2, $3, $4, $5, $6, $7)
+           ON CONFLICT (team_days_off_id, date_string) DO NOTHING`,
+          [
+            dayOff.id,
+            userUID,
+            dateItem.dateString || dateItem.date_string,
+            dateItem.day || null,
+            dateItem.month || null,
+            dateItem.year || null,
+            dateItem.timestamp || null
+          ]
+        );
+      }
+    }
+
+    const formattedDayOff = await formatTeamDaysOff(dayOff);
+    
     // Emit correct event type based on whether it was insert or update
-    emitTeamDaysOffChange(req, isUpdate ? 'updated' : 'created', dayOff);
-    res.status(isUpdate ? 200 : 201).json(dayOff);
+    emitTeamDaysOffChange(req, isUpdate ? 'updated' : 'created', formattedDayOff);
+    res.status(isUpdate ? 200 : 201).json(formattedDayOff);
   } catch (error) {
     if (error.code === '23505') { // Unique violation
       return res.status(409).json({ error: 'Team days off entry already exists for this user' });
@@ -168,12 +225,8 @@ export const updateDayOff = async (req, res, next) => {
       updates.push(`monthly_accrual = $${paramCount++}`);
       params.push(parseFloat(monthlyAccrual) || 1.75);
     }
-    if (offDays !== undefined) {
-      updates.push(`off_days = $${paramCount++}`);
-      params.push(JSON.stringify(offDays));
-    }
 
-    if (updates.length === 0) {
+    if (updates.length === 0 && offDays === undefined) {
       return res.status(400).json({ error: 'No fields to update' });
     }
 
@@ -200,25 +253,53 @@ export const updateDayOff = async (req, res, next) => {
     }
 
     // Always update updated_by_UID
-    updates.push(`updated_by_UID = $${paramCount++}`);
-    params.push(user.userUID || '');
+    if (updates.length > 0) {
+      updates.push(`"updated_by_UID" = $${paramCount++}`);
+      params.push(user.userUID || '');
+      params.push(id);
 
-    params.push(id);
+      const query = `
+        UPDATE team_days_off
+        SET ${updates.join(', ')}
+        WHERE id = $${paramCount}
+        RETURNING *
+      `;
 
-    const query = `
-      UPDATE team_days_off
-      SET ${updates.join(', ')}
-      WHERE id = $${paramCount}
-      RETURNING *
-    `;
-
-    const result = await pool.query(query, params);
-
-    if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Day off not found' });
+      await pool.query(query, params);
     }
 
-    const updatedDayOff = result.rows[0];
+    // Update off_days in normalized table if provided
+    if (offDays !== undefined) {
+      const userUID = existingCheck.rows[0]["user_UID"];
+      
+      // Delete existing dates
+      await pool.query('DELETE FROM team_days_off_dates WHERE team_days_off_id = $1', [id]);
+      
+      // Insert new dates
+      if (Array.isArray(offDays) && offDays.length > 0) {
+        for (const dateItem of offDays) {
+          await pool.query(
+            `INSERT INTO team_days_off_dates (team_days_off_id, "user_UID", date_string, day, month, year, timestamp)
+             VALUES ($1, $2, $3, $4, $5, $6, $7)
+             ON CONFLICT (team_days_off_id, date_string) DO NOTHING`,
+            [
+              id,
+              userUID,
+              dateItem.dateString || dateItem.date_string,
+              dateItem.day || null,
+              dateItem.month || null,
+              dateItem.year || null,
+              dateItem.timestamp || null
+            ]
+          );
+        }
+      }
+    }
+
+    // Fetch updated record
+    const result = await pool.query('SELECT * FROM team_days_off WHERE id = $1', [id]);
+    const updatedDayOff = await formatTeamDaysOff(result.rows[0]);
+    
     emitTeamDaysOffChange(req, 'updated', updatedDayOff);
     res.json(updatedDayOff);
   } catch (error) {
@@ -250,4 +331,3 @@ export const deleteDayOff = async (req, res, next) => {
     next(error);
   }
 };
-

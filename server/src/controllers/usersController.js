@@ -1,15 +1,16 @@
 import pool from '../config/database.js';
-import { parsePermissions } from '../utils/permissions.js';
+import { fetchUserPermissions, setUserPermissions, parsePermissions } from '../utils/permissions.js';
 
-// Helper to parse JSONB fields and format to match Firebase EXACTLY
-const parseUser = (user) => {
+// Helper to format user response (fetches permissions from normalized table)
+const parseUser = async (user) => {
   if (!user) return user;
   
-  // Parse permissions
-  const permissions = parsePermissions(user.permissions);
+  // Fetch permissions from normalized table
+  const permissions = await fetchUserPermissions(user["user_UID"], pool);
   
   // Format response to match Firebase structure
   return {
+    id: user.id || user["user_UID"], // UUID id (primary key) or fallback to user_UID
     color_set: user.color_set || user.colorSet || null,
     createdAt: user.created_at ? new Date(user.created_at).toISOString() : user.createdAt,
     createdBy: user.created_by_UID || user.createdBy, // User UID
@@ -34,7 +35,7 @@ const parseUser = (user) => {
     occupation: user.occupation || null,
     permissions: permissions,
     role: user.role,
-    userUID: user["user_UID"] || user.userUID
+    userUID: user["user_UID"] || user.userUID // Business identifier (VARCHAR)
   };
 };
 
@@ -42,7 +43,7 @@ export const getUsers = async (req, res, next) => {
   try {
     const { role, search, active } = req.query;
     
-    let query = 'SELECT "user_UID", email, name, role, permissions, color_set, is_active, occupation, created_at, created_by_UID FROM users WHERE 1=1';
+    let query = 'SELECT id, "user_UID", email, name, role, color_set, is_active, occupation, created_at, "created_by_UID" FROM users WHERE 1=1';
     const params = [];
     let paramCount = 1;
 
@@ -69,7 +70,8 @@ export const getUsers = async (req, res, next) => {
     query += ' ORDER BY created_at DESC';
 
     const result = await pool.query(query, params);
-    res.json(result.rows.map(parseUser));
+    const users = await Promise.all(result.rows.map(user => parseUser(user)));
+    res.json(users);
   } catch (error) {
     next(error);
   }
@@ -82,7 +84,7 @@ export const getUserById = async (req, res, next) => {
 
     // Authorization: Users can only view their own profile, admins can view any
     const result = await pool.query(
-      'SELECT "user_UID", email, name, role, permissions, color_set, is_active, occupation, created_at, created_by_UID FROM users WHERE "user_UID" = $1',
+      'SELECT id, "user_UID", email, name, role, color_set, is_active, occupation, created_at, "created_by_UID" FROM users WHERE "user_UID" = $1',
       [id]
     );
 
@@ -97,7 +99,7 @@ export const getUserById = async (req, res, next) => {
       return res.status(403).json({ error: 'Insufficient permissions to view this user' });
     }
 
-    res.json(parseUser(requestedUser));
+    res.json(await parseUser(requestedUser));
   } catch (error) {
     next(error);
   }
@@ -109,7 +111,7 @@ export const getUserByUID = async (req, res, next) => {
     const currentUser = req.user;
 
     const result = await pool.query(
-      'SELECT "user_UID", email, name, role, permissions, color_set, is_active, occupation, created_at, created_by_UID FROM users WHERE "user_UID" = $1',
+      'SELECT id, "user_UID", email, name, role, color_set, is_active, occupation, created_at, "created_by_UID" FROM users WHERE "user_UID" = $1',
       [uid]
     );
 
@@ -124,7 +126,7 @@ export const getUserByUID = async (req, res, next) => {
       return res.status(403).json({ error: 'Insufficient permissions to view this user' });
     }
 
-    res.json(parseUser(requestedUser));
+    res.json(await parseUser(requestedUser));
   } catch (error) {
     next(error);
   }
@@ -153,15 +155,14 @@ export const createUser = async (req, res, next) => {
     const finalUserUID = userUID || `user_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
 
     const result = await pool.query(
-      `INSERT INTO users ("user_UID", email, name, role, permissions, password_hash, color_set, is_active, occupation, created_by_UID)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-       RETURNING "user_UID", email, name, role, permissions, color_set, is_active, occupation, created_at, created_by_UID`,
+      `INSERT INTO users ("user_UID", email, name, role, password_hash, color_set, is_active, occupation, "created_by_UID")
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+       RETURNING id, "user_UID", email, name, role, color_set, is_active, occupation, created_at, "created_by_UID"`,
       [
         finalUserUID,
         email.toLowerCase().trim(),
         name,
         role || 'user',
-        JSON.stringify(permissions || []),
         passwordHash,
         color_set || null,
         isActive !== undefined ? isActive : true,
@@ -170,7 +171,12 @@ export const createUser = async (req, res, next) => {
       ]
     );
 
-    const newUser = parseUser(result.rows[0]);
+    // Set permissions in normalized table
+    if (permissions && Array.isArray(permissions) && permissions.length > 0) {
+      await setUserPermissions(finalUserUID, permissions, pool);
+    }
+
+    const newUser = await parseUser(result.rows[0]);
 
     // Emit WebSocket event
     const wsManager = req.app.locals.wsManager;
@@ -224,10 +230,6 @@ export const updateUser = async (req, res, next) => {
       updates.push(`role = $${paramCount++}`);
       values.push(role);
     }
-    if (permissions !== undefined) {
-      updates.push(`permissions = $${paramCount++}`);
-      values.push(JSON.stringify(permissions));
-    }
     if (password) {
       const bcrypt = await import('bcryptjs');
       const passwordHash = await bcrypt.default.hash(password, 10);
@@ -255,11 +257,17 @@ export const updateUser = async (req, res, next) => {
       UPDATE users
       SET ${updates.join(', ')}
       WHERE "user_UID" = $${paramCount}
-      RETURNING "user_UID", email, name, role, permissions, color_set, is_active, occupation, created_at, created_by_UID
+      RETURNING id, "user_UID", email, name, role, color_set, is_active, occupation, created_at, "created_by_UID"
     `;
 
     const result = await pool.query(query, values);
-    const updatedUser = parseUser(result.rows[0]);
+    
+    // Update permissions in normalized table if provided
+    if (permissions !== undefined) {
+      await setUserPermissions(id, permissions, pool);
+    }
+    
+    const updatedUser = await parseUser(result.rows[0]);
 
     // Emit WebSocket event
     const wsManager = req.app.locals.wsManager;
@@ -297,4 +305,3 @@ export const deleteUser = async (req, res, next) => {
     next(error);
   }
 };
-

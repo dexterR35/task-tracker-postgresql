@@ -80,6 +80,29 @@ class ApiClient {
           error.status = response.status;
           error.data = data;
           error.isUnauthorized = true;
+          // Clear invalid token
+          this.setToken(null);
+          throw error;
+        }
+
+        // Handle 403 Forbidden (Invalid or expired token)
+        if (response.status === 403) {
+          const errorMessage = data.error || data.message || 'Invalid or expired token';
+          // Check if it's a token-related error
+          if (errorMessage.toLowerCase().includes('token') || errorMessage.toLowerCase().includes('expired')) {
+            const error = new Error(errorMessage);
+            error.status = response.status;
+            error.data = data;
+            error.isUnauthorized = true;
+            // Clear invalid token
+            this.setToken(null);
+            throw error;
+          }
+          // For other 403 errors (permission denied), pass through
+          const error = new Error(errorMessage);
+          error.status = response.status;
+          error.data = data;
+          error.isForbidden = true;
           throw error;
         }
 

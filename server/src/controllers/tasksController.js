@@ -1,25 +1,65 @@
 import pool from '../config/database.js';
 
-// Helper to parse JSONB fields and normalize field names to match Firebase EXACTLY
-const parseTask = (task) => {
-  if (!task) return task;
-  
-  // Parse data_task if it's a string, otherwise use the object or empty object
-  const dataTask = typeof task.data_task === 'string' 
-    ? JSON.parse(task.data_task) 
-    : (task.data_task || {});
-  
-  // Format response to match old Firebase structure EXACTLY
+// Helper to build data_task object from normalized columns and related tables
+// This maintains backward compatibility with frontend expecting data_task structure
+const buildTaskWithRelatedData = async (task) => {
+  if (!task) return null;
+
+  // Fetch related data
+  const [marketsResult, departmentsResult, deliverablesResult, aiUsageResult] = await Promise.all([
+    pool.query('SELECT market FROM task_markets WHERE task_id = $1 ORDER BY market', [task.id]),
+    pool.query('SELECT department FROM task_departments WHERE task_id = $1 ORDER BY department', [task.id]),
+    pool.query('SELECT deliverable_name, count, variations_enabled, variations_count FROM task_deliverables WHERE task_id = $1', [task.id]),
+    pool.query('SELECT ai_models, ai_time FROM task_ai_usage WHERE task_id = $1 LIMIT 1', [task.id])
+  ]);
+
+  // Build data_task object from columns and related tables
+  const dataTask = {
+    taskName: task.task_name,
+    products: task.products,
+    timeInHours: task.time_in_hours,
+    isVip: task.is_vip || false,
+    reworked: task.reworked || false,
+    useShutterstock: task.use_shutterstock || false,
+    observations: task.observations || '',
+    reporters: task["reporter_UID"] || '',
+    reporterUID: task["reporter_UID"] || '',
+    reporterName: task.reporter_name || '',
+    startDate: task.start_date ? new Date(task.start_date).toISOString() : null,
+    endDate: task.end_date ? new Date(task.end_date).toISOString() : null,
+    departments: departmentsResult.rows.map(r => r.department),
+    markets: marketsResult.rows.map(r => r.market),
+    deliverablesUsed: deliverablesResult.rows.map(r => ({
+      name: r.deliverable_name,
+      count: r.count,
+      variationsEnabled: r.variations_enabled,
+      variationsCount: r.variations_count
+    })),
+    aiUsed: aiUsageResult.rows.length > 0 ? [{
+      aiModels: aiUsageResult.rows[0].ai_models || [],
+      aiTime: aiUsageResult.rows[0].ai_time || 0
+    }] : []
+  };
+
+  // Format response to match Firebase structure
   return {
-    id: task.id, // Keep id for API operations
+    id: task.id,
     boardId: task.board_id || task.boardId,
-    createbyUID: task.created_by_UID || task["user_UID"] || task.userUID, // Note: Firebase uses "createbyUID" not "createdByUID"
+    createbyUID: task.created_by_UID || task["user_UID"] || task.userUID,
     createdAt: task.created_at ? new Date(task.created_at).toISOString() : task.createdAt,
     data_task: dataTask,
     monthId: task.month_id || task.monthId,
     updatedAt: task.updated_at ? new Date(task.updated_at).toISOString() : task.updatedAt,
     userUID: task["user_UID"] || task.userUID
   };
+};
+
+// Helper to parse single task (always uses normalized columns)
+const parseTask = async (task) => {
+  if (!task) return task;
+  
+  // Build from normalized columns
+  return await buildTaskWithRelatedData(task);
 };
 
 export const getTasks = async (req, res, next) => {
@@ -38,101 +78,92 @@ export const getTasks = async (req, res, next) => {
     } = req.query;
     const user = req.user;
 
-    let query = 'SELECT * FROM tasks WHERE 1=1';
+    // Build query with joins for filtering
+    let query = `
+      SELECT DISTINCT t.* 
+      FROM tasks t
+      LEFT JOIN task_markets tm ON t.id = tm.task_id
+      LEFT JOIN task_departments td ON t.id = td.task_id
+      LEFT JOIN task_deliverables tdel ON t.id = tdel.task_id
+      WHERE 1=1
+    `;
     const params = [];
     let paramCount = 1;
 
     // Month filter
     if (monthId) {
-      query += ` AND month_id = $${paramCount++}`;
+      query += ` AND t.month_id = $${paramCount++}`;
       params.push(monthId);
     }
 
     // Role-based user filtering
     if (user.role === 'user') {
-      // Regular users can only see their own tasks
-      query += ` AND "user_UID" = $${paramCount++}`;
+      query += ` AND t."user_UID" = $${paramCount++}`;
       params.push(user.userUID);
     } else if (user.role === 'admin' && userUID) {
-      // Admin can filter by specific user
-      query += ` AND "user_UID" = $${paramCount++}`;
+      query += ` AND t."user_UID" = $${paramCount++}`;
       params.push(userUID);
     }
-    // If admin and no userUID specified, show all tasks (no filter)
 
-    // Date range filtering
+    // Date range filtering (using start_date/end_date columns)
     if (startDate) {
-      query += ` AND created_at >= $${paramCount++}`;
+      query += ` AND (t.start_date >= $${paramCount} OR t.created_at >= $${paramCount})`;
       params.push(startDate);
+      paramCount++;
     }
     if (endDate) {
-      query += ` AND created_at <= $${paramCount++}`;
+      query += ` AND (t.end_date <= $${paramCount} OR t.created_at <= $${paramCount})`;
       params.push(endDate);
-    }
-
-    // JSONB field filtering - use PostgreSQL JSONB queries for better performance
-    // This matches Firebase path structure: /departments/design/2025/2025-12/taskdata/
-    if (reporterUID) {
-      query += ` AND (
-        data_task->>'reporterUID' = $${paramCount} OR 
-        data_task->>'reporters' = $${paramCount}
-      )`;
-      params.push(reporterUID);
       paramCount++;
     }
 
+    // Reporter filter (using column)
+    if (reporterUID) {
+      query += ` AND t."reporter_UID" = $${paramCount++}`;
+      params.push(reporterUID);
+    }
+
+    // Department filter (using junction table)
     if (department) {
-      // Filter by department using JSONB query (matches Firebase path: /departments/design/2025/2025-12/taskdata/)
-      // Departments can be an array or a single string in data_task
-      query += ` AND (
-        data_task->'departments' @> $${paramCount}::jsonb OR
-        data_task->>'departments' = $${paramCount} OR
-        EXISTS (
-          SELECT 1 FROM jsonb_array_elements_text(data_task->'departments') AS dept
-          WHERE dept = $${paramCount}
-        )
-      )`;
+      query += ` AND (td.department = $${paramCount} OR t.department = $${paramCount})`;
       params.push(department);
       paramCount++;
     }
 
-    query += ' ORDER BY created_at DESC';
-
-    const result = await pool.query(query, params);
-    let tasks = result.rows.map(parseTask);
-
+    // Boolean filters (using columns)
     if (isVip !== undefined) {
       const isVipBool = isVip === 'true' || isVip === true;
-      tasks = tasks.filter(task => {
-        const dataTask = task.data_task || {};
-        return dataTask.isVip === isVipBool;
-      });
+      query += ` AND t.is_vip = $${paramCount++}`;
+      params.push(isVipBool);
     }
 
     if (reworked !== undefined) {
       const reworkedBool = reworked === 'true' || reworked === true;
-      tasks = tasks.filter(task => {
-        const dataTask = task.data_task || {};
-        return dataTask.reworked === reworkedBool;
-      });
+      query += ` AND t.reworked = $${paramCount++}`;
+      params.push(reworkedBool);
     }
 
+    // Deliverables filter (using junction table)
     if (hasDeliverables !== undefined) {
       const hasDeliverablesBool = hasDeliverables === 'true' || hasDeliverables === true;
-      tasks = tasks.filter(task => {
-        const dataTask = task.data_task || {};
-        const deliverables = dataTask.deliverablesUsed || [];
-        return hasDeliverablesBool ? deliverables.length > 0 : deliverables.length === 0;
-      });
+      if (hasDeliverablesBool) {
+        query += ` AND tdel.id IS NOT NULL`;
+      } else {
+        query += ` AND tdel.id IS NULL`;
+      }
     }
 
     if (deliverableName) {
-      tasks = tasks.filter(task => {
-        const dataTask = task.data_task || {};
-        const deliverables = dataTask.deliverablesUsed || [];
-        return deliverables.some(d => d.name === deliverableName);
-      });
+      query += ` AND tdel.deliverable_name = $${paramCount++}`;
+      params.push(deliverableName);
     }
+
+    query += ' ORDER BY t.created_at DESC';
+
+    const result = await pool.query(query, params);
+    
+    // Build tasks with related data
+    const tasks = await Promise.all(result.rows.map(task => buildTaskWithRelatedData(task)));
 
     res.json(tasks);
   } catch (error) {
@@ -149,11 +180,11 @@ export const getTaskById = async (req, res, next) => {
       return res.status(404).json({ error: 'Task not found' });
     }
 
-    const task = parseTask(result.rows[0]);
+    const task = await parseTask(result.rows[0]);
     const user = req.user;
 
     // Check permissions
-    if (user.role === 'user' && task["user_UID"] !== user.userUID) {
+    if (user.role === 'user' && result.rows[0]["user_UID"] !== user.userUID) {
       return res.status(403).json({ error: 'Access denied' });
     }
 
@@ -179,35 +210,102 @@ export const createTask = async (req, res, next) => {
     }
 
     const taskUserUID = userUID || user.userUID;
-
-    // Ensure dataTask is an object
     const taskData = typeof dataTask === 'object' ? dataTask : JSON.parse(dataTask);
-
-    // Generate boardId if not provided (match old Firebase format: board_YYYY-MM_timestamp)
     const finalBoardId = boardId || `board_${monthId}_${Date.now()}`;
 
+    // Insert main task record
     const result = await pool.query(
-      `INSERT INTO tasks (month_id, "user_UID", board_id, data_task, created_by_UID)
-       VALUES ($1, $2, $3, $4, $5)
+      `INSERT INTO tasks (
+        month_id, "user_UID", board_id, 
+        task_name, products, time_in_hours, department,
+        start_date, end_date, observations,
+        is_vip, reworked, use_shutterstock,
+        "reporter_UID", reporter_name,
+        "created_by_UID"
+      )
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
        RETURNING *`,
       [
         monthId,
         taskUserUID,
         finalBoardId,
-        JSON.stringify(taskData),
+        taskData.taskName || null,
+        taskData.products || null,
+        taskData.timeInHours || 0,
+        Array.isArray(taskData.departments) ? taskData.departments[0] : (taskData.departments || null),
+        taskData.startDate ? new Date(taskData.startDate).toISOString().split('T')[0] : null,
+        taskData.endDate ? new Date(taskData.endDate).toISOString().split('T')[0] : null,
+        taskData.observations || null,
+        taskData.isVip || false,
+        taskData.reworked || false,
+        taskData.useShutterstock || false,
+        taskData.reporterUID || taskData.reporters || null,
+        taskData.reporterName || null,
         user.userUID || taskUserUID
       ]
     );
 
-    const newTask = parseTask(result.rows[0]);
+    const newTask = result.rows[0];
+
+    // Insert related data
+    // Markets
+    if (taskData.markets && Array.isArray(taskData.markets)) {
+      for (const market of taskData.markets) {
+        await pool.query(
+          'INSERT INTO task_markets (task_id, market) VALUES ($1, $2) ON CONFLICT (task_id, market) DO NOTHING',
+          [newTask.id, market]
+        );
+      }
+    }
+
+    // Departments (beyond the first one stored in main column)
+    if (taskData.departments && Array.isArray(taskData.departments)) {
+      for (const dept of taskData.departments) {
+        await pool.query(
+          'INSERT INTO task_departments (task_id, department) VALUES ($1, $2) ON CONFLICT (task_id, department) DO NOTHING',
+          [newTask.id, dept]
+        );
+      }
+    }
+
+    // Deliverables
+    if (taskData.deliverablesUsed && Array.isArray(taskData.deliverablesUsed)) {
+      for (const deliverable of taskData.deliverablesUsed) {
+        await pool.query(
+          'INSERT INTO task_deliverables (task_id, deliverable_name, count, variations_enabled, variations_count) VALUES ($1, $2, $3, $4, $5)',
+          [
+            newTask.id,
+            deliverable.name,
+            deliverable.count || 1,
+            deliverable.variationsEnabled || false,
+            deliverable.variationsCount || 0
+          ]
+        );
+      }
+    }
+
+    // AI Usage
+    if (taskData.aiUsed && Array.isArray(taskData.aiUsed) && taskData.aiUsed.length > 0) {
+      const aiData = taskData.aiUsed[0];
+      await pool.query(
+        'INSERT INTO task_ai_usage (task_id, ai_models, ai_time) VALUES ($1, $2, $3)',
+        [
+          newTask.id,
+          aiData.aiModels || [],
+          aiData.aiTime || 0
+        ]
+      );
+    }
+
+    const formattedTask = await buildTaskWithRelatedData(newTask);
 
     // Emit WebSocket event
     const wsManager = req.app.locals.wsManager;
     if (wsManager) {
-      wsManager.notifyTaskChange('created', newTask, monthId, taskUserUID);
+      wsManager.notifyTaskChange('created', formattedTask, monthId, taskUserUID);
     }
 
-    res.status(201).json(newTask);
+    res.status(201).json(formattedTask);
   } catch (error) {
     next(error);
   }
@@ -236,11 +334,60 @@ export const updateTask = async (req, res, next) => {
     const params = [];
     let paramCount = 1;
 
+    // Update main task columns if dataTask provided
     if (dataTask) {
       const taskData = typeof dataTask === 'object' ? dataTask : JSON.parse(dataTask);
-      updates.push(`data_task = $${paramCount++}`);
-      params.push(JSON.stringify(taskData));
+
+      if (taskData.taskName !== undefined) {
+        updates.push(`task_name = $${paramCount++}`);
+        params.push(taskData.taskName);
+      }
+      if (taskData.products !== undefined) {
+        updates.push(`products = $${paramCount++}`);
+        params.push(taskData.products);
+      }
+      if (taskData.timeInHours !== undefined) {
+        updates.push(`time_in_hours = $${paramCount++}`);
+        params.push(taskData.timeInHours);
+      }
+      if (taskData.department !== undefined || (taskData.departments && taskData.departments[0])) {
+        updates.push(`department = $${paramCount++}`);
+        params.push(Array.isArray(taskData.departments) ? taskData.departments[0] : taskData.department);
+      }
+      if (taskData.startDate !== undefined) {
+        updates.push(`start_date = $${paramCount++}`);
+        params.push(taskData.startDate ? new Date(taskData.startDate).toISOString().split('T')[0] : null);
+      }
+      if (taskData.endDate !== undefined) {
+        updates.push(`end_date = $${paramCount++}`);
+        params.push(taskData.endDate ? new Date(taskData.endDate).toISOString().split('T')[0] : null);
+      }
+      if (taskData.observations !== undefined) {
+        updates.push(`observations = $${paramCount++}`);
+        params.push(taskData.observations);
+      }
+      if (taskData.isVip !== undefined) {
+        updates.push(`is_vip = $${paramCount++}`);
+        params.push(taskData.isVip);
+      }
+      if (taskData.reworked !== undefined) {
+        updates.push(`reworked = $${paramCount++}`);
+        params.push(taskData.reworked);
+      }
+      if (taskData.useShutterstock !== undefined) {
+        updates.push(`use_shutterstock = $${paramCount++}`);
+        params.push(taskData.useShutterstock);
+      }
+      if (taskData.reporterUID !== undefined || taskData.reporters !== undefined) {
+        updates.push(`"reporter_UID" = $${paramCount++}`);
+        params.push(taskData.reporterUID || taskData.reporters);
+      }
+      if (taskData.reporterName !== undefined) {
+        updates.push(`reporter_name = $${paramCount++}`);
+        params.push(taskData.reporterName);
+      }
     }
+
     if (monthId) {
       updates.push(`month_id = $${paramCount++}`);
       params.push(monthId);
@@ -272,15 +419,67 @@ export const updateTask = async (req, res, next) => {
     `;
 
     const result = await pool.query(query, params);
-    const updatedTask = parseTask(result.rows[0]);
+    const updatedTask = result.rows[0];
+
+    // Update related tables if dataTask provided
+    if (dataTask) {
+      const taskData = typeof dataTask === 'object' ? dataTask : JSON.parse(dataTask);
+
+      // Update markets
+      if (taskData.markets !== undefined) {
+        await pool.query('DELETE FROM task_markets WHERE task_id = $1', [id]);
+        if (Array.isArray(taskData.markets)) {
+          for (const market of taskData.markets) {
+            await pool.query('INSERT INTO task_markets (task_id, market) VALUES ($1, $2)', [id, market]);
+          }
+        }
+      }
+
+      // Update departments
+      if (taskData.departments !== undefined) {
+        await pool.query('DELETE FROM task_departments WHERE task_id = $1', [id]);
+        if (Array.isArray(taskData.departments)) {
+          for (const dept of taskData.departments) {
+            await pool.query('INSERT INTO task_departments (task_id, department) VALUES ($1, $2)', [id, dept]);
+          }
+        }
+      }
+
+      // Update deliverables
+      if (taskData.deliverablesUsed !== undefined) {
+        await pool.query('DELETE FROM task_deliverables WHERE task_id = $1', [id]);
+        if (Array.isArray(taskData.deliverablesUsed)) {
+          for (const deliverable of taskData.deliverablesUsed) {
+            await pool.query(
+              'INSERT INTO task_deliverables (task_id, deliverable_name, count, variations_enabled, variations_count) VALUES ($1, $2, $3, $4, $5)',
+              [id, deliverable.name, deliverable.count || 1, deliverable.variationsEnabled || false, deliverable.variationsCount || 0]
+            );
+          }
+        }
+      }
+
+      // Update AI usage
+      if (taskData.aiUsed !== undefined) {
+        await pool.query('DELETE FROM task_ai_usage WHERE task_id = $1', [id]);
+        if (Array.isArray(taskData.aiUsed) && taskData.aiUsed.length > 0) {
+          const aiData = taskData.aiUsed[0];
+          await pool.query(
+            'INSERT INTO task_ai_usage (task_id, ai_models, ai_time) VALUES ($1, $2, $3)',
+            [id, aiData.aiModels || [], aiData.aiTime || 0]
+          );
+        }
+      }
+    }
+
+    const formattedTask = await buildTaskWithRelatedData(updatedTask);
     
     // Emit WebSocket event
     const wsManager = req.app.locals.wsManager;
     if (wsManager) {
-      wsManager.notifyTaskChange('updated', updatedTask, updatedTask.monthId || updatedTask.month_id, updatedTask.userUID);
+      wsManager.notifyTaskChange('updated', formattedTask, formattedTask.monthId || updatedTask.month_id, formattedTask.userUID);
     }
     
-    res.json(updatedTask);
+    res.json(formattedTask);
   } catch (error) {
     next(error);
   }
@@ -304,6 +503,7 @@ export const deleteTask = async (req, res, next) => {
       return res.status(403).json({ error: 'Access denied' });
     }
 
+    // Delete task (cascade will delete related records)
     await pool.query('DELETE FROM tasks WHERE id = $1', [id]);
     
     // Emit WebSocket event

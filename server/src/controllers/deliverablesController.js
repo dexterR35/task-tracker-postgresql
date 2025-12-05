@@ -145,7 +145,7 @@ export const createDeliverable = async (req, res, next) => {
       `INSERT INTO deliverables (
         id, name, description, department, time_per_unit, time_unit, 
         variations_time, variations_time_unit, declinari_time, declinari_time_unit,
-        requires_quantity, created_by_UID
+        requires_quantity, "created_by_UID"
       )
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
        RETURNING *`,
@@ -330,7 +330,8 @@ export const deleteDeliverable = async (req, res, next) => {
       return res.status(404).json({ error: 'Deliverable not found' });
     }
 
-    emitDeliverableChange(req, 'deleted', { id });
+    // Ensure the deliverable object has id for the frontend filter
+    emitDeliverableChange(req, 'deleted', { id: result.rows[0].id });
     res.json({ success: true, message: 'Deliverable deleted successfully' });
   } catch (error) {
     next(error);

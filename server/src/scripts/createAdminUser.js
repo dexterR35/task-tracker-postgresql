@@ -7,6 +7,7 @@
 import bcrypt from 'bcryptjs';
 import pool from '../config/database.js';
 import dotenv from 'dotenv';
+import { setUserPermissions } from '../utils/permissions.js';
 
 dotenv.config();
 
@@ -52,24 +53,27 @@ const createAdminUser = async () => {
     ];
 
     const result = await pool.query(
-      `INSERT INTO users ("user_UID", email, name, role, permissions, password_hash)
-       VALUES ($1, $2, $3, $4, $5, $6)
+      `INSERT INTO users ("user_UID", email, name, role, password_hash)
+       VALUES ($1, $2, $3, $4, $5)
        RETURNING "user_UID", email, name, role`,
       [
         userUID,
         email.toLowerCase().trim(),
         name,
         'admin',
-        JSON.stringify(allPermissions),
         passwordHash
       ]
     );
+
+    // Set permissions in normalized table
+    await setUserPermissions(userUID, allPermissions, pool);
 
     console.log('✅ Admin user created successfully!');
     console.log('User UID:', result.rows[0]["user_UID"]);
     console.log('Email:', result.rows[0].email);
     console.log('Name:', result.rows[0].name);
     console.log('Role:', result.rows[0].role);
+    console.log('Permissions:', allPermissions.length, 'permissions set');
     
     process.exit(0);
   } catch (error) {
