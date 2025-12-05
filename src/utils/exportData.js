@@ -171,9 +171,9 @@ const formatValueForCSV = (
           const requiresQuantity = deliverableOption.requiresQuantity || false;
           
           // Only use variations if requiresQuantity is true
-          const variationsTime = (requiresQuantity && deliverableOption.variationsTime) || deliverableOption.declinariTime || 0;
-          const variationsTimeUnit = deliverableOption.variationsTimeUnit || deliverableOption.declinariTimeUnit || 'min';
-          const variationsQuantity = (requiresQuantity && (deliverable?.variationsCount || deliverable?.variationsQuantity || deliverable?.declinariQuantity || 0)) || 0;
+          const variationsTime = (requiresQuantity && deliverableOption.variationsTime) || 0;
+          const variationsTimeUnit = deliverableOption.variationsTimeUnit || 'min';
+          const variationsQuantity = (requiresQuantity && (deliverable?.variationsCount || deliverable?.variationsQuantity || 0)) || 0;
 
           // Convert to minutes (base unit)
           let timeInMinutes = timePerUnit;
@@ -240,9 +240,9 @@ const formatValueForCSV = (
         const timeUnit = deliverableOption.timeUnit || 'hr';
         const requiresQuantity = deliverableOption.requiresQuantity || false;
         
-        const variationsTime = (requiresQuantity && deliverableOption.variationsTime) || deliverableOption.declinariTime || 0;
-        const variationsTimeUnit = deliverableOption.variationsTimeUnit || deliverableOption.declinariTimeUnit || 'min';
-        const variationsQuantity = (requiresQuantity && (value?.variationsCount || value?.variationsQuantity || value?.declinariQuantity || 0)) || 0;
+        const variationsTime = (requiresQuantity && deliverableOption.variationsTime) || 0;
+        const variationsTimeUnit = deliverableOption.variationsTimeUnit || 'min';
+        const variationsQuantity = (requiresQuantity && (value?.variationsCount || value?.variationsQuantity || 0)) || 0;
 
         let timeInMinutes = timePerUnit;
         if (timeUnit === 'hr') timeInMinutes = timePerUnit * 60;
@@ -384,9 +384,9 @@ const calculateDeliverablesInfo = (deliverablesUsed, deliverablesOptions = []) =
         const requiresQuantity = deliverableOption.requiresQuantity || false;
         
         // Only use variations if requiresQuantity is true
-        const variationsTime = (requiresQuantity && deliverableOption.variationsTime) || deliverableOption.declinariTime || 0;
-        const variationsTimeUnit = deliverableOption.variationsTimeUnit || deliverableOption.declinariTimeUnit || 'min';
-        const variationsQuantity = (requiresQuantity && (deliverable?.variationsCount || deliverable?.variationsQuantity || deliverable?.declinariQuantity || 0)) || 0;
+        const variationsTime = (requiresQuantity && deliverableOption.variationsTime) || 0;
+        const variationsTimeUnit = deliverableOption.variationsTimeUnit || 'min';
+        const variationsQuantity = (requiresQuantity && (deliverable?.variationsCount || deliverable?.variationsQuantity || 0)) || 0;
 
         // Convert to minutes (base unit)
         let timeInMinutes = timePerUnit;
@@ -566,9 +566,7 @@ const exportTasksToCSV = (data, options = {}) => {
       timeUnit: deliverable.timeUnit,
       requiresQuantity: deliverable.requiresQuantity,
       variationsTime: deliverable.variationsTime,
-      variationsTimeUnit: deliverable.variationsTimeUnit || 'min',
-      declinariTime: deliverable.declinariTime,
-      declinariTimeUnit: deliverable.declinariTimeUnit
+      variationsTimeUnit: deliverable.variationsTimeUnit || 'min'
     }));
 
     const delimiter = EXPORT_CONFIG.CSV_DELIMITER;
@@ -732,9 +730,7 @@ export const exportToCSV = (data, columns, tableType, options = {}) => {
           timeUnit: deliverable.timeUnit,
           requiresQuantity: deliverable.requiresQuantity,
           variationsTime: deliverable.variationsTime,
-          variationsTimeUnit: deliverable.variationsTimeUnit || deliverable.declinariTimeUnit || 'min',
-          declinariTime: deliverable.declinariTime,
-          declinariTimeUnit: deliverable.declinariTimeUnit
+          variationsTimeUnit: deliverable.variationsTimeUnit || 'min'
         }))
       : [];
 

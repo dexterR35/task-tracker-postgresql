@@ -22,8 +22,8 @@ const buildTaskWithRelatedData = async (task) => {
     reworked: task.reworked || false,
     useShutterstock: task.use_shutterstock || false,
     observations: task.observations || '',
-    reporters: task["reporter_UID"] || '',
-    reporterUID: task["reporter_UID"] || '',
+    reporters: task.reporter_id || '',
+    reporterUID: task.reporter_id || '',
     reporterName: task.reporter_name || '',
     startDate: task.start_date ? new Date(task.start_date).toISOString() : null,
     endDate: task.end_date ? new Date(task.end_date).toISOString() : null,
@@ -45,12 +45,12 @@ const buildTaskWithRelatedData = async (task) => {
   return {
     id: task.id,
     boardId: task.board_id || task.boardId,
-    createbyUID: task.created_by_UID || task["user_UID"] || task.userUID,
+    createbyUID: task.created_by_id || task.user_id,
     createdAt: task.created_at ? new Date(task.created_at).toISOString() : task.createdAt,
     data_task: dataTask,
     monthId: task.month_id || task.monthId,
     updatedAt: task.updated_at ? new Date(task.updated_at).toISOString() : task.updatedAt,
-    userUID: task["user_UID"] || task.userUID
+    userUID: task.user_id
   };
 };
 
@@ -98,10 +98,10 @@ export const getTasks = async (req, res, next) => {
 
     // Role-based user filtering
     if (user.role === 'user') {
-      query += ` AND t."user_UID" = $${paramCount++}`;
-      params.push(user.userUID);
+      query += ` AND t.user_id = $${paramCount++}`;
+      params.push(user.id);
     } else if (user.role === 'admin' && userUID) {
-      query += ` AND t."user_UID" = $${paramCount++}`;
+      query += ` AND t.user_id = $${paramCount++}`;
       params.push(userUID);
     }
 
@@ -119,7 +119,7 @@ export const getTasks = async (req, res, next) => {
 
     // Reporter filter (using column)
     if (reporterUID) {
-      query += ` AND t."reporter_UID" = $${paramCount++}`;
+      query += ` AND t.reporter_id = $${paramCount++}`;
       params.push(reporterUID);
     }
 
@@ -184,7 +184,7 @@ export const getTaskById = async (req, res, next) => {
     const user = req.user;
 
     // Check permissions
-    if (user.role === 'user' && result.rows[0]["user_UID"] !== user.userUID) {
+    if (user.role === 'user' && result.rows[0].user_id !== user.id) {
       return res.status(403).json({ error: 'Access denied' });
     }
 
@@ -209,25 +209,43 @@ export const createTask = async (req, res, next) => {
       return res.status(404).json({ error: 'Month board not found' });
     }
 
-    const taskUserUID = userUID || user.userUID;
+    // Get user ID from userUID if provided, otherwise use current user's ID
+    let taskUserId = user.id;
+    if (userUID) {
+      const userCheck = await pool.query('SELECT id FROM users WHERE id = $1', [userUID]);
+      if (userCheck.rows.length === 0) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+      taskUserId = userCheck.rows[0].id;
+    }
+
     const taskData = typeof dataTask === 'object' ? dataTask : JSON.parse(dataTask);
     const finalBoardId = boardId || `board_${monthId}_${Date.now()}`;
+
+    // Get reporter ID if reporterUID is provided
+    let reporterId = null;
+    if (taskData.reporterUID || taskData.reporters) {
+      const reporterCheck = await pool.query('SELECT id FROM reporters WHERE id = $1', [taskData.reporterUID || taskData.reporters]);
+      if (reporterCheck.rows.length > 0) {
+        reporterId = reporterCheck.rows[0].id;
+      }
+    }
 
     // Insert main task record
     const result = await pool.query(
       `INSERT INTO tasks (
-        month_id, "user_UID", board_id, 
+        month_id, user_id, board_id, 
         task_name, products, time_in_hours, department,
         start_date, end_date, observations,
         is_vip, reworked, use_shutterstock,
-        "reporter_UID", reporter_name,
-        "created_by_UID"
+        reporter_id, reporter_name,
+        created_by_id
       )
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
        RETURNING *`,
       [
         monthId,
-        taskUserUID,
+        taskUserId,
         finalBoardId,
         taskData.taskName || null,
         taskData.products || null,
@@ -239,9 +257,9 @@ export const createTask = async (req, res, next) => {
         taskData.isVip || false,
         taskData.reworked || false,
         taskData.useShutterstock || false,
-        taskData.reporterUID || taskData.reporters || null,
+        reporterId,
         taskData.reporterName || null,
-        user.userUID || taskUserUID
+        user.id || taskUserId
       ]
     );
 
@@ -302,7 +320,7 @@ export const createTask = async (req, res, next) => {
     // Emit WebSocket event
     const wsManager = req.app.locals.wsManager;
     if (wsManager) {
-      wsManager.notifyTaskChange('created', formattedTask, monthId, taskUserUID);
+      wsManager.notifyTaskChange('created', formattedTask, monthId, taskUserId);
     }
 
     res.status(201).json(formattedTask);
@@ -379,8 +397,17 @@ export const updateTask = async (req, res, next) => {
         params.push(taskData.useShutterstock);
       }
       if (taskData.reporterUID !== undefined || taskData.reporters !== undefined) {
-        updates.push(`"reporter_UID" = $${paramCount++}`);
-        params.push(taskData.reporterUID || taskData.reporters);
+        // Get reporter ID if reporterUID is provided
+        let reporterId = null;
+        const reporterUID = taskData.reporterUID || taskData.reporters;
+        if (reporterUID) {
+          const reporterCheck = await pool.query('SELECT id FROM reporters WHERE id = $1', [reporterUID]);
+          if (reporterCheck.rows.length > 0) {
+            reporterId = reporterCheck.rows[0].id;
+          }
+        }
+        updates.push(`reporter_id = $${paramCount++}`);
+        params.push(reporterId);
       }
       if (taskData.reporterName !== undefined) {
         updates.push(`reporter_name = $${paramCount++}`);
@@ -393,7 +420,12 @@ export const updateTask = async (req, res, next) => {
       params.push(monthId);
     }
     if (userUID) {
-      updates.push(`"user_UID" = $${paramCount++}`);
+      // Verify user exists
+      const userCheck = await pool.query('SELECT id FROM users WHERE id = $1', [userUID]);
+      if (userCheck.rows.length === 0) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+      updates.push(`user_id = $${paramCount++}`);
       params.push(userUID);
     }
     if (boardId !== undefined) {
@@ -405,9 +437,9 @@ export const updateTask = async (req, res, next) => {
       return res.status(400).json({ error: 'No fields to update' });
     }
 
-    // Update updated_by_UID
-    updates.push(`"updated_by_UID" = $${paramCount++}`);
-    params.push(user.userUID || '');
+    // Update updated_by_id
+    updates.push(`updated_by_id = $${paramCount++}`);
+    params.push(user.id || null);
 
     params.push(id);
 
@@ -491,7 +523,7 @@ export const deleteTask = async (req, res, next) => {
     const user = req.user;
 
     // Check if task exists
-    const taskCheck = await pool.query('SELECT "user_UID", month_id FROM tasks WHERE id = $1', [id]);
+    const taskCheck = await pool.query('SELECT user_id, month_id FROM tasks WHERE id = $1', [id]);
     if (taskCheck.rows.length === 0) {
       return res.status(404).json({ error: 'Task not found' });
     }
@@ -499,7 +531,7 @@ export const deleteTask = async (req, res, next) => {
     const task = taskCheck.rows[0];
 
     // Check permissions
-    if (user.role === 'user' && task["user_UID"] !== user.userUID) {
+    if (user.role === 'user' && task.user_id !== user.id) {
       return res.status(403).json({ error: 'Access denied' });
     }
 
@@ -509,7 +541,7 @@ export const deleteTask = async (req, res, next) => {
     // Emit WebSocket event
     const wsManager = req.app.locals.wsManager;
     if (wsManager) {
-      wsManager.notifyTaskChange('deleted', { id }, task.month_id, task["user_UID"]);
+      wsManager.notifyTaskChange('deleted', { id }, task.month_id, task.user_id);
     }
     
     res.json({ success: true, message: 'Task deleted successfully' });

@@ -6,14 +6,14 @@ const parseUser = async (user) => {
   if (!user) return user;
   
   // Fetch permissions from normalized table
-  const permissions = await fetchUserPermissions(user["user_UID"], pool);
+  const permissions = await fetchUserPermissions(user.id, pool);
   
   // Format response to match Firebase structure
   return {
-    id: user.id || user["user_UID"], // UUID id (primary key) or fallback to user_UID
+    id: user.id, // UUID id (primary key)
     color_set: user.color_set || user.colorSet || null,
     createdAt: user.created_at ? new Date(user.created_at).toISOString() : user.createdAt,
-    createdBy: user.created_by_UID || user.createdBy, // User UID
+    createdBy: user.created_by_id || user.createdBy, // User ID
     email: user.email,
     isActive: (() => {
       // Handle boolean from database
@@ -34,8 +34,7 @@ const parseUser = async (user) => {
     name: user.name,
     occupation: user.occupation || null,
     permissions: permissions,
-    role: user.role,
-    userUID: user["user_UID"] || user.userUID // Business identifier (VARCHAR)
+    role: user.role
   };
 };
 
@@ -43,7 +42,7 @@ export const getUsers = async (req, res, next) => {
   try {
     const { role, search, active } = req.query;
     
-    let query = 'SELECT id, "user_UID", email, name, role, color_set, is_active, occupation, created_at, "created_by_UID" FROM users WHERE 1=1';
+    let query = 'SELECT id, email, name, role, color_set, is_active, occupation, created_at, created_by_id FROM users WHERE 1=1';
     const params = [];
     let paramCount = 1;
 
@@ -79,12 +78,12 @@ export const getUsers = async (req, res, next) => {
 
 export const getUserById = async (req, res, next) => {
   try {
-    const { id } = req.params; // This is actually user_UID now
+    const { id } = req.params; // This is the UUID id
     const currentUser = req.user;
 
     // Authorization: Users can only view their own profile, admins can view any
     const result = await pool.query(
-      'SELECT id, "user_UID", email, name, role, color_set, is_active, occupation, created_at, "created_by_UID" FROM users WHERE "user_UID" = $1',
+      'SELECT id, email, name, role, color_set, is_active, occupation, created_at, created_by_id FROM users WHERE id = $1',
       [id]
     );
 
@@ -95,7 +94,7 @@ export const getUserById = async (req, res, next) => {
     const requestedUser = result.rows[0];
     
     // Check authorization: users can only see their own data, admins can see all
-    if (currentUser.role !== 'admin' && requestedUser["user_UID"] !== currentUser.userUID) {
+    if (currentUser.role !== 'admin' && requestedUser.id !== currentUser.id) {
       return res.status(403).json({ error: 'Insufficient permissions to view this user' });
     }
 
@@ -107,11 +106,11 @@ export const getUserById = async (req, res, next) => {
 
 export const getUserByUID = async (req, res, next) => {
   try {
-    const { uid } = req.params;
+    const { uid } = req.params; // This is now the UUID id
     const currentUser = req.user;
 
     const result = await pool.query(
-      'SELECT id, "user_UID", email, name, role, color_set, is_active, occupation, created_at, "created_by_UID" FROM users WHERE "user_UID" = $1',
+      'SELECT id, email, name, role, color_set, is_active, occupation, created_at, created_by_id FROM users WHERE id = $1',
       [uid]
     );
 
@@ -122,7 +121,7 @@ export const getUserByUID = async (req, res, next) => {
     const requestedUser = result.rows[0];
     
     // Check authorization: users can only see their own data, admins can see all
-    if (currentUser.role !== 'admin' && requestedUser["user_UID"] !== currentUser.userUID) {
+    if (currentUser.role !== 'admin' && requestedUser.id !== currentUser.id) {
       return res.status(403).json({ error: 'Insufficient permissions to view this user' });
     }
 
@@ -134,7 +133,7 @@ export const getUserByUID = async (req, res, next) => {
 
 export const createUser = async (req, res, next) => {
   try {
-    const { email, name, role, permissions, password, userUID, color_set, isActive, occupation } = req.body;
+    const { email, name, role, permissions, password, color_set, isActive, occupation } = req.body;
     const adminUser = req.user;
 
     if (!email || !password) {
@@ -142,7 +141,7 @@ export const createUser = async (req, res, next) => {
     }
 
     // Check if email already exists
-    const emailCheck = await pool.query('SELECT "user_UID" FROM users WHERE email = $1', [email.toLowerCase().trim()]);
+    const emailCheck = await pool.query('SELECT id FROM users WHERE email = $1', [email.toLowerCase().trim()]);
     if (emailCheck.rows.length > 0) {
       return res.status(409).json({ error: 'User with this email already exists' });
     }
@@ -151,15 +150,11 @@ export const createUser = async (req, res, next) => {
     const bcrypt = await import('bcryptjs');
     const passwordHash = await bcrypt.default.hash(password, 10);
 
-    // Generate userUID if not provided
-    const finalUserUID = userUID || `user_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
-
     const result = await pool.query(
-      `INSERT INTO users ("user_UID", email, name, role, password_hash, color_set, is_active, occupation, "created_by_UID")
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-       RETURNING id, "user_UID", email, name, role, color_set, is_active, occupation, created_at, "created_by_UID"`,
+      `INSERT INTO users (email, name, role, password_hash, color_set, is_active, occupation, created_by_id)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+       RETURNING id, email, name, role, color_set, is_active, occupation, created_at, created_by_id`,
       [
-        finalUserUID,
         email.toLowerCase().trim(),
         name,
         role || 'user',
@@ -167,24 +162,26 @@ export const createUser = async (req, res, next) => {
         color_set || null,
         isActive !== undefined ? isActive : true,
         occupation || null,
-        adminUser.userUID || ''
+        adminUser.id || null
       ]
     );
 
+    const newUser = result.rows[0];
+
     // Set permissions in normalized table
     if (permissions && Array.isArray(permissions) && permissions.length > 0) {
-      await setUserPermissions(finalUserUID, permissions, pool);
+      await setUserPermissions(newUser.id, permissions, pool);
     }
 
-    const newUser = await parseUser(result.rows[0]);
+    const formattedUser = await parseUser(newUser);
 
     // Emit WebSocket event
     const wsManager = req.app.locals.wsManager;
     if (wsManager) {
-      wsManager.notifyUserChange('created', newUser);
+      wsManager.notifyUserChange('created', formattedUser);
     }
 
-    res.status(201).json(newUser);
+    res.status(201).json(formattedUser);
   } catch (error) {
     next(error);
   }
@@ -197,7 +194,7 @@ export const updateUser = async (req, res, next) => {
     const adminUser = req.user;
 
     // Check if user exists
-    const userCheck = await pool.query('SELECT "user_UID" FROM users WHERE "user_UID" = $1', [id]);
+    const userCheck = await pool.query('SELECT id FROM users WHERE id = $1', [id]);
     if (userCheck.rows.length === 0) {
       return res.status(404).json({ error: 'User not found' });
     }
@@ -205,7 +202,7 @@ export const updateUser = async (req, res, next) => {
     // Check if email is being updated and if it already exists
     if (email) {
       const emailCheck = await pool.query(
-        'SELECT "user_UID" FROM users WHERE email = $1 AND "user_UID" != $2',
+        'SELECT id FROM users WHERE email = $1 AND id != $2',
         [email.toLowerCase().trim(), id]
       );
       if (emailCheck.rows.length > 0) {
@@ -249,15 +246,13 @@ export const updateUser = async (req, res, next) => {
       values.push(req.body.occupation || null);
     }
 
-    // Note: updated_by_UID removed - not needed per requirements
-
     values.push(id);
 
     const query = `
       UPDATE users
       SET ${updates.join(', ')}
-      WHERE "user_UID" = $${paramCount}
-      RETURNING id, "user_UID", email, name, role, color_set, is_active, occupation, created_at, "created_by_UID"
+      WHERE id = $${paramCount}
+      RETURNING id, email, name, role, color_set, is_active, occupation, created_at, created_by_id
     `;
 
     const result = await pool.query(query, values);
@@ -283,12 +278,12 @@ export const updateUser = async (req, res, next) => {
 
 export const deleteUser = async (req, res, next) => {
   try {
-    const { id } = req.params; // This is actually user_UID now
+    const { id } = req.params; // This is the UUID id
 
     // Get user before deleting for WebSocket notification
-    const userCheck = await pool.query('SELECT "user_UID" FROM users WHERE "user_UID" = $1', [id]);
+    const userCheck = await pool.query('SELECT id FROM users WHERE id = $1', [id]);
     
-    const result = await pool.query('DELETE FROM users WHERE "user_UID" = $1 RETURNING "user_UID"', [id]);
+    const result = await pool.query('DELETE FROM users WHERE id = $1 RETURNING id', [id]);
 
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'User not found' });
@@ -297,7 +292,7 @@ export const deleteUser = async (req, res, next) => {
     // Emit WebSocket event
     const wsManager = req.app.locals.wsManager;
     if (wsManager && userCheck.rows.length > 0) {
-      wsManager.notifyUserChange('deleted', { userUID: result.rows[0]["user_UID"] });
+      wsManager.notifyUserChange('deleted', { id: result.rows[0].id });
     }
 
     res.json({ success: true, message: 'User deleted successfully' });

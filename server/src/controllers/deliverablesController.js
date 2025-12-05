@@ -50,19 +50,9 @@ export const getDeliverables = async (req, res, next) => {
         updatedAt: row.updated_at ? new Date(row.updated_at).toISOString() : row.updatedAt
       };
       
-      // Only include declinariTime if it exists (optional in Firebase)
-      if (row.declinari_time !== null && row.declinari_time !== undefined) {
-        deliverable.declinariTime = row.declinari_time;
-      }
-      
-      // Only include declinariTimeUnit if it exists (optional in Firebase, only one item had it)
-      if (row.declinari_time_unit) {
-        deliverable.declinariTimeUnit = row.declinari_time_unit;
-      }
-      
       // Only include updatedBy if it exists (optional in Firebase)
-      if (row.updated_by_UID) {
-        deliverable.updatedBy = row.updated_by_UID;
+      if (row.updated_by_id) {
+        deliverable.updatedBy = row.updated_by_id;
       }
       
       return deliverable;
@@ -96,16 +86,6 @@ export const getDeliverableById = async (req, res, next) => {
       updatedAt: row.updated_at ? new Date(row.updated_at).toISOString() : row.updatedAt
     };
     
-    // Only include declinariTime if it exists (optional in Firebase)
-    if (row.declinari_time !== null && row.declinari_time !== undefined) {
-      formatted.declinariTime = row.declinari_time;
-    }
-    
-    // Only include declinariTimeUnit if it exists (optional in Firebase)
-    if (row.declinari_time_unit) {
-      formatted.declinariTimeUnit = row.declinari_time_unit;
-    }
-    
     // Only include updatedBy if it exists (optional in Firebase)
     if (row.updated_by_UID) {
       formatted.updatedBy = row.updated_by_UID;
@@ -127,8 +107,6 @@ export const createDeliverable = async (req, res, next) => {
       timeUnit, 
       variationsTime, 
       variationsTimeUnit, 
-      declinariTime,
-      declinariTimeUnit,
       requiresQuantity,
       id // Allow custom ID (deliverable_timestamp format)
     } = req.body;
@@ -144,10 +122,10 @@ export const createDeliverable = async (req, res, next) => {
     const result = await pool.query(
       `INSERT INTO deliverables (
         id, name, description, department, time_per_unit, time_unit, 
-        variations_time, variations_time_unit, declinari_time, declinari_time_unit,
-        requires_quantity, "created_by_UID"
+        variations_time, variations_time_unit,
+        requires_quantity, created_by_id
       )
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
        RETURNING *`,
       [
         deliverableId,
@@ -158,10 +136,8 @@ export const createDeliverable = async (req, res, next) => {
         timeUnit || 'hr', 
         variationsTime, 
         variationsTimeUnit || 'min',
-        declinariTime || null,
-        declinariTimeUnit || 'min',
         requiresQuantity || false,
-        user.userUID || ''
+        user.id || null
       ]
     );
 
@@ -178,16 +154,6 @@ export const createDeliverable = async (req, res, next) => {
       createdAt: row.created_at ? new Date(row.created_at).toISOString() : row.createdAt,
       updatedAt: row.updated_at ? new Date(row.updated_at).toISOString() : row.updatedAt
     };
-    
-    // Only include declinariTime if it exists (optional in Firebase)
-    if (row.declinari_time !== null && row.declinari_time !== undefined) {
-      formatted.declinariTime = row.declinari_time;
-    }
-    
-    // Only include declinariTimeUnit if it exists (optional in Firebase)
-    if (row.declinari_time_unit) {
-      formatted.declinariTimeUnit = row.declinari_time_unit;
-    }
     
     // Only include updatedBy if it exists (optional in Firebase)
     if (row.updated_by_UID) {
@@ -212,8 +178,6 @@ export const updateDeliverable = async (req, res, next) => {
       timeUnit, 
       variationsTime, 
       variationsTimeUnit,
-      declinariTime,
-      declinariTimeUnit,
       requiresQuantity 
     } = req.body;
     const user = req.user;
@@ -250,23 +214,15 @@ export const updateDeliverable = async (req, res, next) => {
       updates.push(`variations_time_unit = $${paramCount++}`);
       params.push(variationsTimeUnit);
     }
-    if (declinariTime !== undefined) {
-      updates.push(`declinari_time = $${paramCount++}`);
-      params.push(declinariTime);
-    }
-    if (declinariTimeUnit !== undefined) {
-      updates.push(`declinari_time_unit = $${paramCount++}`);
-      params.push(declinariTimeUnit);
-    }
     if (requiresQuantity !== undefined) {
       updates.push(`requires_quantity = $${paramCount++}`);
       params.push(requiresQuantity);
     }
 
-    updates.push(`"updated_by_UID" = $${paramCount++}`);
-    params.push(user.userUID || '');
+    updates.push(`updated_by_id = $${paramCount++}`);
+    params.push(user.id || null);
 
-    if (updates.length === 1) { // Only updated_by_UID
+    if (updates.length === 1) { // Only updated_by_id
       return res.status(400).json({ error: 'No fields to update' });
     }
 
@@ -298,16 +254,6 @@ export const updateDeliverable = async (req, res, next) => {
       createdAt: row.created_at ? new Date(row.created_at).toISOString() : row.createdAt,
       updatedAt: row.updated_at ? new Date(row.updated_at).toISOString() : row.updatedAt
     };
-    
-    // Only include declinariTime if it exists (optional in Firebase)
-    if (row.declinari_time !== null && row.declinari_time !== undefined) {
-      formatted.declinariTime = row.declinari_time;
-    }
-    
-    // Only include declinariTimeUnit if it exists (optional in Firebase)
-    if (row.declinari_time_unit) {
-      formatted.declinariTimeUnit = row.declinari_time_unit;
-    }
     
     // Only include updatedBy if it exists (optional in Firebase)
     if (row.updated_by_UID) {

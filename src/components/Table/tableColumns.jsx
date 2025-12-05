@@ -86,9 +86,9 @@ const DeliverableCalculationCell = ({
         <div key={index} className="text-xs">
           <div className="font-medium text-gray-800 dark:text-gray-200">
             {deliverable.quantity}x{deliverable.name}
-            {(deliverable.variationsQuantity || deliverable.declinariQuantity) > 0 && (
+            {deliverable.variationsQuantity > 0 && (
               <span style={{ color: CARD_SYSTEM.COLOR_HEX_MAP.amber }}>
-                {" "}+ {deliverable.variationsQuantity || deliverable.declinariQuantity} variations
+                {" "}+ {deliverable.variationsQuantity} variations
               </span>
             )}
           </div>
@@ -99,10 +99,10 @@ const DeliverableCalculationCell = ({
                 <div className="block">
                   {deliverable.timePerUnit}
                   {deliverable.timeUnit} × {deliverable.quantity}
-                  {(deliverable.variationsQuantity || deliverable.declinariQuantity) > 0 &&
+                  {deliverable.variationsQuantity > 0 &&
                     (Number(deliverable.variationsTimeInMinutes) || 0) > 0 && (
                       <span>
-                        {" "}+ {deliverable.variationsQuantity || deliverable.declinariQuantity} × {Number(deliverable.variationsTimeInMinutes || 0).toFixed(0)}min
+                        {" "}+ {deliverable.variationsQuantity} × {Number(deliverable.variationsTimeInMinutes || 0).toFixed(0)}min
                       </span>
                     )}
                 </div>

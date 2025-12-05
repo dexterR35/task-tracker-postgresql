@@ -13,7 +13,7 @@ export const login = async (req, res, next) => {
 
     // Find user by email (including is_active for security check)
     const result = await pool.query(
-      'SELECT "user_UID", email, name, role, password_hash, is_active FROM users WHERE email = $1',
+      'SELECT id, email, name, role, password_hash, is_active FROM users WHERE email = $1',
       [email.toLowerCase().trim()]
     );
 
@@ -35,7 +35,7 @@ export const login = async (req, res, next) => {
     }
 
     // Fetch permissions from normalized table
-    const permissions = await fetchUserPermissions(user["user_UID"], pool);
+    const permissions = await fetchUserPermissions(user.id, pool);
 
     // Generate JWT token
     if (!process.env.JWT_SECRET) {
@@ -44,7 +44,7 @@ export const login = async (req, res, next) => {
 
     const token = jwt.sign(
       {
-        userUID: user["user_UID"],
+        id: user.id,
         email: user.email,
         role: user.role,
         permissions: permissions
@@ -55,7 +55,7 @@ export const login = async (req, res, next) => {
 
     // Return user data (without password)
     const userData = {
-      userUID: user["user_UID"],
+      id: user.id,
       email: user.email,
       name: user.name,
       role: user.role,
@@ -75,8 +75,8 @@ export const verifyToken = async (req, res, next) => {
   try {
     // User is already set by authenticateToken middleware
     const result = await pool.query(
-      'SELECT "user_UID", email, name, role FROM users WHERE "user_UID" = $1',
-      [req.user.userUID]
+      'SELECT id, email, name, role FROM users WHERE id = $1',
+      [req.user.id]
     );
 
     if (result.rows.length === 0) {
@@ -86,11 +86,11 @@ export const verifyToken = async (req, res, next) => {
     const user = result.rows[0];
     
     // Fetch permissions from normalized table
-    const permissions = await fetchUserPermissions(user["user_UID"], pool);
+    const permissions = await fetchUserPermissions(user.id, pool);
 
     res.json({
       user: {
-        userUID: user["user_UID"],
+        id: user.id,
         email: user.email,
         name: user.name,
         role: user.role,

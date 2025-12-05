@@ -275,9 +275,7 @@ const AdminDashboardPage = () => {
       timeUnit: deliverable.timeUnit,
       requiresQuantity: deliverable.requiresQuantity,
       variationsTime: deliverable.variationsTime,
-      variationsTimeUnit: deliverable.variationsTimeUnit || 'min',
-      declinariTime: deliverable.declinariTime,
-      declinariTimeUnit: deliverable.declinariTimeUnit
+      variationsTimeUnit: deliverable.variationsTimeUnit || 'min'
     }));
   }, [deliverables]);
   const actionsDeliverablesHoursData = useDeliverablesHours(actionsFilteredTasks, [], deliverablesOptions, actionsFilters);

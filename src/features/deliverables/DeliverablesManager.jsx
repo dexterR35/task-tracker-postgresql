@@ -119,8 +119,8 @@ export const useDeliverableCalculation = (deliverablesUsed, deliverablesOptions)
       const requiresQuantity = deliverableOption.requiresQuantity || false;
       
       // Only use variations if requiresQuantity is true
-      const variationsTime = (requiresQuantity && deliverableOption.variationsTime) || deliverableOption.declinariTime || 0;
-      const variationsTimeUnit = deliverableOption.variationsTimeUnit || deliverableOption.declinariTimeUnit || 'min';
+      const variationsTime = (requiresQuantity && deliverableOption.variationsTime) || 0;
+      const variationsTimeUnit = deliverableOption.variationsTimeUnit || 'min';
       
   // Convert to minutes (base unit)
   let timeInMinutes = timePerUnit;
@@ -136,7 +136,7 @@ export const useDeliverableCalculation = (deliverablesUsed, deliverablesOptions)
       
       // Get variations quantity for this deliverable (if available in the data)
       // Only use variations if requiresQuantity is true
-      const variationsQuantity = (requiresQuantity && (deliverable?.variationsCount || deliverable?.variationsQuantity || deliverable?.declinariQuantity || 0)) || 0;
+      const variationsQuantity = (requiresQuantity && (deliverable?.variationsCount || deliverable?.variationsQuantity || 0)) || 0;
       const totalvariationsTimeInMinutes = variationsQuantity * variationsTimeInMinutes;
       const calculatedTimeInMinutes = (timeInMinutes * quantity) + totalvariationsTimeInMinutes;
       
@@ -205,8 +205,8 @@ export const calculateSingleDeliverable = (deliverableOption, quantity = 1, vari
   const requiresQuantity = deliverableOption.requiresQuantity || false;
   
   // Only use variations if requiresQuantity is true
-  const variationsTime = (requiresQuantity && deliverableOption.variationsTime) || deliverableOption.declinariTime || 0;
-  const variationsTimeUnit = deliverableOption.variationsTimeUnit || deliverableOption.declinariTimeUnit || 'min';
+  const variationsTime = (requiresQuantity && deliverableOption.variationsTime) || 0;
+  const variationsTimeUnit = deliverableOption.variationsTimeUnit || 'min';
   
   // Convert to minutes (base unit)
   let timeInMinutes = timePerUnit;
@@ -257,8 +257,8 @@ export const formatDeliverableDisplay = (deliverable) => {
   // Calculate base time (without variations)
   const baseTime = deliverable.timeInHours * deliverable.quantity;
   
-  if ((deliverable.variationsTime || deliverable.declinariTime) > 0 && (deliverable.variationsQuantity || deliverable.declinariQuantity) > 0) {
-    const variationsQuantity = deliverable.variationsQuantity || deliverable.declinariQuantity || 0;
+  if (deliverable.variationsTime > 0 && deliverable.variationsQuantity > 0) {
+    const variationsQuantity = deliverable.variationsQuantity || 0;
     const variationsTimeInMinutes = deliverable.variationsTimeInMinutes || 0;
     
     return `${deliverable.timePerUnit}${deliverable.timeUnit} × ${deliverable.quantity} + ${variationsQuantity} × ${variationsTimeInMinutes.toFixed(0)}min = ${deliverable.time.toFixed(1)}h`;

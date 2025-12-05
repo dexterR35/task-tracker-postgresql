@@ -146,7 +146,8 @@ class WebSocketManager {
       event: type,
       month
     }, (ws) => {
-      return !ws.subscriptions || ws.subscriptions.has('months');
+      // Broadcast if no subscriptions set (all clients) or if subscribed to months
+      return !ws.subscriptions || ws.subscriptions.size === 0 || ws.subscriptions.has('months');
     });
   }
 

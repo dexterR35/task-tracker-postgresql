@@ -175,23 +175,6 @@ const DeliverableTable = ({
       size: 120,
     },
     {
-      accessorKey: "declinariTime",
-      header: "Declinari Time",
-      cell: ({ getValue, row }) => {
-        const declinariTime = getValue();
-        const timeUnit = row.original.declinariTimeUnit || 'min';
-        if (!declinariTime || declinariTime === 0) {
-          return <span className="text-gray-500 dark:text-gray-400 text-xs">None</span>;
-        }
-        return (
-          <Badge variant="orange" size="sm">
-            {declinariTime} {timeUnit}
-          </Badge>
-        );
-      },
-      size: 120,
-    },
-    {
       accessorKey: "requiresQuantity",
       header: "Requires Quantity",
       cell: ({ getValue }) => {

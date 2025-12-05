@@ -166,8 +166,6 @@
 | time_unit | VARCHAR(10) | DEFAULT 'hr' | Time unit |
 | variations_time | DECIMAL(10,2) | | Variations time |
 | variations_time_unit | VARCHAR(10) | DEFAULT 'min' | Variations unit |
-| declinari_time | DECIMAL(10,2) | | Declinari time |
-| declinari_time_unit | VARCHAR(10) | DEFAULT 'min' | Declinari unit |
 | requires_quantity | BOOLEAN | DEFAULT false | Quantity required flag |
 | created_at | TIMESTAMP | DEFAULT NOW | Creation timestamp |
 | updated_at | TIMESTAMP | DEFAULT NOW | Update timestamp |

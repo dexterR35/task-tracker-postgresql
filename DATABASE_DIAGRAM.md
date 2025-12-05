@@ -131,8 +131,6 @@
 │     time_unit             VARCHAR(10)  DEFAULT 'hr'                        │
 │     variations_time       DECIMAL(10,2)                                    │
 │     variations_time_unit  VARCHAR(10)  DEFAULT 'min'                      │
-│     declinari_time        DECIMAL(10,2)                                    │
-│     declinari_time_unit   VARCHAR(10)  DEFAULT 'min'                       │
 │     requires_quantity     BOOLEAN      DEFAULT false                        │
 │     created_at            TIMESTAMP    DEFAULT NOW                         │
 │     updated_at            TIMESTAMP    DEFAULT NOW                          │

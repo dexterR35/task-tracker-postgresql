@@ -242,6 +242,113 @@ export const useAvailableMonths = (yearId = null) => {
     };
 
     fetchMonths();
+
+    // Subscribe to WebSocket updates for real-time month changes
+    const handleMonthChange = (data) => {
+      logger.log('🔔 [WebSocket] Month change event received:', data);
+      
+      if (data.event === 'created') {
+        logger.log('✅ [WebSocket] Month created event received:', data.month);
+        setMonths(prev => {
+          // Check if month already exists
+          const monthId = data.month.month_id || data.month.monthId;
+          const exists = prev.some(m => (m.month_id || m.monthId) === monthId);
+          
+          if (exists) {
+            // Update existing month
+            logger.log('⚠️ [WebSocket] Month already exists, updating instead');
+            return prev.map(m => {
+              const mId = m.month_id || m.monthId;
+              if (mId === monthId) {
+                const metadata = typeof data.month.metadata === 'string' 
+                  ? JSON.parse(data.month.metadata) 
+                  : data.month.metadata || {};
+                return {
+                  ...data.month,
+                  monthId: monthId,
+                  metadata,
+                  monthName: data.month.monthName || metadata.monthName || null,
+                  startDate: data.month.startDate || metadata.startDate || null,
+                  endDate: data.month.endDate || metadata.endDate || null,
+                  daysInMonth: data.month.daysInMonth || metadata.daysInMonth || null,
+                  boardId: data.month.boardId || metadata.boardId || null,
+                  boardExists: true
+                };
+              }
+              return m;
+            });
+          }
+          
+          // Add new month
+          const metadata = typeof data.month.metadata === 'string' 
+            ? JSON.parse(data.month.metadata) 
+            : data.month.metadata || {};
+          const newMonth = {
+            ...data.month,
+            monthId: monthId,
+            metadata,
+            monthName: data.month.monthName || metadata.monthName || null,
+            startDate: data.month.startDate || metadata.startDate || null,
+            endDate: data.month.endDate || metadata.endDate || null,
+            daysInMonth: data.month.daysInMonth || metadata.daysInMonth || null,
+            boardId: data.month.boardId || metadata.boardId || null,
+            boardExists: true
+          };
+          
+          // Filter by yearId if provided
+          if (yearId && newMonth.year_id !== yearId) {
+            return prev;
+          }
+          
+          return [...prev, newMonth].sort((a, b) => {
+            const aId = a.month_id || a.monthId || '';
+            const bId = b.month_id || b.monthId || '';
+            return bId.localeCompare(aId); // Sort descending (newest first)
+          });
+        });
+      } else if (data.event === 'updated') {
+        logger.log('✅ [WebSocket] Month updated event received:', data.month);
+        setMonths(prev => {
+          const monthId = data.month.month_id || data.month.monthId;
+          const metadata = typeof data.month.metadata === 'string' 
+            ? JSON.parse(data.month.metadata) 
+            : data.month.metadata || {};
+          return prev.map(m => {
+            const mId = m.month_id || m.monthId;
+            if (mId === monthId) {
+              return {
+                ...data.month,
+                monthId: monthId,
+                metadata,
+                monthName: data.month.monthName || metadata.monthName || null,
+                startDate: data.month.startDate || metadata.startDate || null,
+                endDate: data.month.endDate || metadata.endDate || null,
+                daysInMonth: data.month.daysInMonth || metadata.daysInMonth || null,
+                boardId: data.month.boardId || metadata.boardId || null,
+                boardExists: true
+              };
+            }
+            return m;
+          });
+        });
+      } else if (data.event === 'deleted') {
+        logger.log('✅ [WebSocket] Month deleted event received:', data.month);
+        setMonths(prev => {
+          const monthId = data.month.month_id || data.month.monthId;
+          return prev.filter(m => {
+            const mId = m.month_id || m.monthId;
+            return mId !== monthId;
+          });
+        });
+      }
+    };
+
+    wsClient.on('month_change', handleMonthChange);
+    wsClient.subscribe(['months']);
+
+    return () => {
+      wsClient.off('month_change', handleMonthChange);
+    };
   }, [yearId]);
 
   return { months, isLoading, error };

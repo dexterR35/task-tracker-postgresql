@@ -10,7 +10,8 @@ const isAdmin = (user) => {
 
 export const getUserUID = (user) => {
   if (!user) return null;
-  return user.userUID || user.id || null;
+  // Use id as primary identifier, fallback to userUID for backward compatibility
+  return user.id || user.userUID || null;
 };
 
 
@@ -43,7 +44,7 @@ export const validateUserStructure = (user, options = {}) => {
 
 export const isUserComplete = (user) => {
   if (!user) return false;
-  return !!user.userUID && !!user.email && !!user.name && !!user.role;
+  return !!(user.id || user.userUID) && !!user.email && !!user.name && !!user.role;
 };
 
 
@@ -287,7 +288,7 @@ export const validateUserPermissions = (userData, requiredPermissions, options =
     const error = `User lacks required permissions for ${operation}`;
     if (logWarnings) {
       logger.warn(`[validateUserPermissions] ${error}:`, {
-        userUID: userData.userUID,
+        id: userData.id || userData.userUID,
         email: userData.email,
         role: userData.role,
         userPermissions: userData.permissions || [],

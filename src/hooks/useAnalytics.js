@@ -301,7 +301,7 @@ export const useTotalVariations = (tasks, users = [], filters = {}) => {
       const markets = getTaskMarkets(task);
       const deliverables = task.data_task?.deliverablesUsed || task.deliverablesUsed || [];
       const variationCount = deliverables.reduce((delSum, del) => 
-        delSum + (del.variationsCount || del.variationsQuantity || del.declinariQuantity || 0), 0
+        delSum + (del.variationsCount || del.variationsQuantity || 0), 0
       );
       
       totalVariations += variationCount;
@@ -373,8 +373,7 @@ export const useDeliverablesHours = (tasks, users = [], deliverablesOptions = []
         const deliverableName = deliverable?.name;
         const quantity = deliverable?.count || 1;
         const variationsQuantity = deliverable?.variationsCount || 
-                                   deliverable?.variationsQuantity || 
-                                   deliverable?.declinariQuantity || 0;
+                                   deliverable?.variationsQuantity || 0;
 
         if (!deliverableName) return;
 
@@ -400,8 +399,8 @@ export const useDeliverablesHours = (tasks, users = [], deliverablesOptions = []
           // Calculate variations time if applicable
           let variationsTimeInHours = 0;
           if (requiresQuantity && variationsQuantity > 0) {
-            const variationsTime = deliverableOption.variationsTime || deliverableOption.declinariTime || 0;
-            const variationsTimeUnit = deliverableOption.variationsTimeUnit || deliverableOption.declinariTimeUnit || 'min';
+            const variationsTime = deliverableOption.variationsTime || 0;
+            const variationsTimeUnit = deliverableOption.variationsTimeUnit || 'min';
 
             let variationsTimePerUnitInHours = variationsTime;
             if (variationsTimeUnit === 'min') variationsTimePerUnitInHours = variationsTime / 60;

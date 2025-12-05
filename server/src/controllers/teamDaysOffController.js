@@ -48,15 +48,15 @@ export const getTeamDaysOff = async (req, res, next) => {
 
     // Authorization: Regular users can only see their own, admins can see all
     if (currentUser.role !== 'admin') {
-      query += ` AND "user_UID" = $${paramCount++}`;
-      params.push(currentUser.userUID);
+      query += ` AND user_id = $${paramCount++}`;
+      params.push(currentUser.id);
     } else if (userUID) {
       // Admin can filter by specific user
-      query += ` AND "user_UID" = $${paramCount++}`;
+      query += ` AND user_id = $${paramCount++}`;
       params.push(userUID);
     }
 
-    query += ' ORDER BY "user_UID"';
+    query += ' ORDER BY user_id';
 
     const result = await pool.query(query, params);
     const formattedResults = await Promise.all(result.rows.map(dayOff => formatTeamDaysOff(dayOff)));
@@ -80,7 +80,7 @@ export const getDayOffById = async (req, res, next) => {
     const dayOff = result.rows[0];
     
     // Authorization: Users can only view their own, admins can view any
-    if (currentUser.role !== 'admin' && dayOff["user_UID"] !== currentUser.userUID) {
+    if (currentUser.role !== 'admin' && dayOff.user_id !== currentUser.id) {
       return res.status(403).json({ error: 'Insufficient permissions to view this record' });
     }
 
@@ -100,7 +100,7 @@ export const createDayOff = async (req, res, next) => {
     }
 
     // Authorization: Regular users can only create for themselves, admins can create for anyone
-    if (user.role !== 'admin' && userUID !== user.userUID) {
+    if (user.role !== 'admin' && userUID !== user.id) {
       return res.status(403).json({ error: 'You can only create days off for yourself' });
     }
 
@@ -114,32 +114,32 @@ export const createDayOff = async (req, res, next) => {
 
     // Check if entry already exists for this user
     const existingCheck = await pool.query(
-      'SELECT id FROM team_days_off WHERE "user_UID" = $1',
+      'SELECT id FROM team_days_off WHERE user_id = $1',
       [userUID]
     );
 
     const isUpdate = existingCheck.rows.length > 0;
 
-    // Use INSERT ... ON CONFLICT to handle unique constraint on user_UID
+    // Use INSERT ... ON CONFLICT to handle unique constraint on user_id
     const result = await pool.query(
       `INSERT INTO team_days_off (
-        "user_UID", 
+        user_id, 
         base_days, 
         days_off, 
         days_remaining, 
         days_total, 
         monthly_accrual,
-        "created_by_UID"
+        created_by_id
       )
       VALUES ($1, $2, $3, $4, $5, $6, $7)
-      ON CONFLICT ("user_UID") 
+      ON CONFLICT (user_id) 
       DO UPDATE SET
         base_days = EXCLUDED.base_days,
         days_off = EXCLUDED.days_off,
         days_remaining = EXCLUDED.days_remaining,
         days_total = EXCLUDED.days_total,
         monthly_accrual = EXCLUDED.monthly_accrual,
-        "updated_by_UID" = EXCLUDED."created_by_UID",
+        updated_by_id = EXCLUDED.created_by_id,
         updated_at = CURRENT_TIMESTAMP
       RETURNING *`,
       [
@@ -149,7 +149,7 @@ export const createDayOff = async (req, res, next) => {
         daysRemaining, 
         daysTotal, 
         monthlyAccrualValue,
-        user.userUID || ''
+        user.id || null
       ]
     );
 
@@ -163,7 +163,7 @@ export const createDayOff = async (req, res, next) => {
       // Insert new dates
       for (const dateItem of offDays) {
         await pool.query(
-          `INSERT INTO team_days_off_dates (team_days_off_id, "user_UID", date_string, day, month, year, timestamp)
+          `INSERT INTO team_days_off_dates (team_days_off_id, user_id, date_string, day, month, year, timestamp)
            VALUES ($1, $2, $3, $4, $5, $6, $7)
            ON CONFLICT (team_days_off_id, date_string) DO NOTHING`,
           [
@@ -199,13 +199,13 @@ export const updateDayOff = async (req, res, next) => {
     const user = req.user;
 
     // Check if record exists and verify authorization
-    const existingCheck = await pool.query('SELECT "user_UID" FROM team_days_off WHERE id = $1', [id]);
+    const existingCheck = await pool.query('SELECT user_id FROM team_days_off WHERE id = $1', [id]);
     if (existingCheck.rows.length === 0) {
       return res.status(404).json({ error: 'Day off not found' });
     }
 
     // Authorization: Regular users can only update their own, admins can update any
-    if (user.role !== 'admin' && existingCheck.rows[0]["user_UID"] !== user.userUID) {
+    if (user.role !== 'admin' && existingCheck.rows[0].user_id !== user.id) {
       return res.status(403).json({ error: 'You can only update your own days off' });
     }
 
@@ -252,10 +252,10 @@ export const updateDayOff = async (req, res, next) => {
       params.push(daysRemaining);
     }
 
-    // Always update updated_by_UID
+    // Always update updated_by_id
     if (updates.length > 0) {
-      updates.push(`"updated_by_UID" = $${paramCount++}`);
-      params.push(user.userUID || '');
+      updates.push(`updated_by_id = $${paramCount++}`);
+      params.push(user.id || null);
       params.push(id);
 
       const query = `
@@ -270,7 +270,7 @@ export const updateDayOff = async (req, res, next) => {
 
     // Update off_days in normalized table if provided
     if (offDays !== undefined) {
-      const userUID = existingCheck.rows[0]["user_UID"];
+      const userId = existingCheck.rows[0].user_id;
       
       // Delete existing dates
       await pool.query('DELETE FROM team_days_off_dates WHERE team_days_off_id = $1', [id]);
@@ -279,12 +279,12 @@ export const updateDayOff = async (req, res, next) => {
       if (Array.isArray(offDays) && offDays.length > 0) {
         for (const dateItem of offDays) {
           await pool.query(
-            `INSERT INTO team_days_off_dates (team_days_off_id, "user_UID", date_string, day, month, year, timestamp)
+            `INSERT INTO team_days_off_dates (team_days_off_id, user_id, date_string, day, month, year, timestamp)
              VALUES ($1, $2, $3, $4, $5, $6, $7)
              ON CONFLICT (team_days_off_id, date_string) DO NOTHING`,
             [
               id,
-              userUID,
+              userId,
               dateItem.dateString || dateItem.date_string,
               dateItem.day || null,
               dateItem.month || null,
@@ -313,7 +313,7 @@ export const deleteDayOff = async (req, res, next) => {
     const user = req.user;
 
     // Check if record exists and verify authorization (only admins can delete)
-    const existingCheck = await pool.query('SELECT "user_UID" FROM team_days_off WHERE id = $1', [id]);
+    const existingCheck = await pool.query('SELECT user_id FROM team_days_off WHERE id = $1', [id]);
     if (existingCheck.rows.length === 0) {
       return res.status(404).json({ error: 'Day off not found' });
     }

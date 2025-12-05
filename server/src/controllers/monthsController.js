@@ -106,7 +106,7 @@ export const createMonth = async (req, res, next) => {
       `INSERT INTO months (
         month_id, year_id, department, status,
         month_name, start_date, end_date, days_in_month, board_id, month, year,
-        "created_by_UID"
+        created_by_id
       )
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
        RETURNING *`,
@@ -122,7 +122,7 @@ export const createMonth = async (req, res, next) => {
         boardId,
         month,
         year,
-        user.userUID || ''
+        user.id || null
       ]
     );
 
@@ -187,11 +187,11 @@ export const updateMonth = async (req, res, next) => {
       }
     }
 
-    // Always update updated_by_UID to track who made the change
-    updates.push(`"updated_by_UID" = $${paramCount++}`);
-    params.push(user.userUID || '');
+    // Always update updated_by_id to track who made the change
+    updates.push(`updated_by_id = $${paramCount++}`);
+    params.push(user.id || null);
 
-    if (updates.length === 1) { // Only updated_by_UID
+    if (updates.length === 1) { // Only updated_by_id
       return res.status(400).json({ error: 'No fields to update' });
     }
 

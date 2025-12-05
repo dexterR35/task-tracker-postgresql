@@ -4,15 +4,15 @@
 
 /**
  * Fetch permissions from user_permissions table for a user
- * @param {string} userUID - User UID
+ * @param {string} userId - User ID (UUID)
  * @param {Object} pool - Database connection pool
  * @returns {Promise<Array>} Array of permission strings
  */
-export const fetchUserPermissions = async (userUID, pool) => {
+export const fetchUserPermissions = async (userId, pool) => {
   try {
     const result = await pool.query(
-      'SELECT permission FROM user_permissions WHERE "user_UID" = $1 ORDER BY permission',
-      [userUID]
+      'SELECT permission FROM user_permissions WHERE user_id = $1 ORDER BY permission',
+      [userId]
     );
     return result.rows.map(row => row.permission);
   } catch (error) {
@@ -61,36 +61,35 @@ export const hasPermission = (user, permission) => {
 
 /**
  * Set permissions for a user (replaces all existing permissions)
- * @param {string} userUID - User UID
+ * @param {string} userId - User ID (UUID)
  * @param {Array<string>} permissions - Array of permission strings
  * @param {Object} pool - Database connection pool
  * @returns {Promise<void>}
  */
-export const setUserPermissions = async (userUID, permissions, pool) => {
+export const setUserPermissions = async (userId, permissions, pool) => {
   try {
-    // Get user ID
-    const userResult = await pool.query('SELECT id FROM users WHERE "user_UID" = $1', [userUID]);
+    // Verify user exists
+    const userResult = await pool.query('SELECT id FROM users WHERE id = $1', [userId]);
     if (userResult.rows.length === 0) {
       throw new Error('User not found');
     }
-    const userId = userResult.rows[0].id;
 
     // Delete existing permissions
-    await pool.query('DELETE FROM user_permissions WHERE "user_UID" = $1', [userUID]);
+    await pool.query('DELETE FROM user_permissions WHERE user_id = $1', [userId]);
 
     // Insert new permissions
     if (permissions && permissions.length > 0) {
       const values = permissions.map((perm, index) => 
-        `($${index * 3 + 1}, $${index * 3 + 2}, $${index * 3 + 3})`
+        `($${index * 2 + 1}, $${index * 2 + 2})`
       ).join(', ');
       
       const params = [];
       permissions.forEach(perm => {
-        params.push(userId, userUID, perm);
+        params.push(userId, perm);
       });
 
       await pool.query(
-        `INSERT INTO user_permissions (user_id, "user_UID", permission) VALUES ${values}`,
+        `INSERT INTO user_permissions (user_id, permission) VALUES ${values}`,
         params
       );
     }

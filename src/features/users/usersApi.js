@@ -169,15 +169,15 @@ export const useUsers = () => {
 };
 
 /**
- * User by UID Hook (REST API with WebSocket)
+ * User by ID Hook (REST API with WebSocket)
  */
-export const useUserByUID = (userUID) => {
+export const useUserByUID = (userId) => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!userUID) {
+    if (!userId) {
       setUser(null);
       setIsLoading(false);
       return;
@@ -188,12 +188,12 @@ export const useUserByUID = (userUID) => {
         setIsLoading(true);
         setError(null);
 
-        const userData = await apiClient.get(`/users/uid/${userUID}`);
+        const userData = await apiClient.get(`/users/${userId}`);
         setUser(userData);
         setIsLoading(false);
         setError(null);
       } catch (err) {
-        logger.error('User by UID fetch error:', err);
+        logger.error('User by ID fetch error:', err);
         setError(err);
         setIsLoading(false);
       }
@@ -203,7 +203,7 @@ export const useUserByUID = (userUID) => {
 
     // Subscribe to WebSocket updates
     const handleUserChange = (data) => {
-      if (data.user && data.user.userUID === userUID) {
+      if (data.user && (data.user.id === userId || data.user.userUID === userId)) {
         if (data.event === 'updated' || data.event === 'created') {
           fetchUser();
         } else if (data.event === 'deleted') {
@@ -218,7 +218,7 @@ export const useUserByUID = (userUID) => {
     return () => {
       wsClient.off('user_change', handleUserChange);
     };
-  }, [userUID]);
+  }, [userId]);
 
   return { user, isLoading, error };
 };
@@ -240,18 +240,18 @@ export const useDeleteUserMutation = () => {
 };
 
 /**
- * Fetch user by UID from API (direct function for AuthContext)
- * @param {string} userUID - User UID to fetch
+ * Fetch user by ID from API (direct function for AuthContext)
+ * @param {string} userId - User ID to fetch
  * @returns {Promise<Object|null>} - User data or null if not found
  */
-export const fetchUserByUIDFromFirestore = async (userUID) => {
+export const fetchUserByUIDFromFirestore = async (userId) => {
   try {
-    if (!userUID) {
-      logger.error('fetchUserByUIDFromFirestore: userUID is required');
+    if (!userId) {
+      logger.error('fetchUserByUIDFromFirestore: userId is required');
       return null;
     }
 
-    const userData = await apiClient.get(`/users/uid/${userUID}`);
+    const userData = await apiClient.get(`/users/${userId}`);
     logger.log('fetchUserByUIDFromFirestore: User found:', userData.id);
     return userData;
   } catch (error) {
