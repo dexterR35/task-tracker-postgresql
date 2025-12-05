@@ -86,8 +86,8 @@ export const createMonth = async (req, res, next) => {
     }
 
     const result = await pool.query(
-      `INSERT INTO months (month_id, year_id, department, status, metadata, created_by_UID, created_by_name)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)
+      `INSERT INTO months (month_id, year_id, department, status, metadata, created_by_UID)
+       VALUES ($1, $2, $3, $4, $5, $6)
        RETURNING *`,
       [
         monthId,
@@ -95,8 +95,7 @@ export const createMonth = async (req, res, next) => {
         department || 'design',
         status || 'active',
         JSON.stringify(metadata || {}),
-        user.userUID || '', // Use user_UID directly
-        user.name || user.email
+        user.userUID || ''
       ]
     );
 
@@ -118,6 +117,7 @@ export const updateMonth = async (req, res, next) => {
   try {
     const { monthId } = req.params;
     const { status, metadata } = req.body;
+    const user = req.user;
 
     const updates = [];
     const params = [];
@@ -132,7 +132,11 @@ export const updateMonth = async (req, res, next) => {
       params.push(JSON.stringify(metadata));
     }
 
-    if (updates.length === 0) {
+    // Always update updated_by_UID to track who made the change
+    updates.push(`updated_by_UID = $${paramCount++}`);
+    params.push(user.userUID || '');
+
+    if (updates.length === 1) { // Only updated_by_UID
       return res.status(400).json({ error: 'No fields to update' });
     }
 

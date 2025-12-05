@@ -27,25 +27,31 @@ export const validate = (schema) => {
 // Common validation schemas
 export const schemas = {
   login: Joi.object({
-    email: Joi.string().email().required(),
-    password: Joi.string().min(6).required()
+    email: Joi.string().email().required().trim().lowercase(),
+    password: Joi.string().min(8).required() // Increased minimum password length for security
   }),
 
   createUser: Joi.object({
-    email: Joi.string().email().required(),
-    name: Joi.string().min(2).max(100).required(),
+    email: Joi.string().email().required().trim().lowercase(),
+    name: Joi.string().min(2).max(100).required().trim(),
     role: Joi.string().valid('admin', 'user').default('user'),
     permissions: Joi.array().items(Joi.string()).default([]),
-    password: Joi.string().min(6).required(),
-    userUID: Joi.string().optional()
+    password: Joi.string().min(8).required(), // Increased minimum password length
+    userUID: Joi.string().optional(),
+    color_set: Joi.string().pattern(/^#[0-9A-Fa-f]{6}$/).optional(),
+    isActive: Joi.boolean().optional(),
+    occupation: Joi.string().max(100).optional()
   }),
 
   updateUser: Joi.object({
-    email: Joi.string().email().optional(),
-    name: Joi.string().min(2).max(100).optional(),
+    email: Joi.string().email().optional().trim().lowercase(),
+    name: Joi.string().min(2).max(100).optional().trim(),
     role: Joi.string().valid('admin', 'user').optional(),
     permissions: Joi.array().items(Joi.string()).optional(),
-    password: Joi.string().min(6).optional()
+    password: Joi.string().min(8).optional(), // Increased minimum password length
+    color_set: Joi.string().pattern(/^#[0-9A-Fa-f]{6}$/).optional(),
+    isActive: Joi.boolean().optional(),
+    occupation: Joi.string().max(100).optional()
   }),
 
   createTask: Joi.object({

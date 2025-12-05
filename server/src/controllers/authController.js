@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import pool from '../config/database.js';
+import { parsePermissions } from '../utils/permissions.js';
 
 export const login = async (req, res, next) => {
   try {
@@ -10,9 +11,9 @@ export const login = async (req, res, next) => {
       return res.status(400).json({ error: 'Email and password are required' });
     }
 
-    // Find user by email
+    // Find user by email (including is_active for security check)
     const result = await pool.query(
-      'SELECT id, "user_UID", email, name, role, permissions, password_hash FROM users WHERE email = $1',
+      'SELECT "user_UID", email, name, role, permissions, password_hash, is_active FROM users WHERE email = $1',
       [email.toLowerCase().trim()]
     );
 
@@ -28,27 +29,32 @@ export const login = async (req, res, next) => {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
+    // Check if user is active
+    if (!user.is_active) {
+      return res.status(403).json({ error: 'Account is inactive. Please contact an administrator.' });
+    }
+
     // Generate JWT token
+    if (!process.env.JWT_SECRET) {
+      return res.status(500).json({ error: 'Server configuration error' });
+    }
+
     const token = jwt.sign(
       {
-        userId: user.id,
         userUID: user["user_UID"],
         email: user.email,
         role: user.role,
-        permissions: user.permissions || []
+        permissions: parsePermissions(user.permissions)
       },
-      process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production',
+      process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRES_IN || '8h' }
     );
 
-    // Parse permissions if it's a string
-    const permissions = typeof user.permissions === 'string' 
-      ? JSON.parse(user.permissions) 
-      : user.permissions || [];
+    // Parse permissions
+    const permissions = parsePermissions(user.permissions);
 
     // Return user data (without password)
     const userData = {
-      id: user.id,
       userUID: user["user_UID"],
       email: user.email,
       name: user.name,
@@ -69,8 +75,8 @@ export const verifyToken = async (req, res, next) => {
   try {
     // User is already set by authenticateToken middleware
     const result = await pool.query(
-      'SELECT id, "user_UID", email, name, role, permissions FROM users WHERE id = $1',
-      [req.user.userId]
+      'SELECT "user_UID", email, name, role, permissions FROM users WHERE "user_UID" = $1',
+      [req.user.userUID]
     );
 
     if (result.rows.length === 0) {
@@ -79,14 +85,11 @@ export const verifyToken = async (req, res, next) => {
 
     const user = result.rows[0];
     
-    // Parse permissions if it's a string
-    const permissions = typeof user.permissions === 'string' 
-      ? JSON.parse(user.permissions) 
-      : user.permissions || [];
+    // Parse permissions
+    const permissions = parsePermissions(user.permissions);
 
     res.json({
       user: {
-        id: user.id,
         userUID: user["user_UID"],
         email: user.email,
         name: user.name,

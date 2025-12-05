@@ -12,7 +12,7 @@ const router = express.Router();
 router.get('/', authenticateToken, getMonths);
 router.get('/:monthId', authenticateToken, getMonthById);
 router.post('/', authenticateToken, requirePermission('create_boards'), createMonth);
-router.put('/:monthId', authenticateToken, updateMonth);
+router.put('/:monthId', authenticateToken, requirePermission('update_boards'), updateMonth);
 
 export default router;
 

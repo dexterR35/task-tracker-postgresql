@@ -22,7 +22,7 @@ const createAdminUser = async () => {
 
   try {
     // Check if user already exists
-    const existingUser = await pool.query('SELECT id FROM users WHERE email = $1', [email.toLowerCase().trim()]);
+    const existingUser = await pool.query('SELECT "user_UID" FROM users WHERE email = $1', [email.toLowerCase().trim()]);
     
     if (existingUser.rows.length > 0) {
       console.error('❌ User with this email already exists');
@@ -54,7 +54,7 @@ const createAdminUser = async () => {
     const result = await pool.query(
       `INSERT INTO users ("user_UID", email, name, role, permissions, password_hash)
        VALUES ($1, $2, $3, $4, $5, $6)
-       RETURNING id, "user_UID", email, name, role`,
+       RETURNING "user_UID", email, name, role`,
       [
         userUID,
         email.toLowerCase().trim(),
@@ -66,7 +66,6 @@ const createAdminUser = async () => {
     );
 
     console.log('✅ Admin user created successfully!');
-    console.log('User ID:', result.rows[0].id);
     console.log('User UID:', result.rows[0]["user_UID"]);
     console.log('Email:', result.rows[0].email);
     console.log('Name:', result.rows[0].name);

@@ -60,12 +60,9 @@ export const getDeliverables = async (req, res, next) => {
         deliverable.declinariTimeUnit = row.declinari_time_unit;
       }
       
-      // Only include updatedBy/updatedByName if they exist (optional in Firebase)
+      // Only include updatedBy if it exists (optional in Firebase)
       if (row.updated_by_UID) {
         deliverable.updatedBy = row.updated_by_UID;
-      }
-      if (row.updated_by_name) {
-        deliverable.updatedByName = row.updated_by_name;
       }
       
       return deliverable;
@@ -109,12 +106,9 @@ export const getDeliverableById = async (req, res, next) => {
       formatted.declinariTimeUnit = row.declinari_time_unit;
     }
     
-    // Only include updatedBy/updatedByName if they exist (optional in Firebase)
+    // Only include updatedBy if it exists (optional in Firebase)
     if (row.updated_by_UID) {
       formatted.updatedBy = row.updated_by_UID;
-    }
-    if (row.updated_by_name) {
-      formatted.updatedByName = row.updated_by_name;
     }
 
     res.json(formatted);
@@ -151,9 +145,9 @@ export const createDeliverable = async (req, res, next) => {
       `INSERT INTO deliverables (
         id, name, description, department, time_per_unit, time_unit, 
         variations_time, variations_time_unit, declinari_time, declinari_time_unit,
-        requires_quantity, created_by_UID, created_by_name
+        requires_quantity, created_by_UID
       )
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
        RETURNING *`,
       [
         deliverableId,
@@ -167,8 +161,7 @@ export const createDeliverable = async (req, res, next) => {
         declinariTime || null,
         declinariTimeUnit || 'min',
         requiresQuantity || false,
-        user.userUID || '', // Use user_UID directly
-        user.name || user.email
+        user.userUID || ''
       ]
     );
 
@@ -196,12 +189,9 @@ export const createDeliverable = async (req, res, next) => {
       formatted.declinariTimeUnit = row.declinari_time_unit;
     }
     
-    // Only include updatedBy/updatedByName if they exist (optional in Firebase)
+    // Only include updatedBy if it exists (optional in Firebase)
     if (row.updated_by_UID) {
       formatted.updatedBy = row.updated_by_UID;
-    }
-    if (row.updated_by_name) {
-      formatted.updatedByName = row.updated_by_name;
     }
 
     emitDeliverableChange(req, 'created', formatted);
@@ -275,10 +265,8 @@ export const updateDeliverable = async (req, res, next) => {
 
     updates.push(`"updated_by_UID" = $${paramCount++}`);
     params.push(user.userUID || '');
-    updates.push(`updated_by_name = $${paramCount++}`);
-    params.push(user.name || user.email);
 
-    if (updates.length === 2) { // Only updated_by and updated_by_name
+    if (updates.length === 1) { // Only updated_by_UID
       return res.status(400).json({ error: 'No fields to update' });
     }
 
@@ -321,12 +309,9 @@ export const updateDeliverable = async (req, res, next) => {
       formatted.declinariTimeUnit = row.declinari_time_unit;
     }
     
-    // Only include updatedBy/updatedByName if they exist (optional in Firebase)
+    // Only include updatedBy if it exists (optional in Firebase)
     if (row.updated_by_UID) {
       formatted.updatedBy = row.updated_by_UID;
-    }
-    if (row.updated_by_name) {
-      formatted.updatedByName = row.updated_by_name;
     }
 
     emitDeliverableChange(req, 'updated', formatted);

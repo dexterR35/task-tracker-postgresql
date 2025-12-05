@@ -15,12 +15,10 @@ const parseTask = (task) => {
     boardId: task.board_id || task.boardId,
     createbyUID: task.created_by_UID || task["user_UID"] || task.userUID, // Note: Firebase uses "createbyUID" not "createdByUID"
     createdAt: task.created_at ? new Date(task.created_at).toISOString() : task.createdAt,
-    createdByName: task.created_by_name || task.createdByName,
     data_task: dataTask,
     monthId: task.month_id || task.monthId,
     updatedAt: task.updated_at ? new Date(task.updated_at).toISOString() : task.updatedAt,
     userUID: task["user_UID"] || task.userUID
-    // Note: updatedBy, updatedByName, createdByUID are NOT in Firebase structure
   };
 };
 
@@ -189,16 +187,15 @@ export const createTask = async (req, res, next) => {
     const finalBoardId = boardId || `board_${monthId}_${Date.now()}`;
 
     const result = await pool.query(
-      `INSERT INTO tasks (month_id, "user_UID", board_id, data_task, created_by_UID, created_by_name)
-       VALUES ($1, $2, $3, $4, $5, $6)
+      `INSERT INTO tasks (month_id, "user_UID", board_id, data_task, created_by_UID)
+       VALUES ($1, $2, $3, $4, $5)
        RETURNING *`,
       [
         monthId,
         taskUserUID,
         finalBoardId,
         JSON.stringify(taskData),
-        user.userUID || taskUserUID, // Use user_UID directly
-        user.name || user.email
+        user.userUID || taskUserUID
       ]
     );
 
@@ -261,11 +258,9 @@ export const updateTask = async (req, res, next) => {
       return res.status(400).json({ error: 'No fields to update' });
     }
 
-    // Update updated_by_UID and updated_by_name
+    // Update updated_by_UID
     updates.push(`"updated_by_UID" = $${paramCount++}`);
     params.push(user.userUID || '');
-    updates.push(`updated_by_name = $${paramCount++}`);
-    params.push(user.name || user.email);
 
     params.push(id);
 

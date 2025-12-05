@@ -6,36 +6,31 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Users table
 CREATE TABLE users (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    "user_UID" VARCHAR(255) UNIQUE NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    name VARCHAR(255),
+    "user_UID" VARCHAR(255) PRIMARY KEY, -- Primary key and application identifier
+    email VARCHAR(255) UNIQUE NOT NULL CHECK (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
+    name VARCHAR(255) NOT NULL,
     role VARCHAR(50) DEFAULT 'user' CHECK (role IN ('admin', 'user')),
     permissions JSONB DEFAULT '[]'::jsonb,
-    password_hash VARCHAR(255) NOT NULL,
-    color_set VARCHAR(7), -- Hex color code (e.g., "3B82F6")
+    password_hash VARCHAR(255) NOT NULL, -- Bcrypt hash (typically 60 chars, but allow up to 255 for future-proofing)
+    color_set VARCHAR(7) CHECK (color_set IS NULL OR color_set ~* '^#[0-9A-Fa-f]{6}$'), -- Hex color code (e.g., "#3B82F6")
     is_active BOOLEAN DEFAULT true,
     occupation VARCHAR(100), -- e.g., "developer", "acq"
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_by_UID VARCHAR(255), -- User UID who created the user
-    created_by_name VARCHAR(255), -- Denormalized for performance
-    updated_by_UID VARCHAR(255), -- User UID who last updated the user
-    updated_by_name VARCHAR(255) -- Denormalized: may become stale if user name changes
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- Internal tracking (not returned in API)
 );
 
--- Add self-referencing FK constraints after table creation (to avoid circular dependency)
+-- Add self-referencing FK constraint after table creation (to avoid circular dependency)
 ALTER TABLE users 
     ADD CONSTRAINT fk_users_created_by FOREIGN KEY (created_by_UID) 
     REFERENCES users("user_UID") ON DELETE SET NULL;
-ALTER TABLE users 
-    ADD CONSTRAINT fk_users_updated_by FOREIGN KEY (updated_by_UID) 
-    REFERENCES users("user_UID") ON DELETE SET NULL;
 
--- Create index on email for faster lookups
+-- Create indexes for faster lookups
 CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
-CREATE INDEX IF NOT EXISTS idx_users_user_UID ON users("user_UID");
 CREATE INDEX IF NOT EXISTS idx_users_role ON users(role);
+CREATE INDEX IF NOT EXISTS idx_users_is_active ON users(is_active); -- Useful for filtering active users
+CREATE INDEX IF NOT EXISTS idx_users_email_active ON users(email, is_active); -- Composite index for common query pattern
+-- Note: user_UID is PRIMARY KEY, so it already has an index
 
 -- Months table (month boards)
 CREATE TABLE months (
@@ -48,9 +43,7 @@ CREATE TABLE months (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_by_UID VARCHAR(255), -- User UID who created the month board
-    created_by_name VARCHAR(255), -- Denormalized for performance
     updated_by_UID VARCHAR(255), -- User UID who last updated the month board
-    updated_by_name VARCHAR(255), -- Denormalized for performance
     FOREIGN KEY (created_by_UID) REFERENCES users("user_UID") ON DELETE SET NULL,
     FOREIGN KEY (updated_by_UID) REFERENCES users("user_UID") ON DELETE SET NULL
 );
@@ -69,11 +62,9 @@ CREATE TABLE tasks (
     data_task JSONB NOT NULL, -- Contains all task data (taskName, products, markets, etc.)
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    -- Auditing fields: UIDs are the source of truth, names are denormalized for performance
+    -- Auditing fields: UIDs are the source of truth
     created_by_UID VARCHAR(255), -- User UID who created the task
-    created_by_name VARCHAR(255), -- Denormalized for performance
     updated_by_UID VARCHAR(255), -- User UID who last updated the task
-    updated_by_name VARCHAR(255), -- Denormalized for performance
     FOREIGN KEY (month_id) REFERENCES months(month_id) ON DELETE CASCADE,
     -- Foreign key constraint ensures user_UID exists, but NO ACTION prevents cascading deletes
     -- This preserves task history even if user is deactivated
@@ -86,20 +77,17 @@ CREATE INDEX IF NOT EXISTS idx_tasks_created_at ON tasks(created_at);
 
 -- Reporters table
 CREATE TABLE reporters (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    "reporter_UID" VARCHAR(255) PRIMARY KEY, -- Primary key and application identifier (NOT for auth)
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255),
     department VARCHAR(100), -- Also supports "departament" spelling in response
     channel VARCHAR(100),
     channel_name VARCHAR(100), -- Maps to "channelName" in response
     country VARCHAR(10),
-    "reporter_UID" VARCHAR(255) UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_by_UID VARCHAR(255), -- User UID who created the reporter
-    created_by_name VARCHAR(255), -- Denormalized for performance
     updated_by_UID VARCHAR(255), -- User UID who last updated the reporter
-    updated_by_name VARCHAR(255), -- Denormalized for performance
     FOREIGN KEY (created_by_UID) REFERENCES users("user_UID") ON DELETE SET NULL,
     FOREIGN KEY (updated_by_UID) REFERENCES users("user_UID") ON DELETE SET NULL
 );
@@ -122,9 +110,7 @@ CREATE TABLE deliverables (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_by_UID VARCHAR(255), -- User UID who created the deliverable
-    created_by_name VARCHAR(255), -- Denormalized for performance
     updated_by_UID VARCHAR(255), -- User UID who last updated the deliverable
-    updated_by_name VARCHAR(255), -- Denormalized for performance
     FOREIGN KEY (created_by_UID) REFERENCES users("user_UID") ON DELETE SET NULL,
     FOREIGN KEY (updated_by_UID) REFERENCES users("user_UID") ON DELETE SET NULL
 );
@@ -136,7 +122,6 @@ CREATE INDEX IF NOT EXISTS idx_deliverables_name ON deliverables(name);
 CREATE TABLE team_days_off (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     "user_UID" VARCHAR(255) NOT NULL UNIQUE,
-    user_name VARCHAR(255), -- Denormalized user name for performance
     base_days DECIMAL(10, 2) DEFAULT 0, -- Base days allocated
     days_off DECIMAL(10, 2) DEFAULT 0, -- Days off used (calculated from offDays array)
     days_remaining DECIMAL(10, 2) DEFAULT 0, -- Days remaining (calculated)
@@ -145,13 +130,11 @@ CREATE TABLE team_days_off (
     off_days JSONB DEFAULT '[]'::jsonb, -- Array of selected dates: [{dateString, day, month, year, timestamp}]
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    created_by_uid VARCHAR(255), -- User UID who created the day off entry
-    created_by_name VARCHAR(255), -- Denormalized for performance
-    updated_by_uid VARCHAR(255), -- User UID who last updated the day off entry
-    updated_by_name VARCHAR(255), -- Denormalized for performance
+    created_by_UID VARCHAR(255), -- User UID who created the day off entry
+    updated_by_UID VARCHAR(255), -- User UID who last updated the day off entry
     FOREIGN KEY ("user_UID") REFERENCES users("user_UID") ON DELETE NO ACTION,
-    FOREIGN KEY (created_by_uid) REFERENCES users("user_UID") ON DELETE SET NULL,
-    FOREIGN KEY (updated_by_uid) REFERENCES users("user_UID") ON DELETE SET NULL
+    FOREIGN KEY (created_by_UID) REFERENCES users("user_UID") ON DELETE SET NULL,
+    FOREIGN KEY (updated_by_UID) REFERENCES users("user_UID") ON DELETE SET NULL
 );
 
 CREATE INDEX IF NOT EXISTS idx_team_days_off_user_UID ON team_days_off("user_UID");

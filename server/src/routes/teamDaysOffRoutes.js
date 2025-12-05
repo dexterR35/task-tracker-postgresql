@@ -6,15 +6,17 @@ import {
   updateDayOff,
   deleteDayOff
 } from '../controllers/teamDaysOffController.js';
-import { authenticateToken } from '../middleware/auth.js';
+import { authenticateToken, requireRole, requirePermission } from '../middleware/auth.js';
 
 const router = express.Router();
 
+// GET: Users can view their own, admins can view all
 router.get('/', authenticateToken, getTeamDaysOff);
 router.get('/:id', authenticateToken, getDayOffById);
-router.post('/', authenticateToken, createDayOff);
-router.put('/:id', authenticateToken, updateDayOff);
-router.delete('/:id', authenticateToken, deleteDayOff);
+// POST/PUT/DELETE: Only admins or users with permission can manage
+router.post('/', authenticateToken, requirePermission('manage_team_days_off'), createDayOff);
+router.put('/:id', authenticateToken, requirePermission('manage_team_days_off'), updateDayOff);
+router.delete('/:id', authenticateToken, requireRole('admin'), deleteDayOff);
 
 export default router;
 

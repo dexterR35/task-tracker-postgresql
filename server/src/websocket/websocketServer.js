@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 class WebSocketManager {
   constructor(server) {
     this.wss = new WebSocketServer({ server, path: '/ws' });
-    this.clients = new Map(); // Map<userId, Set<WebSocket>>
+    this.clients = new Map(); // Map<userUID, Set<WebSocket>>
     this.setupConnection();
   }
 
@@ -28,16 +28,16 @@ class WebSocketManager {
         return;
       }
 
-      // Add client to map
-      if (!this.clients.has(user.userId)) {
-        this.clients.set(user.userId, new Set());
+      // Add client to map (use userUID as key)
+      const userUID = user.userUID || user.userId; // Fallback for old tokens
+      if (!this.clients.has(userUID)) {
+        this.clients.set(userUID, new Set());
       }
-      this.clients.get(user.userId).add(ws);
+      this.clients.get(userUID).add(ws);
 
-      ws.userId = user.userId;
-      ws.userUID = user.userUID;
+      ws.userUID = userUID;
 
-      console.log(`✅ WebSocket client connected: ${user.email} (${user.userId})`);
+      console.log(`✅ WebSocket client connected: ${user.email} (${userUID})`);
 
       // Handle messages
       ws.on('message', (message) => {
@@ -51,10 +51,10 @@ class WebSocketManager {
 
       // Handle disconnect
       ws.on('close', () => {
-        if (this.clients.has(ws.userId)) {
-          this.clients.get(ws.userId).delete(ws);
-          if (this.clients.get(ws.userId).size === 0) {
-            this.clients.delete(ws.userId);
+        if (ws.userUID && this.clients.has(ws.userUID)) {
+          this.clients.get(ws.userUID).delete(ws);
+          if (this.clients.get(ws.userUID).size === 0) {
+            this.clients.delete(ws.userUID);
           }
         }
         console.log(`❌ WebSocket client disconnected: ${user.email}`);
@@ -86,7 +86,7 @@ class WebSocketManager {
   // Broadcast to all clients
   broadcast(data, filter = null) {
     const message = JSON.stringify(data);
-    this.clients.forEach((clientSet, userId) => {
+    this.clients.forEach((clientSet, userUID) => {
       clientSet.forEach(ws => {
         if (ws.readyState === 1) { // WebSocket.OPEN
           if (!filter || filter(ws)) {
@@ -97,11 +97,11 @@ class WebSocketManager {
     });
   }
 
-  // Send to specific user
-  sendToUser(userId, data) {
+  // Send to specific user by UID
+  sendToUser(userUID, data) {
     const message = JSON.stringify(data);
-    if (this.clients.has(userId)) {
-      this.clients.get(userId).forEach(ws => {
+    if (this.clients.has(userUID)) {
+      this.clients.get(userUID).forEach(ws => {
         if (ws.readyState === 1) { // WebSocket.OPEN
           ws.send(message);
         }
@@ -112,7 +112,7 @@ class WebSocketManager {
   // Send to users by UID
   sendToUserByUID(userUID, data) {
     const message = JSON.stringify(data);
-    this.clients.forEach((clientSet, userId) => {
+    this.clients.forEach((clientSet, clientUserUID) => {
       clientSet.forEach(ws => {
         if (ws.userUID === userUID && ws.readyState === 1) {
           ws.send(message);
