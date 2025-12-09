@@ -2,13 +2,6 @@ import { useSearchParams } from "react-router-dom";
 import { useCallback, useMemo } from "react";
 import { updateURLParams, updateURLParam, getURLParam } from "@/utils/urlParams";
 
-/**
- * Custom hook for managing URL-based filters
- * Handles reading from and writing to URL parameters
- * 
- * @param {Array<string>} filterKeys - Array of filter keys to manage
- * @returns {Object} Filter values and update function
- */
 export const useURLFilters = (filterKeys = []) => {
   const [searchParams, setSearchParams] = useSearchParams();
 

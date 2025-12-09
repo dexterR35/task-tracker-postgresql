@@ -8,15 +8,6 @@ import {
   normalizeMarket,
 } from '@/components/Cards/configs/analyticsSharedConfig';
 
-/**
- * Analytics Hooks
- * Reusable hooks for calculating analytics data per user, per market, per category
- * Each hook is independent and can be used separately
- */
-
-/**
- * Check if a product string matches a category
- */
 const isProductCategory = (products, category) => {
   if (!products || typeof products !== 'string') return false;
   const productsLower = products.toLowerCase().trim();
@@ -43,9 +34,6 @@ const isProductCategory = (products, category) => {
   }
 };
 
-/**
- * Filter tasks by various criteria
- */
 const filterTasks = (tasks, filters = {}) => {
   if (!tasks || !Array.isArray(tasks)) return [];
   
@@ -79,13 +67,6 @@ const filterTasks = (tasks, filters = {}) => {
   return filtered;
 };
 
-/**
- * Hook: Calculate total tasks per user per market
- * @param {Array} tasks - Array of tasks
- * @param {Array} users - Array of user objects
- * @param {Object} filters - Optional filters { userId, market, category, monthId }
- * @returns {Object} { totalTasks, tasksByUser, tasksByMarket, tasksByUserAndMarket }
- */
 export const useTotalTasks = (tasks, users = [], filters = {}) => {
   return useMemo(() => {
     const filteredTasks = filterTasks(tasks, filters);
@@ -135,13 +116,6 @@ export const useTotalTasks = (tasks, users = [], filters = {}) => {
   }, [tasks, users, filters.userId, filters.market, filters.category, filters.monthId]);
 };
 
-/**
- * Hook: Calculate total hours per user per market
- * @param {Array} tasks - Array of tasks
- * @param {Array} users - Array of user objects
- * @param {Object} filters - Optional filters { userId, market, category, monthId }
- * @returns {Object} { totalHours, hoursByUser, hoursByMarket, hoursByUserAndMarket }
- */
 export const useTotalHours = (tasks, users = [], filters = {}) => {
   return useMemo(() => {
     const filteredTasks = filterTasks(tasks, filters);
@@ -210,13 +184,6 @@ export const useTotalHours = (tasks, users = [], filters = {}) => {
   }, [tasks, users, filters.userId, filters.market, filters.category, filters.monthId]);
 };
 
-/**
- * Hook: Calculate total deliverables per user per market
- * @param {Array} tasks - Array of tasks
- * @param {Array} users - Array of user objects
- * @param {Object} filters - Optional filters { userId, market, category, monthId }
- * @returns {Object} { totalDeliverables, deliverablesByUser, deliverablesByMarket, deliverablesByUserAndMarket }
- */
 export const useTotalDeliverables = (tasks, users = [], filters = {}) => {
   return useMemo(() => {
     const filteredTasks = filterTasks(tasks, filters);
@@ -271,13 +238,6 @@ export const useTotalDeliverables = (tasks, users = [], filters = {}) => {
   }, [tasks, users, filters.userId, filters.market, filters.category, filters.monthId]);
 };
 
-/**
- * Hook: Calculate total variations per user per market
- * @param {Array} tasks - Array of tasks
- * @param {Array} users - Array of user objects
- * @param {Object} filters - Optional filters { userId, market, category, monthId }
- * @returns {Object} { totalVariations, variationsByUser, variationsByMarket, variationsByUserAndMarket }
- */
 export const useTotalVariations = (tasks, users = [], filters = {}) => {
   return useMemo(() => {
     const filteredTasks = filterTasks(tasks, filters);
@@ -334,14 +294,6 @@ export const useTotalVariations = (tasks, users = [], filters = {}) => {
   }, [tasks, users, filters.userId, filters.market, filters.category, filters.monthId]);
 };
 
-/**
- * Hook: Calculate deliverables hours (base and with variations)
- * @param {Array} tasks - Array of tasks
- * @param {Array} users - Array of user objects
- * @param {Array} deliverablesOptions - Array of deliverable options with timePerUnit, etc.
- * @param {Object} filters - Optional filters { userId, market, category, monthId }
- * @returns {Object} { totalDeliverablesHours, totalDeliverablesWithVariationsHours, hoursByUser, hoursByMarket }
- */
 export const useDeliverablesHours = (tasks, users = [], deliverablesOptions = [], filters = {}) => {
   return useMemo(() => {
     const filteredTasks = filterTasks(tasks, filters);
@@ -459,13 +411,6 @@ export const useDeliverablesHours = (tasks, users = [], deliverablesOptions = []
   }, [tasks, users, deliverablesOptions, filters.userId, filters.market, filters.category, filters.monthId]);
 };
 
-/**
- * Hook: Calculate acquisition tasks per user per market
- * @param {Array} tasks - Array of tasks
- * @param {Array} users - Array of user objects
- * @param {Object} filters - Optional filters { userId, market, monthId }
- * @returns {Object} { totalTasks, totalHours, tasksByUser, tasksByMarket, hoursByUser, hoursByMarket }
- */
 export const useAcquisitionTasks = (tasks, users = [], filters = {}) => {
   const categoryFilters = { ...filters, category: 'acquisition' };
   const tasksData = useTotalTasks(tasks, users, categoryFilters);
@@ -483,13 +428,6 @@ export const useAcquisitionTasks = (tasks, users = [], filters = {}) => {
   }), [tasksData, hoursData]);
 };
 
-/**
- * Hook: Calculate marketing tasks per user per market
- * @param {Array} tasks - Array of tasks
- * @param {Array} users - Array of user objects
- * @param {Object} filters - Optional filters { userId, market, monthId }
- * @returns {Object} { totalTasks, totalHours, tasksByUser, tasksByMarket, hoursByUser, hoursByMarket }
- */
 export const useMarketingTasks = (tasks, users = [], filters = {}) => {
   const categoryFilters = { ...filters, category: 'marketing' };
   const tasksData = useTotalTasks(tasks, users, categoryFilters);
@@ -507,13 +445,6 @@ export const useMarketingTasks = (tasks, users = [], filters = {}) => {
   }), [tasksData, hoursData]);
 };
 
-/**
- * Hook: Calculate product tasks per user per market
- * @param {Array} tasks - Array of tasks
- * @param {Array} users - Array of user objects
- * @param {Object} filters - Optional filters { userId, market, monthId }
- * @returns {Object} { totalTasks, totalHours, tasksByUser, tasksByMarket, hoursByUser, hoursByMarket }
- */
 export const useProductTasks = (tasks, users = [], filters = {}) => {
   const categoryFilters = { ...filters, category: 'product' };
   const tasksData = useTotalTasks(tasks, users, categoryFilters);
@@ -531,13 +462,6 @@ export const useProductTasks = (tasks, users = [], filters = {}) => {
   }), [tasksData, hoursData]);
 };
 
-/**
- * Hook: Calculate misc tasks per user per market
- * @param {Array} tasks - Array of tasks
- * @param {Array} users - Array of user objects
- * @param {Object} filters - Optional filters { userId, market, monthId }
- * @returns {Object} { totalTasks, totalHours, tasksByUser, tasksByMarket, hoursByUser, hoursByMarket }
- */
 export const useMiscTasks = (tasks, users = [], filters = {}) => {
   const categoryFilters = { ...filters, category: 'misc' };
   const tasksData = useTotalTasks(tasks, users, categoryFilters);
@@ -555,15 +479,6 @@ export const useMiscTasks = (tasks, users = [], filters = {}) => {
   }), [tasksData, hoursData]);
 };
 
-/**
- * Hook: Get analytics for a specific user and market
- * @param {Array} tasks - Array of tasks
- * @param {Array} users - Array of user objects
- * @param {string} userId - User ID
- * @param {string} market - Market code
- * @param {string} monthId - Optional month ID
- * @returns {Object} Complete analytics data
- */
 export const useUserMarketAnalytics = (tasks, users = [], userId, market, monthId = null) => {
   const filters = useMemo(() => ({ userId, market, monthId }), [userId, market, monthId]);
   

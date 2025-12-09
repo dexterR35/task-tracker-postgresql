@@ -13,10 +13,6 @@ import { DATE_TIME } from '@/constants';
 
 // Standalone date utility functions (can be used outside React components)
 
-/**
- * Normalize timestamp to consistent format
- * Handles both ISO timestamps and regular Date objects (backward compatibility for old data formats)
- */
 export const normalizeTimestamp = (value) => {
   if (!value) return null;
 
@@ -52,9 +48,6 @@ export const normalizeTimestamp = (value) => {
   return null;
 };
 
-/**
- * Convert any timestamp value to milliseconds
- */
 export const toMs = (value) => {
   if (!value) return null;
   try {
@@ -91,9 +84,6 @@ export const toMs = (value) => {
   return null;
 };
 
-/**
- * Format date using a pattern with consistent timezone handling
- */
 export const formatDate = (value, pattern = 'yyyy-MM-dd HH:mm', useRomanianTimezone = true) => {
   const ms = toMs(value);
   if (!ms) return 'N/A';
@@ -109,12 +99,6 @@ export const formatDate = (value, pattern = 'yyyy-MM-dd HH:mm', useRomanianTimez
   }
 };
 
-/**
- * Format date to YYYY-MM-DD string using local date components (not UTC)
- * This avoids timezone shifts when working with calendar dates
- * @param {Date|string|number} date - Date to format
- * @returns {string} Date string in YYYY-MM-DD format
- */
 export const formatDateString = (date) => {
   if (!date) return '';
   const dateObj = date instanceof Date ? date : new Date(date);
@@ -127,9 +111,6 @@ export const formatDateString = (date) => {
   return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 };
 
-/**
- * Format date as "time ago" with US language
- */
 export const fromNow = (value, useRomanianTimezone = true) => {
   const ms = toMs(value);
   if (!ms) return 'N/A';
@@ -144,9 +125,6 @@ export const fromNow = (value, useRomanianTimezone = true) => {
   }
 };
 
-/**
- * Format month ID to readable format with US language
- */
 export const formatMonth = (monthId, useRomanianTimezone = true) => {
   if (!monthId) return 'N/A';
   try {
@@ -158,25 +136,16 @@ export const formatMonth = (monthId, useRomanianTimezone = true) => {
   }
 };
 
-/**
- * Get current year using proper timezone
- */
 export const getCurrentYear = () => {
   const now = new Date();
   // Use the timezone from constants if needed
   return now.getFullYear().toString();
 };
 
-/**
- * Get current month ID
- */
 export const getCurrentMonthId = () => {
   return format(new Date(), 'yyyy-MM');
 };
 
-/**
- * Parse month ID to Date object
- */
 export const parseMonthId = (monthId) => {
   if (!monthId) return null;
   try {
@@ -186,26 +155,15 @@ export const parseMonthId = (monthId) => {
   }
 };
 
-/**
- * Get start of month for a given date
- */
 export const getStartOfMonth = (date = new Date()) => {
   return startOfMonth(date);
 };
 
-/**
- * Get end of month for a given date
- */
 export const getEndOfMonth = (date = new Date()) => {
   return endOfMonth(date);
 };
 
 
-/**
- * Optimized timestamp serialization for JSON serialization
- * Converts all timestamp fields to ISO strings for API responses
- * Uses memoization to avoid redundant processing
- */
 const timestampCache = new WeakMap();
 
 export const serializeTimestamps = (data) => {

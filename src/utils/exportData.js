@@ -5,9 +5,6 @@ import { EXPORT_CONFIG } from "@/constants";
 // CSV date format constant (ISO date with time)
 const CSV_DATE_FORMAT = "yyyy-MM-dd HH:mm";
 
-/**
- * Format value for CSV export with proper date formatting and empty field handling
- */
 const formatValueForCSV = (
   value,
   columnId,
@@ -1008,13 +1005,6 @@ export const exportToCSV = (data, columns, tableType, options = {}) => {
   }
 };
 
-/**
- * Export analytics data to CSV
- * @param {Array|Object} data - Analytics data to export
- * @param {string} tableType - Type of data being exported
- * @param {Object} options - Export options
- * @returns {boolean} Success status
- */
 export const exportAnalyticsToCSV = (data, tableType, options = {}) => {
   try {
     const { filename = null, includeHeaders = true } = options;

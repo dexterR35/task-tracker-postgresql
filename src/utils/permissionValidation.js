@@ -1,36 +1,5 @@
-/**
- * Centralized Permission Validation Utilities
- * Consolidates all permission validation patterns across the application
- */
-
 import { logger } from '@/utils/logger';
 
-/**
- * Standard permission validation result
- * @typedef {Object} PermissionValidationResult
- * @property {boolean} isValid - Whether the user has permission
- * @property {string[]} errors - Array of error messages
- * @property {string} operation - The operation being validated
- */
-
-/**
- * Permission validation options
- * @typedef {Object} PermissionValidationOptions
- * @property {string} operation - Operation name for logging
- * @property {boolean} logWarnings - Whether to log warnings
- * @property {boolean} requireActive - Whether user must be active
- * @property {boolean} allowAdminBypass - Whether admins can bypass permission checks
- */
-
-/**
- * Centralized permission validation function
- * Replaces duplicate validation logic across different API modules
- *
- * @param {Object} userData - User data object
- * @param {string|Array} requiredPermissions - Required permission(s)
- * @param {PermissionValidationOptions} options - Validation options
- * @returns {PermissionValidationResult} - Validation result
- */
 export const validatePermissions = (userData, requiredPermissions, options = {}) => {
   const {
     operation = 'unknown',
@@ -92,12 +61,6 @@ export const validatePermissions = (userData, requiredPermissions, options = {})
   return { isValid: true, errors: [], operation };
 };
 
-/**
- * Role-based permission mapping
- * @param {string} role - User role
- * @param {string} permission - Required permission
- * @returns {boolean} - Whether role has permission
- */
 const hasRoleBasedPermission = (role, permission) => {
   const rolePermissions = {
     admin: [
@@ -114,12 +77,6 @@ const hasRoleBasedPermission = (role, permission) => {
   return rolePermissions[role]?.includes(permission) || false;
 };
 
-/**
- * Task-specific permission validation
- * @param {Object} userData - User data object
- * @param {string} operation - Task operation (create_tasks, update_tasks, etc.)
- * @returns {PermissionValidationResult} - Validation result
- */
 export const validateTaskPermissions = (userData, operation) => {
   return validatePermissions(userData, operation, {
     operation: `task_${operation}`,
@@ -129,12 +86,6 @@ export const validateTaskPermissions = (userData, operation) => {
   });
 };
 
-/**
- * Deliverable-specific permission validation
- * @param {Object} userData - User data object
- * @param {string} operation - Deliverable operation
- * @returns {PermissionValidationResult} - Validation result
- */
 export const validateDeliverablePermissions = (userData, operation) => {
   return validatePermissions(userData, operation, {
     operation: `deliverable_${operation}`,
@@ -144,12 +95,6 @@ export const validateDeliverablePermissions = (userData, operation) => {
   });
 };
 
-/**
- * Reporter-specific permission validation
- * @param {Object} userData - User data object
- * @param {string} operation - Reporter operation
- * @returns {PermissionValidationResult} - Validation result
- */
 export const validateReporterPermissions = (userData, operation) => {
   return validatePermissions(userData, operation, {
     operation: `reporter_${operation}`,
@@ -159,11 +104,6 @@ export const validateReporterPermissions = (userData, operation) => {
   });
 };
 
-/**
- * Analytics-specific permission validation
- * @param {Object} userData - User data object
- * @returns {PermissionValidationResult} - Validation result
- */
 export const validateAnalyticsPermissions = (userData) => {
   return validatePermissions(userData, 'view_analytics', {
     operation: 'view_analytics',
@@ -173,12 +113,6 @@ export const validateAnalyticsPermissions = (userData) => {
   });
 };
 
-/**
- * Permission validation decorator for API functions
- * @param {string|Array} requiredPermissions - Required permissions
- * @param {PermissionValidationOptions} options - Validation options
- * @returns {Function} - Decorated function
- */
 export const withPermissionValidation = (requiredPermissions, options = {}) => {
   return (target, propertyKey, descriptor) => {
     const originalMethod = descriptor.value;
@@ -203,13 +137,6 @@ export const withPermissionValidation = (requiredPermissions, options = {}) => {
   };
 };
 
-/**
- * Permission validation hook for React components
- * @param {Object} userData - User data object
- * @param {string|Array} requiredPermissions - Required permissions
- * @param {PermissionValidationOptions} options - Validation options
- * @returns {Object} - Permission state and validation result
- */
 export const usePermissionValidation = (userData, requiredPermissions, options = {}) => {
   const validation = validatePermissions(userData, requiredPermissions, options);
 

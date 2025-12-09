@@ -1,16 +1,5 @@
-/**
- * User Preferences Utility
- * Handles saving and loading user-specific preferences (e.g., column visibility)
- */
-
 const PREFERENCES_PREFIX = 'user_preferences_';
 
-/**
- * Get a user-specific storage key
- * @param {string} userId - User ID
- * @param {string} preferenceKey - Preference key (e.g., 'taskTable_columnVisibility')
- * @returns {string} Storage key
- */
 const getUserPreferenceKey = (userId, preferenceKey) => {
   if (!userId) {
     // Fallback to generic key if no user ID
@@ -19,12 +8,6 @@ const getUserPreferenceKey = (userId, preferenceKey) => {
   return `${PREFERENCES_PREFIX}${userId}_${preferenceKey}`;
 };
 
-/**
- * Save user preference to localStorage
- * @param {string} userId - User ID
- * @param {string} preferenceKey - Preference key
- * @param {any} value - Value to save
- */
 export const saveUserPreference = (userId, preferenceKey, value) => {
   try {
     const key = getUserPreferenceKey(userId, preferenceKey);
@@ -34,13 +17,6 @@ export const saveUserPreference = (userId, preferenceKey, value) => {
   }
 };
 
-/**
- * Load user preference from localStorage
- * @param {string} userId - User ID
- * @param {string} preferenceKey - Preference key
- * @param {any} defaultValue - Default value if not found
- * @returns {any} Loaded value or default value
- */
 export const loadUserPreference = (userId, preferenceKey, defaultValue = null) => {
   try {
     const key = getUserPreferenceKey(userId, preferenceKey);

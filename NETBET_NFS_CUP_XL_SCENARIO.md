@@ -1,4 +1,4 @@
-# 📄 Plan de Campanie Avansat: NetBet NFS Cup - Ediția București (Scenario XL)
+# 📄 Plan de Campanie: NetBet NFS Cup - Ediția București (Scenario XL)
 
 ---
 
@@ -6,25 +6,25 @@
 
 | Aspect | Detalii |
 |:---|:---|
-| **Obiectiv Principal** | Atingerea unui **ROI optim** prin atragerea de **1000+ utilizatori noi** (conturi noi), fiecare generând un volum minim de **500 RON wagering pe zi** (14.000 RON total în 28 zile) pe jocuri slot de la afiliați. |
+| **Obiectiv Principal** | Atingerea unui **ROI optim** prin atragerea de **1000+ utilizatori noi** (conturi noi), fiecare generând un volum minim de **500 wagering pe zi** (14.000 total în 28 zile) pe jocuri slot de la afiliați. |
 | **Perioada Campaniei** | **28 de zile** de joc + **2 zile** pentru Evenimentul Final Grand Tour. |
-| **Buget Total (Cheltuieli Externe)** | **55.000 RON** (10.000 RON Fix Premii + 45.000 RON Variabil Marketing) |
-| **Venit Net Așteptat (NR)** | **289.000 RON** |
-| **Profit Net Așteptat** | **234.000 RON** |
+| **Buget Total (Cheltuieli Externe)** | **55.000** (10.000 Fix Premii + 45.000 Variabil Marketing) |
+| **Venit Net Așteptat (NR)** | **289.000** |
+| **Profit Net Așteptat** | **234.000** |
 | **ROI Așteptat** | **5.3x** (525% profit) |
 | **Măsurarea Succesului** | Volum Wagering (Turnover), Net Revenue (NR), Număr utilizatori noi (1000+ conturi). |
-| **Notă Importantă** | **Distribuție realistă**: Wagering mediu de 8.500 RON/utilizator, cu 45% Regular Players și 35% Active Players. Utilizatorii trebuie să joace exclusiv jocuri slot de la afiliați pentru a acumula puncte. |
+| **Notă Importantă** | **Distribuție realistă**: Wagering mediu de 8.500/utilizator, cu 45% Regular Players și 35% Active Players. Utilizatorii trebuie să joace exclusiv jocuri slot de la afiliați pentru a acumula puncte. |
 
 ### Rezumat Vizual - ROI Comparison
 
 ```
-Scenario Conservator (800 users):        ROI 4.2x  → Profit: 185.600 RON
-Scenario Realist (1000 users):           ROI 5.3x  → Profit: 234.000 RON ✅
-Scenario Agresiv (1200 users):           ROI 6.5x  → Profit: 302.400 RON 🚀
-Scenario Realist Ajustat (1000 users):  ROI 3.8x  → Profit: 155.000 RON ⚠️ (CEL MAI REALIST)
+Scenario Conservator (800 users):        Rentabilitate 4.2x  → Profit: 185.600
+Scenario Realist (1000 users):           Rentabilitate 5.3x  → Profit: 234.000 ✅
+Scenario Agresiv (1200 users):           Rentabilitate 6.5x  → Profit: 302.400 🚀
+Scenario Realist Ajustat (1000 users):  Rentabilitate 3.8x  → Profit: 155.000 ⚠️ (CEL MAI REALIST)
 ```
 
-**Notă:** Scenariile reflectă o distribuție realistă pentru utilizatori de rând: 45% Regular Players, 35% Active Players, doar 2% Ultra High Rollers. **Scenario 4 (Realist Ajustat)** reflectă parametri mai conservatori (CPA real 80-100 RON, wagering mediu 6.500 RON) și este cel mai probabil să se realizeze în practică.
+**Notă:** Scenariile reflectă o distribuție realistă pentru utilizatori de rând: 45% Regular Players, 35% Active Players, doar 2% Ultra High Rollers. **Scenario 4 (Realist Ajustat)** reflectă parametri mai conservatori (cost real 80-100 per utilizator, wagering mediu 6.500) și este cel mai probabil să se realizeze în practică.
 
 ---
 
@@ -36,50 +36,50 @@ Oferta se concentrează pe **jocuri slot de la afiliați** - utilizatorii joacă
 
 | Acțiune | Recompensă & Condiție | Analiză (Focus pe Profit) |
 |:---|:---|:---|
-| **Depunere Min. Calificativă** | **100 RON** (Depunere Min. cu Codul `NFSRACE100`) | Menținerea **ADV (Average Deposit Value)** la un nivel care să acopere costul de achiziție și bonusul. |
-| **Pachet Premiu Imediat** (Valoare 30 RON) | **1. 150 Rotiri Gratuite** (0.20 RON/rotire) <br> **2. 50 Puncte NFS Bonus** (Suplimentar la Start Rapid) | Creșterea percepției de valoare. Punctele bonus alimentează imediat dorința de a urca în clasament. |
+| **Depunere Min. Calificativă** | **100** (Depunere Min. cu Codul `NFSRACE100`) | Menținerea **ADV (Average Deposit Value)** la un nivel care să acopere costul de achiziție și bonusul. |
+| **Pachet Premiu Imediat** (Valoare 30) | **1. 150 Rotiri Gratuite** (0.20/rotire) <br> **2. 50 Puncte NFS Bonus** (Suplimentar la Start Rapid) | Creșterea percepției de valoare. Punctele bonus alimentează imediat dorința de a urca în clasament. |
 | **Jocuri Aplicabile** | **Exclusiv jocuri slot de la afiliați** (Marjă de Profit Stabilă) | Optimizarea Marjei de Profit (NR Rate ≈ **3.4%**). Utilizatorii trebuie să joace sloturi pentru a câștiga puncte. |
 
 #### Cost Efectiv per Conversie
 
-| Element | Cost Unitar (RON) | Pentru 1000 Utilizatori (RON) |
+| Element | Cost Unitar | Pentru 1000 Utilizatori |
 |:---|---:|---:|
-| **Free Spins (150 × 0.20 RON)** | 30.00 | 30.000 |
+| **Free Spins (150 × 0.20)** | 30.00 | 30.000 |
 | **Cost Efectiv după RTP** | 18.00 | 18.000 |
 | **Puncte Bonus (50 puncte)** | 0.00 | 0 (Cost virtual) |
-| **TOTAL COST PER USER** | **18.00 RON** | **18.000 RON** |
+| **TOTAL COST PER USER** | **18.00** | **18.000** |
 
-> **Notă:** Costul de 18.000 RON pentru Free Spins este inclus în bugetul variabil de marketing (45.000 RON), lăsând 27.000 RON pentru achiziția efectivă de trafic.
+> **Notă:** Costul de 18.000 pentru Free Spins este inclus în bugetul variabil de marketing (45.000), lăsând 27.000 pentru achiziția efectivă de trafic.
 
 ### B. Oferte Complementare pentru Maximizarea Wagering-ului
 
 | Oferta | Cod Promoțional | Mecanism | Obiectiv | Impact Wagering |
 |:---|:---|:---|:---|:---|
-| **Mega Booster** | `NFSTURBO` | Depune 500 RON → **+500 Puncte** + 100 Free Spins | Creștere ADV la 350 RON | +30% wagering pentru users activi |
+| **Mega Booster** | `NFSTURBO` | Depune 500 → **+500 Puncte** + 100 Free Spins | Creștere depunere medie la 350 | +30% wagering pentru users activi |
 | **Weekend Racer** | `NFSWEEKEND` | Joacă Sâmbătă/Duminică → **Puncte Triple** (3x) | Retenție weekend | +25% wagering total campanie |
 | **Loyalty Streak** | Automat | Joacă 7 zile consecutive → **+1.000 Puncte** | Engagement zilnic | +15% retention rate |
-| **High Roller Bonus** | `NFSVIP` | Depune 2.000 RON → **+2.500 Puncte** + Manager VIP Dedicat | Atragere High Rollers | +50% wagering per VIP user |
+| **High Roller Bonus** | `NFSVIP` | Depune 2.000 → **+2.500 Puncte** + Manager VIP Dedicat | Atragere High Rollers | +50% wagering per VIP user |
 
 ### C. Structura de Punctaj (Sistemul de Clasament)
 
-Se menține structura bazată pe profit pentru a asigura că numai jucătorii activi ajung în Top 10, cu valori accesibile (100-500 RON wagering/zi).
+Se menține structura bazată pe profit pentru a asigura că numai jucătorii activi ajung în Top 10, cu valori accesibile (100-500 wagering/zi).
 
 | Sursa Punctelor NFS Cup | Formula de Calcul | Scop Strategic |
 |:---|:---|:---|
 | **Start Rapid (Bonus Fix)** | **100 Puncte FIX** (După prima depunere calificativă) | Retenție imediată și plasarea inițială în clasament. |
-| **Puncte de Cursă (Wagering)** | **1 Punct = 10 RON wagering** | **Fluxul Principal de Profit.** Punctajul este direct corelat cu Venitul Net generat. Formula mai generoasă pentru accesibilitate. |
+| **Puncte de Cursă (Wagering)** | **1 Punct = 10 wagering** | Punctajul este direct corelat cu venitul net generat. Formula mai generoasă pentru accesibilitate. |
 | **Bonus Start Pack** | **+50 Puncte** (Din pachetul NFSRACE100) | Boost inițial pentru motivație. |
 | **Streak Bonus** | **+1.000 Puncte** (7 zile consecutive) | Retenție pe termen lung, creștere engagement. |
-| **Refer-a-Friend** | **+400 Puncte** (Pentru fiecare prieten adus cu FTD 100 RON+) | Viralitate organică, reducere CPA. |
-| **Bonus Depunere** | **Puncte proporționale cu depunerea** (Cu cât depui mai mult, cu atât primești mai multe puncte) | Motivație pentru depuneri mai mari, creștere ADV. |
+| **Refer-a-Friend** | **+400 Puncte** (Pentru fiecare prieten adus cu prima depunere 100+) | Viralitate organică, reducere cost. |
+| **Bonus Depunere** | **Puncte proporționale cu depunerea** (Cu cât depui mai mult, cu atât primești mai multe puncte) | Motivație pentru depuneri mai mari, creștere depunere medie. |
 
 #### Calculul Punctajului pentru Top 10 (Estimări Realiste)
 
-**Bazat pe minim 500 RON wagering pe zi × 28 zile = 14.000 RON minim pentru utilizatori obișnuiți**
+**Bazat pe minim 500 wagering pe zi × 28 zile = 14.000 minim pentru utilizatori obișnuiți**
 
 **Pentru Top 10, target-urile sunt accesibile pentru a selecta cei mai activi jucători:**
 
-| Poziție Clasament | Puncte Estimate | Wagering Necesar (RON) | Wagering/zi (RON) | Wagering Necesar (€) | Net Revenue (NR) (RON) |
+| Poziție Clasament | Puncte Estimate | Wagering Necesar | Wagering/zi | Wagering Necesar (€) | Venit Net |
 |:---|---:|---:|---:|---:|---:|
 | **🥇 Locul 1** | 1.410 - 2.900 | 12.600 - 14.000 | 450 - 500 | ~2.520 - 2.800 | 428 - 476 |
 | **🥈 Locul 2** | 1.270 - 2.760 | 11.200 - 12.600 | 400 - 450 | ~2.240 - 2.520 | 381 - 428 |
@@ -88,15 +88,15 @@ Se menține structura bazată pe profit pentru a asigura că numai jucătorii ac
 | **Locul 6-10** | 430 - 2.200 | 2.800 - 7.000 | 100 - 250 | ~560 - 1.400 | 95 - 238 |
 
 **Calcul detaliat:**
-- **Puncte din Wagering**: 1 Punct = 10 RON wagering (formula principală)
+- **Puncte din Wagering**: 1 Punct = 10 wagering (formula principală)
 - **Puncte Bonus**: Start Rapid (100) + Bonus Start Pack (50) = 150 puncte minim, plus eventual Streak Bonus (1.000) și Referrals (400/referral) = 150-1.500 puncte bonus pentru Top 10
 - **Total Puncte**: Puncte Wagering + Puncte Bonus
-- **Net Revenue**: Wagering × 3.4% NR Rate
+- **Venit Net**: Wagering × 3.4%
 
 **Observație:** 
-- **Utilizatori obișnuiți**: Minim **500 RON wagering pe zi** (14.000 RON total în 28 zile) pentru participare activă.
-- **Top 10**: Pentru a ajunge în Top 10, un jucător trebuie să genereze un wagering de **2.800-14.000 RON** (560€-2.800€), ceea ce înseamnă **100-500 RON pe zi**. 
-- **Net Revenue estimat pentru Top 10**: **95-476 RON** per jucător (calculat: Wagering × 3.4% NR Rate)
+- **Utilizatori obișnuiți**: Minim **500 wagering pe zi** (14.000 total în 28 zile) pentru participare activă.
+- **Top 10**: Pentru a ajunge în Top 10, un jucător trebuie să genereze un wagering de **2.800-14.000** (560€-2.800€), ceea ce înseamnă **100-500 pe zi**. 
+- **Venit net estimat pentru Top 10**: **95-476** per jucător (calculat: Wagering × 3.4%)
 - **Puncte estimate pentru Top 10**: **430-2.900 puncte** (inclusiv puncte din wagering + bonusuri)
 
 ---
@@ -107,14 +107,14 @@ Se menține structura bazată pe profit pentru a asigura că numai jucătorii ac
 
 ### A. Structura Premiilor Principale
 
-| Premiu | Buget Alocat (RON) | Detalii & Valoare |
+| Premiu | Buget Alocat | Detalii & Valoare |
 |:---|---:|:---|
-| **Grand Tour (Locurile 1-10)** | 5.000 | **10 utilizatori selectați** pentru experiență Grand Tour (eveniment exclusiv, experiență premium). Valoare maximă: **500 RON per utilizator**. |
-| **Premii Secundare (Locurile 11-100)** | 4.500 | **90 × Cadouri simple** (valoare medie 50 RON per cadou - produse promoționale, merch NetBet, vouchere). Range: **100-500 RON** per premiu. |
+| **Grand Tour (Locurile 1-10)** | 5.000 | **10 utilizatori selectați** pentru experiență Grand Tour (eveniment exclusiv, experiență premium). Valoare maximă: **500 per utilizator**. |
+| **Premii Secundare (Locurile 11-100)** | 4.500 | **90 × Cadouri simple** (valoare medie 50 per cadou - produse promoționale, merch NetBet, vouchere). Range: **100-500** per premiu. |
 | **Logistică Eveniment Grand Tour** | 300 | Organizare eveniment pentru Top 10. |
 | **Trofee & Branding** | 150 | 10 trofee personalizate + bannere NetBet. |
 | **Catering & Experiență** | 50 | Băuturi, snacks pentru eveniment. |
-| **TOTAL PREMII** | **10.000 RON** | Buget optimizat fără premii cash. Range premii: **100-500 RON** per premiu. |
+| **TOTAL PREMII** | **10.000** | Buget optimizat fără premii cash. Range premii: **100-500** per premiu. |
 
 ### B. Strategia de Branding (Fără UGC)
 
@@ -133,60 +133,60 @@ Se menține structura bazată pe profit pentru a asigura că numai jucătorii ac
 
 ## IV. Analiza Financiară & Strategia de Marketing
 
-### A. Bugetul de Marketing (Cheltuieli Variabile: 45.000 RON)
+### A. Bugetul de Marketing (Cheltuieli Variabile: 45.000)
 
 Strategia se concentrează pe atragerea de **1000 utilizatori noi (conturi noi)** care vor juca jocuri slot de la afiliați.
 
-| Canal Marketing | Buget (RON) | Obiectiv FTD | CPA Target (RON) | Detalii Strategie |
+| Canal Marketing | Buget | Obiectiv FTD | Cost Target | Detalii Strategie |
 |:---|---:|---:|---:|:---|
 | **Media Buy (Social & Search Ads)** | 24.000 | 600 FTD | 40.00 | Campanii cu **geotargeting strict** pe București și Ilfov. Mesagerie centrată pe experiența Grand Tour: *"Câștigă un loc la Grand Tour NetBet!"* |
-| **Afiliați (CPA Boost)** | 18.000 | 400 FTD | 45.00 | Comision majorat **(CPA + 20%)** pentru afiliați care livrează trafic FTD. Focus pe utilizatori care vor juca jocuri slot de la afiliați. Bonus de performanță: **+500 RON** pentru cel mai mare volum. |
+| **Afiliați (Cost Boost)** | 18.000 | 400 FTD | 45.00 | Comision majorat **(Cost + 20%)** pentru afiliați care livrează trafic FTD. Focus pe utilizatori care vor juca jocuri slot de la afiliați. Bonus de performanță: **+500** pentru cel mai mare volum. |
 | **CRM & Reactivare** | 3.000 | 0 FTD | - | Campanii segmentate (email/SMS/push) pentru reactivare utilizatori existenți (nu se numără în target-ul de 1000 utilizatori noi). |
-| **TOTAL C_Variabil** | **45.000 RON** | **1000 FTD** | **45.00 RON** | Buget dedicat atingerii țintei de 1000 utilizatori noi. |
+| **TOTAL Variabil** | **45.000** | **1000 FTD** | **45.00** | Buget dedicat atingerii țintei de 1000 utilizatori noi. |
 
-#### Breakdown Detaliat Media Buy (24.000 RON)
+#### Breakdown Detaliat Media Buy (24.000)
 
-| Platform | Buget (RON) | Format | Obiectiv | KPI Țintă |
+| Platform | Buget | Format | Obiectiv | KPI Țintă |
 |:---|---:|:---|:---|:---|
 | **Facebook & Instagram** | 12.000 | Carousel Ads + Stories | 360 FTD | CTR: 2.5%, CR: 28% |
-| **Google Ads (Search)** | 8.000 | Intent-based keywords (*"cazinou online București"*, *"pacanele NetBet"*) | 200 FTD | CPC: 2.50 RON, CR: 25% |
-| **Google Ads (Display)** | 4.000 | Banner retargeting + YouTube pre-roll | 40 FTD | CPM: 25 RON, CR: 15% |
+| **Google Ads (Search)** | 8.000 | Intent-based keywords (*"cazinou online București"*, *"pacanele NetBet"*) | 200 FTD | CPC: 2.50, CR: 25% |
+| **Google Ads (Display)** | 4.000 | Banner retargeting + YouTube pre-roll | 40 FTD | CPM: 25, CR: 15% |
 
 ### B. Proiecția Financiară - Scenariul Principal (1000 Utilizatori Noi)
 
 | Indicator Analitic | Valoare | Formula de Calcul / Concluzie |
 |:---|:---|:---|
-| **Cost Total (C_T)** | **55.000 RON** | Cost Fix (10.000 RON) + Cost Variabil (45.000 RON) |
+| **Cost Total (C_T)** | **55.000** | Cost Fix (10.000) + Cost Variabil (45.000) |
 | **Utilizatori Noi Necesari** | **1000** | Ținta de volum pentru a garanta profitul. |
-| **Wagering Mediu / Utilizator** | **8.500 RON** | ≈ **1.700 €** - **Minim 500 RON/zi** (14.000 RON total). **Distribuție realistă**: Majoritatea utilizatorilor sunt regular players (45%) și active players (35%), cu doar 2% ultra high rollers. |
-| **Volum Total Wagering (Turnover)** | **8.500.000 RON** | \( 1000 \text{ utilizatori} \times 8.500 \text{ RON/utilizator} \) (distribuție realistă) |
-| **Venit Net Așteptat (NR)** | **289.000 RON** | \( 8.500.000 \text{ RON Wagering} \times 3.4\% \text{ NR Rate} \) |
-| **Profit Net Așteptat** | **234.000 RON** | \( \text{NR} (289.000) - \text{C\_T} (55.000) \) |
+| **Wagering Mediu / Utilizator** | **8.500** | ≈ **1.700 €** - **Minim 500/zi** (14.000 total). **Distribuție realistă**: Majoritatea utilizatorilor sunt regular players (45%) și active players (35%), cu doar 2% ultra high rollers. |
+| **Volum Total Wagering (Turnover)** | **8.500.000** | \( 1000 \text{ utilizatori} \times 8.500 \text{/utilizator} \) (distribuție realistă) |
+| **Venit Net Așteptat (NR)** | **289.000** | \( 8.500.000 \text{ Wagering} \times 3.4\% \text{ NR Rate} \) |
+| **Profit Net Așteptat** | **234.000** | \( \text{NR} (289.000) - \text{C\_T} (55.000) \) |
 | **ROI (Return on Investment)** | **5.3x** | \( \text{NR} / \text{C\_T} = 289.000 / 55.000 \) |
 
 #### Analiza Break-Even
 
 ```
 Break-Even Wagering Total = Cost Total / NR Rate
-                          = 55.000 RON / 3.4%
-                          = 1.617.647 RON
+                          = 55.000 / 3.4%
+                          = 1.617.647
 
 Break-Even Utilizatori = Break-Even Wagering / Wagering Mediu per User
-                       = 1.617.647 RON / 8.500 RON
+                       = 1.617.647 / 8.500
                        = 190 utilizatori
 
 Margin of Safety = (1000 - 190) / 1000 = 81.0%
 ```
 
-**Concluzie:** Campania devine profitabilă cu doar **190 utilizatori** (19% din ținta de 1000). Orice peste acest număr este **profit net direct**. **Notă:** Distribuția realistă (8.500 RON wagering mediu) reflectă comportamentul utilizatorilor de rând, cu majoritatea regular players și active players, nu doar high rollers.
+**Concluzie:** Campania devine profitabilă cu doar **190 utilizatori** (19% din ținta de 1000). Orice peste acest număr este **profit net direct**. **Notă:** Distribuția realistă (8.500 wagering mediu) reflectă comportamentul utilizatorilor de rând, cu majoritatea regular players și active players, nu doar high rollers.
 
 **⚠️ Notă Importantă - Scenariu Ajustat Realist:**
 Pentru o estimare mai precisă bazată pe realitățile pieței iGaming din România, vezi **Scenario 4 (Realist Ajustat)** în secțiunea V și **Analiza Realizabilitate** în secțiunea VI, care reflectă:
-- CPA real: 80-100 RON/FTD (în loc de 45 RON optimist)
-- Wagering mediu: 6.500 RON/utilizator (în loc de 8.500 RON optimist)
-- Costuri totale: 100.000 RON (în loc de 55.000 RON optimist)
-- **Profit net așteptat: 121.000 RON (ROI 2.2x) fără taxe**
-- **Profit net după taxe GGR (27%): ~61.000 RON (ROI 1.6x)** - tot profitabil, dar necesită optimizare!
+- CPA real: 80-100/FTD
+- Wagering mediu: 6.500/utilizator
+- Costuri totale: 100.000
+- **Profit net așteptat: 121.000 (ROI 2.2x) fără taxe**
+- **Profit net după taxe GGR (27%): ~61.000 (ROI 1.6x)** - tot profitabil, dar necesită optimizare!
 
 ---
 
@@ -199,15 +199,15 @@ Pentru o evaluare a riscurilor și a potențialului maxim, prezentăm **4 scenar
 | Indicator | Scenario 2 (Conservator) | Scenario 1 (Țintă/Mid-point) | Scenario 3 (Agresiv/Maxim) | **Scenario 4 (Realist Ajustat)** ⚠️ |
 |:---|---:|---:|---:|:---:|
 | **Utilizatori Noi** | 800 | 1000 | 1200 | **1000** |
-| **CPA Mediu** | 45 RON | 45 RON | 45 RON | **80-100 RON** |
-| **Wagering Mediu / Utilizator** | 7.675 RON | 8.500 RON | 8.880 RON | **6.500 RON** |
-| **Volum Total Wagering (Turnover)** | 6.140.000 RON | 8.500.000 RON | 10.656.000 RON | **6.500.000 RON** |
-| **Cost Total (C_T)** | 46.000 RON | 55.000 RON | 64.000 RON | **100.000 RON** |
-| **Venit Net Așteptat (NR)** | 208.760 RON | 289.000 RON | 362.304 RON | **221.000 RON** |
-| **Profit Net Așteptat** | 162.760 RON | 234.000 RON | 298.304 RON | **121.000 RON** |
+| **CPA Mediu** | 45 | 45 | 45 | **80-100** |
+| **Wagering Mediu / Utilizator** | 7.675 | 8.500 | 8.880 | **6.500** |
+| **Volum Total Wagering (Turnover)** | 6.140.000 | 8.500.000 | 10.656.000 | **6.500.000** |
+| **Cost Total (C_T)** | 46.000 | 55.000 | 64.000 | **100.000** |
+| **Venit Net Așteptat (NR)** | 208.760 | 289.000 | 362.304 | **221.000** |
+| **Profit Net Așteptat** | 162.760 | 234.000 | 298.304 | **121.000** |
 | **ROI** | **4.5x** | **5.3x** | **5.7x** | **2.2x** |
 | **Probabilitate de Realizare** | 35% | 50% | 15% | **60%** |
-| **Notă** | Distribuție realistă pentru utilizatori de rând | Scenariul optim cu distribuție realistă | Distribuție optimistă dar realistă | **Scenariu ajustat cu parametri mai conservatori (CPA real 80-100 RON, wagering mediu realist)** |
+| **Notă** | Distribuție realistă pentru utilizatori de rând | Scenariul optim cu distribuție realistă | Distribuție realistă | **Scenariu ajustat cu parametri mai conservatori (CPA 80-100, wagering mediu realist)** |
 
 ### Analiza Detaliată per Scenariu
 
@@ -215,7 +215,7 @@ Pentru o evaluare a riscurilor și a potențialului maxim, prezentăm **4 scenar
 
 **Context:** Campania nu atinge ținta completă de FTD din cauza unor factori externi (competiție intensificată, buget ads insuficient, performanță slabă a afiliaților). Distribuție realistă pentru utilizatori de rând.
 
-| Segment Utilizatori | % | Număr | Wagering Mediu (RON) | Wagering Total (RON) | NR (3.4%) (RON) |
+| Segment Utilizatori | % | Număr | Wagering Mediu | Wagering Total | NR (3.4%) |
 |:---|---:|---:|---:|---:|---:|
 | **Ultra High Rollers** | 1% | 8 | 35.000 | 280.000 | 9.520 |
 | **High Rollers** | 5% | 40 | 16.000 | 640.000 | 21.760 |
@@ -224,15 +224,15 @@ Pentru o evaluare a riscurilor și a potențialului maxim, prezentăm **4 scenar
 | **Casual/Low Value** | 14% | 112 | 1.800 | 201.600 | 6.854 |
 | **TOTAL** | 100% | 800 | 7.675 | 6.140.000 | 208.760 |
 
-**Costuri:** 10.000 RON (premii) + 36.000 RON (800 × 45 CPA) = **46.000 RON**
+**Costuri:** 10.000 (premii) + 36.000 (800 × 45 CPA) = **46.000**
 
-**Rezultat:** ROI 4.5x, Profit 162.760 RON. Profitabil, cu distribuție realistă pentru utilizatori obișnuiți.
+**Rezultat:** ROI 4.5x, Profit 162.760. Profitabil, cu distribuție realistă pentru utilizatori obișnuiți.
 
 #### Scenario 1: REALIST / ȚINTĂ (1000 utilizatori noi) ✅
 
 **Context:** Execuție corectă a strategiei, performanță bună a canalelor de marketing, engagement ridicat pe jocuri slot de la afiliați. Distribuție realistă bazată pe comportamentul utilizatorilor de rând.
 
-| Segment Utilizatori | % | Număr | Wagering Mediu (RON) | Wagering Total (RON) | NR (3.4%) (RON) |
+| Segment Utilizatori | % | Număr | Wagering Mediu | Wagering Total | NR (3.4%) |
 |:---|---:|---:|---:|---:|---:|
 | **Ultra High Rollers** | 2% | 20 | 35.000 | 700.000 | 23.800 |
 | **High Rollers** | 8% | 80 | 16.000 | 1.280.000 | 43.520 |
@@ -241,15 +241,15 @@ Pentru o evaluare a riscurilor și a potențialului maxim, prezentăm **4 scenar
 | **Casual/Low Value** | 10% | 100 | 1.950 | 195.000 | 6.630 |
 | **TOTAL** | 100% | 1000 | 8.500 | 8.500.000 | 289.000 |
 
-**Costuri:** 10.000 RON (premii) + 45.000 RON (1000 × 45 CPA) = **55.000 RON**
+**Costuri:** 10.000 (premii) + 45.000 (1000 × 45 CPA) = **55.000**
 
-**Rezultat:** ROI 5.3x, Profit 234.000 RON. **Scenariul optim și cel mai probabil, cu distribuție realistă pentru utilizatori obișnuiți.**
+**Rezultat:** ROI 5.3x, Profit 234.000. **Scenariul optim și cel mai probabil, cu distribuție realistă pentru utilizatori obișnuiți.**
 
 #### Scenario 3: AGRESIV / MAXIM (1200 utilizatori noi) 🚀
 
-**Context:** Performanță excepțională a afiliaților, buzz organic intens, multiplicare referrals, engagement ridicat pe jocuri slot. Distribuție optimistă dar realistă.
+**Context:** Performanță excepțională a afiliaților, buzz organic intens, multiplicare referrals, engagement ridicat pe jocuri slot. Distribuție realistă.
 
-| Segment Utilizatori | % | Număr | Wagering Mediu (RON) | Wagering Total (RON) | NR (3.4%) (RON) |
+| Segment Utilizatori | % | Număr | Wagering Mediu | Wagering Total | NR (3.4%) |
 |:---|---:|---:|---:|---:|---:|---:|
 | **Ultra High Rollers** | 2% | 24 | 35.000 | 840.000 | 28.560 |
 | **High Rollers** | 10% | 120 | 16.000 | 1.920.000 | 65.280 |
@@ -258,18 +258,18 @@ Pentru o evaluare a riscurilor și a potențialului maxim, prezentăm **4 scenar
 | **Casual/Low Value** | 10% | 120 | 2.000 | 240.000 | 8.160 |
 | **TOTAL** | 100% | 1200 | 8.880 | 10.656.000 | 362.304 |
 
-**Costuri:** 10.000 RON (premii) + 54.000 RON (1200 × 45 CPA) = **64.000 RON**
+**Costuri:** 10.000 (premii) + 54.000 (1200 × 45 CPA) = **64.000**
 
-**Rezultat:** ROI 5.7x, Profit 298.304 RON. **Potențial excelent cu execuție perfectă, menținând distribuție realistă.**
+**Rezultat:** ROI 5.7x, Profit 298.304. **Potențial excelent cu execuție perfectă, menținând distribuție realistă.**
 
 #### Scenario 4: REALIST AJUSTAT (1000 utilizatori noi) ⚠️ **CEL MAI REALIST**
 
 **Context:** Scenariu ajustat cu parametri mai conservatori, bazat pe realitățile pieței iGaming din România. Reflectă:
-- **CPA real**: 80-100 RON/FTD (în loc de 45 RON optimist) → Costuri mai mari: 100.000 RON
-- **Wagering mediu realist**: 6.500 RON/utilizator (în loc de 8.500 RON optimist)
+- **CPA real**: 80-100/FTD → Costuri totale: 100.000
+- **Wagering mediu realist**: 6.500/utilizator
 - Acest scenariu este cel mai probabil să se realizeze în practică, având în vedere riscurile identificate și experiența din campaniile anterioare.
 
-| Segment Utilizatori | % | Număr | Wagering Mediu (RON) | Wagering Total (RON) | NR (3.4%) (RON) |
+| Segment Utilizatori | % | Număr | Wagering Mediu | Wagering Total | NR (3.4%) |
 |:---|---:|---:|---:|---:|---:|
 | **Ultra High Rollers** | 1% | 10 | 30.000 | 300.000 | 10.200 |
 | **High Rollers** | 6% | 60 | 14.000 | 840.000 | 28.560 |
@@ -279,20 +279,20 @@ Pentru o evaluare a riscurilor și a potențialului maxim, prezentăm **4 scenar
 | **TOTAL** | 100% | 1000 | 6.500 | 6.500.000 | 221.000 |
 
 **Calcul Costuri Ajustate:**
-- **CPA mediu**: 90 RON/FTD (media între 80-100 RON)
-- **Cost achiziție utilizatori**: 1000 × 90 RON = 90.000 RON
-- **Costuri fixe (premii)**: 10.000 RON
-- **Costuri CRM & Reactivare**: 0 RON (inclus în bugetul de achiziție)
-- **TOTAL COSTURI**: **100.000 RON**
+- **CPA mediu**: 90/FTD (media între 80-100)
+- **Cost achiziție utilizatori**: 1000 × 90 = 90.000
+- **Costuri fixe (premii)**: 10.000
+- **Costuri CRM & Reactivare**: 0 (inclus în bugetul de achiziție)
+- **TOTAL COSTURI**: **100.000**
 
-**Rezultat:** ROI 2.2x, Profit 121.000 RON (fără taxe GGR). **Scenariul cel mai realist și cel mai probabil să se realizeze în practică. Profitabil chiar și cu parametri conservatori.**
+**Rezultat:** ROI 2.2x, Profit 121.000 (fără taxe GGR). **Scenariul cel mai realist și cel mai probabil să se realizeze în practică. Profitabil chiar și cu parametri conservatori.**
 
 **⚠️ Impact Taxe GGR (27%):**
-- Profit după taxe: **~61.000 RON**
+- Profit după taxe: **~61.000**
 - ROI după taxe: **~1.6x**
 - **Tot profitabil, dar necesită optimizare continuă!**
 
-**Concluzie Scenario 4:** Chiar și cu ajustări conservatoare (CPA mai mare, wagering mediu mai mic), campania rămâne profitabilă cu un ROI de 2.2x (1.6x după taxe) și profit net de 121.000 RON (61.000 RON după taxe). Acest scenariu reflectă mai bine realitățile pieței și oferă o estimare mai precisă a rezultatelor așteptate. **Vezi secțiunea VI pentru analiza detaliată de realizabilitate.**
+**Concluzie Scenario 4:** Chiar și cu ajustări conservatoare (CPA mai mare, wagering mediu mai mic), campania rămâne profitabilă cu un ROI de 2.2x (1.6x după taxe) și profit net de 121.000 (61.000 după taxe). Acest scenariu reflectă mai bine realitățile pieței și oferă o estimare mai precisă a rezultatelor așteptate. **Vezi secțiunea VI pentru analiza detaliată de realizabilitate.**
 
 ---
 
@@ -302,34 +302,34 @@ Pentru o evaluare a riscurilor și a potențialului maxim, prezentăm **4 scenar
 
 **✅ REALIZABIL, dar cu ajustări necesare**
 
-Campania este **realizabilă** pe piața română de iGaming, dar scenariul optimist (ROI 5.3x) este **foarte ambițios**. Scenariul ajustat realist (ROI 2.2x) este cel mai probabil să se realizeze în practică.
+Campania este **realizabilă** pe piața română de iGaming. Scenariul principal (ROI 5.3x) este **ambițios**, iar scenariul ajustat realist (ROI 2.2x) este cel mai probabil să se realizeze în practică.
 
 ### B. Analiză Parametri Financiari vs Realitatea Pieței
 
 #### 1. Cost per Acquisition (CPA)
 
-| Parametru | Document Optimist | Realitate Piață România | Verdict |
+| Parametru | Scenariu Principal | Realitate Piață România | Verdict |
 |:---|:---:|:---:|:---:|
-| **CPA Optimist** | 45 RON/FTD | ❌ **Nerealist** | Prea optimist pentru iGaming România |
-| **CPA Realist** | 80-100 RON/FTD | ✅ **Realist** | Aliniat cu realitatea pieței (85-120 RON/FTD) |
-| **CPA Mediu Piață** | - | **85-120 RON/FTD** | Documentul subestimează în scenariul optimist |
+| **CPA Principal** | 45/FTD | ⚠️ **Ambițios** | Necesită condiții favorabile |
+| **CPA Realist** | 80-100/FTD | ✅ **Realist** | Aliniat cu realitatea pieței (85-120/FTD) |
+| **CPA Mediu Piață** | - | **85-120/FTD** | Range-ul pieței pentru trafic calificat |
 
 **Concluzie CPA:**
-- ✅ Scenariul ajustat (80-100 RON) este **realist** și aliniat cu piața
-- ❌ Scenariul optimist (45 RON) este **foarte optimist** - probabil doar cu trafic organic masiv sau parteneriate excepționale
-- ⚠️ **Risc:** CPA-ul real poate ajunge la 100-120 RON pentru trafic calificat București
+- ✅ Scenariul ajustat (80-100) este **realist** și aliniat cu piața
+- ⚠️ Scenariul principal (45) necesită **condiții favorabile** - trafic organic masiv sau parteneriate excepționale
+- ⚠️ **Risc:** CPA-ul real poate ajunge la 100-120 pentru trafic calificat București
 
 #### 2. Wagering Mediu per Utilizator
 
-| Parametru | Document | Realitate Piață | Verdict |
+| Parametru | Scenariu Principal | Realitate Piață | Verdict |
 |:---|:---:|:---:|:---:|
-| **Wagering Optimist** | 8.500 RON/user | ⚠️ **Optimist** | Posibil, dar necesită engagement excelent |
-| **Wagering Realist** | 6.500 RON/user | ✅ **Realist** | Aliniat cu comportamentul utilizatorilor noi (5.000-7.000 RON) |
-| **Wagering Mediu Piață** | - | **5.000-7.000 RON/user** | Documentul este în range-ul realist |
+| **Wagering Principal** | 8.500/user | ⚠️ **Ambițios** | Posibil, dar necesită engagement excelent |
+| **Wagering Realist** | 6.500/user | ✅ **Realist** | Aliniat cu comportamentul utilizatorilor noi (5.000-7.000) |
+| **Wagering Mediu Piață** | - | **5.000-7.000/user** | Range-ul pieței pentru utilizatori noi |
 
 **Concluzie Wagering:**
-- ✅ Wagering mediu de 6.500 RON este **realist** pentru utilizatori noi în 28 zile
-- ⚠️ Wagering de 8.500 RON necesită **gamification excelent** și retenție ridicată
+- ✅ Wagering mediu de 6.500 este **realist** pentru utilizatori noi în 28 zile
+- ⚠️ Wagering de 8.500 necesită **gamification excelent** și retenție ridicată
 - 📊 Distribuția utilizatorilor (45% Regular, 35% Active) este **realistă**
 
 #### 3. Net Revenue Rate (NR Rate)
@@ -349,33 +349,33 @@ Campania este **realizabilă** pe piața română de iGaming, dar scenariul opti
 
 | Aspect | Calcul Fără Taxe | Calcul Cu Taxe GGR (27%) | Impact |
 |:---|:---:|:---:|:---:|
-| **NR Brut** | 221.000 RON | 221.000 RON | - |
-| **Taxa GGR (27%)** | - | -59.670 RON | Reducere profit |
-| **NR Net După Taxe** | 221.000 RON | **161.330 RON** | -27% |
-| **Costuri Totale** | 100.000 RON | 100.000 RON | - |
-| **Profit Net Real** | 121.000 RON | **61.330 RON** | ⚠️ Reducere cu 49% |
+| **NR Brut** | 221.000 | 221.000 | - |
+| **Taxa GGR (27%)** | - | -59.670 | Reducere profit |
+| **NR Net După Taxe** | 221.000 | **161.330** | -27% |
+| **Costuri Totale** | 100.000 | 100.000 | - |
+| **Profit Net Real** | 121.000 | **61.330** | ⚠️ Reducere cu 49% |
 | **ROI Real** | 2.2x | **1.6x** | ⚠️ Reducere ROI |
 
 **Concluzie Taxe:**
 - ⚠️ **Profitul real** va fi mai mic din cauza taxelor GGR (27%)
-- 📊 Profit net după taxe pentru Scenario Ajustat: **~61.000 RON** (în loc de 121.000 RON)
-- 📊 ROI real după taxe: **~1.6x** (în loc de 2.2x)
+- 📊 Profit net după taxe pentru Scenario Ajustat: **~61.000**
+- 📊 ROI real după taxe: **~1.6x**
 - ✅ **Tot profitabil!** Dar necesită ajustare așteptări
 
 ### D. Analiză Strategie Marketing vs Realitate
 
 #### 1. Buget Marketing pentru 1000 Utilizatori
 
-| Canal | Buget Document | CPA Target | Realitate | Verdict |
+| Canal | Buget Planificat | CPA Target | Estimare Reală | Verdict |
 |:---|:---:|:---:|:---:|:---|
-| **Media Buy** | 24.000 RON | 40 RON | ⚠️ **Optimist** | Posibil cu optimizare excelentă, probabil va fi 50-60 RON |
-| **Afiliați** | 18.000 RON | 45 RON | ✅ **Realist** | Aliniat cu piața (cu bonus +20%) |
-| **CRM** | 3.000 RON | - | ✅ **Corect** | Buget rezonabil pentru reactivare |
+| **Media Buy** | 24.000 | 40 | 50-60 | Necesită optimizare excelentă |
+| **Afiliați** | 18.000 | 45 | 45 | Aliniat cu piața (cu bonus +20%) |
+| **CRM** | 3.000 | - | 3.000 | Buget rezonabil pentru reactivare |
 
 **Concluzie Buget Marketing:**
-- ⚠️ **Media Buy CPA 40 RON** este optimist - probabil va fi 50-60 RON în realitate
-- ✅ **Afiliați CPA 45 RON** este realist cu bonus +20%
-- 📊 **Total 45.000 RON** pentru 1000 FTD este **subestimat** - probabil va fi **50.000-60.000 RON**
+- ⚠️ **Media Buy CPA 40** necesită optimizare excelentă - estimare reală 50-60
+- ✅ **Afiliați CPA 45** este realist cu bonus +20%
+- 📊 **Bugetul pentru 1000 FTD** se estimează la **50.000-60.000**
 
 #### 2. Geotargeting București & Ilfov
 
@@ -413,10 +413,10 @@ Campania este **realizabilă** pe piața română de iGaming, dar scenariul opti
 
 | Scenariu | Profit Fără Taxe | Taxa GGR (27%) | Profit După Taxe | ROI Real |
 |:---|:---:|:---:|:---:|:---:|
-| **Conservator (800)** | 162.760 RON | -43.945 RON | **118.815 RON** | **2.6x** |
-| **Realist (1000)** | 234.000 RON | -63.180 RON | **170.820 RON** | **3.1x** |
-| **Agresiv (1200)** | 298.304 RON | -80.542 RON | **217.762 RON** | **3.4x** |
-| **Ajustat (1000)** | 121.000 RON | -32.670 RON | **88.330 RON** | **0.9x** ⚠️ |
+| **Conservator (800)** | 162.760 | -43.945 | **118.815** | **2.6x** |
+| **Realist (1000)** | 234.000 | -63.180 | **170.820** | **3.1x** |
+| **Agresiv (1200)** | 298.304 | -80.542 | **217.762** | **3.4x** |
+| **Ajustat (1000)** | 121.000 | -32.670 | **88.330** | **0.9x** ⚠️ |
 
 **⚠️ ATENȚIE:** Scenariul ajustat cu taxe GGR are ROI sub 1.0x, ceea ce indică necesitatea ajustării bugetului sau a optimizării costurilor.
 
@@ -434,10 +434,10 @@ Campania este **realizabilă** pe piața română de iGaming, dar scenariul opti
 
 #### ⚠️ Slabiciuni & Riscuri
 
-1. **CPA Optimist** - 45 RON este foarte optimist pentru piața română
+1. **CPA Principal** - 45 necesită condiții favorabile pentru piața română
 2. **Taxe GGR** - Trebuie incluse în calcule (27% din NR)
 3. **Competiție** - București are competiție ridicată
-4. **Wagering Mediu** - 8.500 RON necesită engagement excelent
+4. **Wagering Mediu** - 8.500 necesită engagement excelent
 5. **Retention D7** - Target 70% este peste media industriei (55-65%)
 6. **Reglementări** - Necesită verificare conformitate ONJN
 
@@ -445,14 +445,14 @@ Campania este **realizabilă** pe piața română de iGaming, dar scenariul opti
 
 #### 🔴 P0 - Critice
 
-1. **Ajustare Buget Marketing**
-   - Buget real necesar: **80.000-100.000 RON** (nu 45.000 RON)
+1. **Buget Marketing**
+   - Bugetul pornește de la **80.000-100.000**
    - Include buffer de 20% pentru fluctuații
-   - Pregătește-te pentru CPA real: **80-100 RON/FTD**
+   - Pregătește-te pentru CPA real: **80-100/FTD**
 
 2. **Ajustare Profit Așteptat**
    - Profitul real va fi mai mic din cauza taxelor GGR (27%)
-   - Profit net după taxe pentru scenariul ajustat: **~61.000 RON**
+   - Profit net după taxe pentru scenariul ajustat: **~61.000**
    - ROI real: **~1.6x** (tot profitabil, dar mai conservator)
 
 3. **Verificare Conformitate ONJN**
@@ -481,24 +481,24 @@ Campania este **realizabilă** pe piața română de iGaming, dar scenariul opti
 
 **✅ Realizabilitate: DA, cu ajustări necesare**
 
-**Scenariul Optimist (ROI 5.3x):**
-- ❌ **Nerealist** pentru piața română
+**Scenariul Principal (ROI 5.3x):**
+- ⚠️ **Ambițios** pentru piața română
 - Probabilitate: **20-30%**
 - Necesită: execuție perfectă + condiții favorabile
 
 **Scenariul Ajustat (ROI 2.2x fără taxe / 1.6x cu taxe):**
 - ✅ **Realist** și realizabil
 - Probabilitate: **60%**
-- Profit net după taxe: **~61.000 RON**
+- Profit net după taxe: **~61.000**
 - **Tot profitabil!**
 
 **Concluzie:**
-1. **Bugetul trebuie ajustat** la 80.000-100.000 RON (nu 55.000 RON)
+1. **Bugetul** pornește de la 80.000-100.000
 2. **Profitul real** va fi mai mic din cauza taxelor (27% GGR)
 3. **Scenariul ajustat** este cel mai probabil să se realizeze
 4. **ROI real așteptat:** 1.6x-3.1x (tot profitabil!)
 
-**Recomandare:** Proceed cu campania, dar cu buget ajustat și așteptări realiste. Scenariul ajustat oferă un profit net de ~61.000 RON după taxe, ceea ce este acceptabil pentru o campanie de marketing, dar necesită optimizare continuă.
+**Recomandare:** Proceed cu campania, dar cu buget ajustat și așteptări realiste. Scenariul ajustat oferă un profit net de ~61.000 după taxe, ceea ce este acceptabil pentru o campanie de marketing, dar necesită optimizare continuă.
 
 ---
 
@@ -506,7 +506,7 @@ Campania este **realizabilă** pe piața română de iGaming, dar scenariul opti
 
 ### A. Timeline & Faze de Campanie
 
-| Fază | Perioada | Obiective | Tactici Cheie | Buget Alocat (RON) |
+| Fază | Perioada | Obiective | Tactici Cheie | Buget Alocat |
 |:---|:---|:---|:---|---:|
 | **Pre-Launch** | 7 zile înainte | Teasing, anticipație, pre-înregistrare | Teaser video, landing page, email warming | 1.500 |
 | **Launch Week** | Zile 1-7 | Maximizarea FTD | Ads agresive, afiliați push, urgency messaging | 8.000 |
@@ -521,14 +521,14 @@ Campania este **realizabilă** pe piața română de iGaming, dar scenariul opti
 
 | Canal | Mesaj Principal | Call-to-Action | Creative Format |
 |:---|:---|:---|:---|
-| **Facebook/Instagram** | *"Câștigă un loc la Grand Tour NetBet!"* | "Depune 100 RON și Joacă Sloturi!" | Carousel cu jocuri slot + experiență premium |
+| **Facebook/Instagram** | *"Câștigă un loc la Grand Tour NetBet!"* | "Depune 100 și Joacă Sloturi!" | Carousel cu jocuri slot + experiență premium |
 | **Google Search** | *"Câștigă Grand Tour - Competiția NetBet NFS Cup București"* | "Înscrie-te Acum cu Bonus!" | Text ads + sitelinks către regulament |
 | **Email (CRM)** | *"[Nume], Ești Invitat la Grand Tour NetBet în București!"* | "Activează Codul NFSRACE100" | HTML responsive cu countdown timer |
 | **Affiliate** | *"Comision Sporit 20% + Bonus Performanță - Campanie Grand Tour!"* | "Promovează Acum!" | Landing page dedicată pentru afiliați |
 
 ### C. Strategia Afiliați (Buget Integrat în Media Buy)
 
-| Tier Afiliat | Număr | Target FTD | Cost per FTD (RON) | Total Budget (RON) | Deliverables |
+| Tier Afiliat | Număr | Target FTD | Cost per FTD | Total Budget | Deliverables |
 |:---|---:|---:|---:|---:|:---|
 | **Top Performers** | 5 | 200 FTD | 45 | 9.000 | Trafic calificat, utilizatori care joacă sloturi |
 | **Mid-tier** | 10 | 160 FTD | 45 | 7.200 | Trafic standard, conversie medie |
@@ -539,7 +539,7 @@ Campania este **realizabilă** pe piața română de iGaming, dar scenariul opti
 - Focus pe utilizatori care vor juca jocuri slot de la afiliați
 - Tracking unic pentru măsurarea conversiilor
 - Comision majorat (+20%) pentru performanță ridicată
-- Bonus performanță: +300 RON pentru cel mai mare volum
+- Bonus performanță: +300 pentru cel mai mare volum
 
 ---
 
@@ -549,18 +549,18 @@ Campania este **realizabilă** pe piața română de iGaming, dar scenariul opti
 
 | Misiune Zilnică | Cerință | Reward Puncte | Completion Rate Estimat |
 |:---|:---|---:|---:|
-| **Daily Target** | Atinge 500 RON wagering pe zi | +150 | 60% |
+| **Daily Target** | Atinge 500 wagering pe zi | +150 | 60% |
 | **Morning Starter** | Joacă înainte de 12:00 (50 runde) | +75 | 25% |
 | **Speed Runner** | Finalizează 100 runde în orice slot | +100 | 40% |
-| **High Roller Challenge** | Fă o pariție de min. 50 RON | +150 | 18% |
+| **High Roller Challenge** | Fă o pariție de min. 50 | +150 | 18% |
 | **Lucky 7** | Câștigă 7 runde consecutive | +200 | 8% |
 | **Complete All** | Finalizează toate 5 misiunile în aceeași zi | +500 BONUS | 5% |
 
 **Impact Estimat:**
 - **Users activi zilnic:** 60-70% din baza totală
 - **Session length increase:** +35%
-- **Wagering boost:** +25% pentru utilizatorii care completează missions (inclusiv target-ul zilnic de 500 RON)
-- **Target Achievement:** 60% din utilizatori vor atinge minim 500 RON/zi
+- **Wagering boost:** +25% pentru utilizatorii care completează missions (inclusiv target-ul zilnic de 500)
+- **Target Achievement:** 60% din utilizatori vor atinge minim 500/zi
 
 ### B. Achievement Badges (Status & Recunoaștere)
 
@@ -569,7 +569,7 @@ Campania este **realizabilă** pe piața română de iGaming, dar scenariul opti
 | **🏁 Rookie Racer** | Primele 500 puncte | 30 Free Spins | Profil user + leaderboard |
 | **⚡ Speed Demon** | 5.000 puncte într-o zi | +300 puncte bonus | + Badge "On Fire" 24h |
 | **👑 VIP Contender** | Top 50 pentru 7 zile consecutive | Invitație eveniment exclusiv NetBet | Badge auriu permanent |
-| **🤝 Ambassador** | 5 referrals convertiți (FTD) | 200 RON bonus cash | Badge special + mențiune social |
+| **🤝 Ambassador** | 5 referrals convertiți (FTD) | 200 bonus cash | Badge special + mențiune social |
 | **💎 Diamond Racer** | 30.000+ puncte total | Access VIP Lounge + Manager dedicat | Badge premium |
 
 ### C. Leaderboard Dinamic & Psihologie Competitivă
@@ -596,11 +596,11 @@ Campania este **realizabilă** pe piața română de iGaming, dar scenariul opti
 |:---|:---|:---|
 | **Jocuri Slot de la Afiliați** | Utilizatorii joacă exclusiv jocuri slot de la afiliați pentru a câștiga puncte | Fluxul principal de acumulare puncte |
 | **Depuneri** | Cu cât depui mai mult, cu atât primești mai multe puncte (sistem proporțional) | Motivație pentru depuneri mai mari |
-| **Wagering** | 1 Punct = 10 RON wagering pe jocuri slot eligible | Corelare directă între joc și puncte (formulă generoasă pentru accesibilitate) |
+| **Wagering** | 1 Punct = 10 wagering pe jocuri slot eligible | Corelare directă între joc și puncte (formulă generoasă pentru accesibilitate) |
 
 ### B. Setup Eveniment Grand Tour (Top 10)
 
-| Element | Specificații | Cost (RON) | Responsabil |
+| Element | Specificații | Cost | Responsabil |
 |:---|:---|---:|:---|
 | **Logistică Eveniment** | Organizare eveniment exclusiv pentru Top 10 | 300 | Event Manager |
 | **Branding NetBet** | Bannere, logo-uri pentru eveniment | 100 | Marketing Team |
@@ -611,7 +611,7 @@ Campania este **realizabilă** pe piața română de iGaming, dar scenariul opti
 
 ### C. Strategia Post-Event (Fără Amplificare Social Media)
 
-| Acțiune | Timeline | Obiectiv | Buget (RON) |
+| Acțiune | Timeline | Obiectiv | Buget |
 |:---|:---|:---|:---|
 | **Thank You Email** | D+1 după event | Mulțumire participanți, clasament final | 0 (email) |
 | **Retention Campaign** | D+7 | Re-engagement utilizatori pentru jocuri slot | 1.000 (bonus offers) |
@@ -627,11 +627,11 @@ Campania este **realizabilă** pe piața română de iGaming, dar scenariul opti
 
 | Risc | Probabilitate | Impact | Severitate | Strategie de Mitigare |
 |:---|:---:|:---:|:---:|:---|
-| **Wagering sub 500 RON/zi (14.000 RON/user)** | Medie (35%) | Ridicat | 🔴 Critic | Daily missions agresive, bonus wagering pentru top performers, personalizate push notifications, reminder-uri pentru target-ul zilnic de 500 RON. |
+| **Wagering sub 500/zi (14.000/user)** | Medie (35%) | Ridicat | 🔴 Critic | Daily missions agresive, bonus wagering pentru top performers, personalizate push notifications, reminder-uri pentru target-ul zilnic de 500. |
 | **FTD sub 1.000 utilizatori** | Scăzută (20%) | Ridicat | 🔴 Critic | A/B testing ads continu, buget flexibil pentru best performers, ofertă "Last Chance" în week 3. |
 | **Bonus Abuse & Fraud** | Medie (30%) | Mediu | 🟡 Moderat | KYC strict după primele 1.000 puncte, limitare conturi duplicate (IP tracking), monitoring anomalii. |
 | **Engagement scăzut pe sloturi** | Medie (30%) | Ridicat | 🔴 Critic | Bonus wagering pentru sloturi, missions zilnice, push notifications. |
-| **Budget overrun premii secundare** | Foarte scăzută (10%) | Scăzut | 🟢 Minor | Cap fix la 10.000 RON premii, no additional prizes unless pre-approved. |
+| **Budget overrun premii secundare** | Foarte scăzută (10%) | Scăzut | 🟢 Minor | Cap fix la 10.000 premii, no additional prizes unless pre-approved. |
 | **Performance slabă canale ads** | Medie (25%) | Ridicat | 🔴 Critic | Daily monitoring, realocare buget după primele 48h, kill underperformers rapid. |
 
 ### B. Contingency Plans (Dacă X, Atunci Y)
@@ -639,23 +639,23 @@ Campania este **realizabilă** pe piața română de iGaming, dar scenariul opti
 #### Scenario 1: La Ziua 10 avem <400 FTD
 
 **🚨 Acțiuni Imediate (execuție în 24h):**
-1. **Boost buget Facebook Ads** cu +2.000 RON (realocare din Google Display)
-2. **Lansare ofertă "Catch-Up":** Cod `NFSBOOST` → Depune 150 RON, primești +300 puncte instant
-3. **Afiliați Emergency Push:** Contactare afiliați top pentru boost trafic (budget 1.000 RON)
+1. **Boost buget Facebook Ads** cu +2.000 (realocare din Google Display)
+2. **Lansare ofertă "Catch-Up":** Cod `NFSBOOST` → Depune 150, primești +300 puncte instant
+3. **Afiliați Emergency Push:** Contactare afiliați top pentru boost trafic (budget 1.000)
 4. **Email blast entire database** (nu doar București) cu mesaj urgency: *"Ultimele 48h Early Bird!"*
 
-#### Scenario 2: La Ziua 20, wagering mediu/user <350 RON/zi (<9.800 RON total)
+#### Scenario 2: La Ziua 20, wagering mediu/user <350/zi (<9.800 total)
 
 **🚨 Acțiuni Imediate:**
 1. **Triple Points Weekend:** Toate punctele ×3 în weekend-ul 22-23
 2. **Leaderboard Bonus:** Top 50 current primesc +500 puncte bonus instant (motivație să continue)
 3. **Personalized Offers:** Segmentare users după wagering actual:
-   - High potential (300-350 RON/zi): Ofertă deposit 500 RON → +1.000 puncte
-   - Low engagement (<250 RON/zi): Last chance 200 RON → +500 puncte + 50 Free Spins
-   - Reminder target zilnic: "Ai nevoie de 500 RON wagering/zi pentru participare activă!"
-4. **Push Notifications Agresive:** "Ești la doar X RON wagering de target-ul zilnic de 500 RON!"
+   - High potential (300-350/zi): Ofertă deposit 500 → +1.000 puncte
+   - Low engagement (<250/zi): Last chance 200 → +500 puncte + 50 Free Spins
+   - Reminder target zilnic: "Ai nevoie de 500 wagering/zi pentru participare activă!"
+4. **Push Notifications Agresive:** "Ești la doar X wagering de target-ul zilnic de 500!"
 
-#### Scenario 3: La Ziua 28, Wagering Total <8.000.000 RON
+#### Scenario 3: La Ziua 28, Wagering Total <8.000.000
 
 **🚨 Acțiuni Imediate:**
 1. **Extindere campanie:** Prelungire cu 3 zile pentru a atinge target-ul de wagering
@@ -672,9 +672,9 @@ Campania este **realizabilă** pe piața română de iGaming, dar scenariul opti
 | KPI | Target | Tracking Tool | Alert Threshold | Acțiune la Alert |
 |:---|:---|:---|:---|:---|
 | **Total FTD** | 1000 | CRM + Google Analytics | <40 FTD/zi (primele 10 zile) | Boost ads budget cu 20% |
-| **Wagering Total** | 8.500.000 RON | NetBet BI Dashboard | <500.000 RON/zi (1000 users × 500 RON/zi minim) | Activate bonus wagering offers, reminder-uri target zilnic |
-| **Net Revenue** | 289.000 RON | Finance Dashboard | NR Rate <3.2% | Investigate game mix, adjust |
-| **Cost per FTD (CPA)** | 45.00 RON | Marketing Dashboard | >60 RON | Pause underperforming channels |
+| **Wagering Total** | 8.500.000 | NetBet BI Dashboard | <500.000/zi (1000 users × 500/zi minim) | Activate bonus wagering offers, reminder-uri target zilnic |
+| **Net Revenue** | 289.000 | Finance Dashboard | NR Rate <3.2% | Investigate game mix, adjust |
+| **Cost per FTD (CPA)** | 45.00 | Marketing Dashboard | >60 | Pause underperforming channels |
 | **ROI** | 5.3x | Excel Model (updated daily) | <4.0x at day 20 | Emergency meeting, contingency activation |
 
 ### B. KPI-uri Secundare (Engagement) - Monitorizare Every 3 Days
@@ -684,7 +684,7 @@ Campania este **realizabilă** pe piața română de iGaming, dar scenariul opti
 | **Daily Active Users (DAU)** | 600+ (60% din 1000) | Session logs unique users/day | Industry avg: 45-55% |
 | **Avg. Session Duration** | 30 min+ | Google Analytics | Benchmark: 22 min (industry) |
 | **Daily Missions Completion** | 45%+ | Gamification tracker | Good: 40%+, Excellent: 50%+ |
-| **Wagering per Active Day** | 500+ RON | Wagering / Active days | Target minim 500 RON/zi pentru participare activă (14.000 RON în 28 zile) |
+| **Wagering per Active Day** | 500+ | Wagering / Active days | Target minim 500/zi pentru participare activă (14.000 în 28 zile) |
 | **Retention Rate (D7)** | 70%+ | Users active Day 7 / FTD Day 1 | Industry avg: 55-65% |
 | **Referral Rate** | 10%+ | Referrals convertit / Total users | Good virality indicator |
 
@@ -693,7 +693,7 @@ Campania este **realizabilă** pe piața română de iGaming, dar scenariul opti
 | KPI | Target | Tracking Tool | Impact pe ROI |
 |:---|:---|:---|:---|
 | **Slot Games Played** | 80%+ din wagering pe sloturi | Game analytics | Corelare directă cu puncte |
-| **Average Deposit Value (ADV)** | 200+ RON | Finance Dashboard | Indicator performanță |
+| **Average Deposit Value (ADV)** | 200+ | Finance Dashboard | Indicator performanță |
 | **Press Mentions** | 3+ | Google Alerts + Media monitoring | Credibilitate +10% brand awareness |
 | **Net Promoter Score (NPS)** | 50+ | Post-campaign survey (50 users sample) | Long-term indicator |
 | **Affiliate Performance** | 400+ FTD din afiliați | Affiliate dashboard | Cost efficiency |
@@ -707,7 +707,7 @@ Campania este **realizabilă** pe piața română de iGaming, dar scenariul opti
 | Ziua Post-Event | Touchpoint | Conținut | Obiectiv | Conversion Target |
 |:---|:---|:---|:---|:---|
 | **D+1** | Email personalizat | "Mulțumim pentru participare! Iată clasamentul final + detalii Grand Tour" | Emotional connection, closure | 80% open rate |
-| **D+3** | SMS + Push Notification | "Cadou special pentru tine: 50 RON bonus la deposit 100+" | Re-engagement, quick win | 25% conversion |
+| **D+3** | SMS + Push Notification | "Cadou special pentru tine: 50 bonus la deposit 100+" | Re-engagement, quick win | 25% conversion |
 | **D+7** | Email + In-app message | "Mulțumim pentru participare! Continuă să joci sloturi pentru bonusuri speciale" | Re-engagement, continuare joc | 20% click rate |
 | **D+14** | Email exclusive | "Ai acces Early Bird la NFS Cup Season 2! Pre-înscrie-te acum." | Retention long-term | 20% pre-registration |
 
@@ -742,12 +742,12 @@ TERMENI ȘI CONDIȚII - NetBet NFS Cup Ediția București
    - Eveniment Grand Tour: [DATA + 30 zile]
 
 3. MECANISM CALIFICARE
-   - Depunere minimă calificativă: 100 RON cu codul promoțional NFSRACE100.
-   - Primirea bonusului: 150 Free Spins (0.20 RON/spin) + 50 Puncte NFS.
+   - Depunere minimă calificativă: 100 cu codul promoțional NFSRACE100.
+   - Primirea bonusului: 150 Free Spins (0.20/spin) + 50 Puncte NFS.
    - Wagering requirement pentru Free Spins: 35x (valoarea câștigurilor).
 
 4. ACUMULARE PUNCTE NFS
-   - 1 Punct NFS = 10 RON wagering pe sloturi eligible.
+   - 1 Punct NFS = 10 wagering pe sloturi eligible.
    - Puncte Bonus: Start Rapid (100 puncte), Streak (1.000 puncte la 7 zile consecutive).
    - Jocuri eligible: Exclusiv categoria "Sloturi" (lista completă pe netbet.ro/nfs-cup/games).
    - Jocuri EXCLUSE: Table games, Live Casino, Sports Betting.
@@ -814,15 +814,15 @@ Versiunea: 1.0
 | **3. Gamification Puternic** | Missions, achievements, leaderboard live → addiction loop | +60% retention, +35% session length |
 | **4. Focus pe Jocuri Slot Afiliați** | Utilizatorii joacă exclusiv sloturi de la afiliați pentru puncte | Corelare directă între joc și puncte |
 | **5. Parteneriat VMax - Branding & Amplificare** | **Parteneriat strategic cu VMax pentru branding și reclame în perioada evenimentului Grand Tour** | **+20% brand awareness, asociere cu experiență premium, reach extins** |
-| **6. Focus pe Profitabilitate** | Campaign profit variabil: **61k-171k RON** (după taxe GGR 27%) | ROI 1.6x-3.1x (după taxe) |
-| **7. Scenariu Realist Ajustat** | **Parametri conservatori (CPA 80-100 RON, wagering 6.500 RON/user)** | **ROI 1.6x după taxe, Profit 61k RON (cel mai probabil)** |
+| **6. Focus pe Profitabilitate** | Campaign profit variabil: **61k-171k** (după taxe GGR 27%) | ROI 1.6x-3.1x (după taxe) |
+| **7. Scenariu Realist Ajustat** | **Parametri conservatori (CPA 80-100, wagering 6.500/user)** | **ROI 1.6x după taxe, Profit 61k (cel mai probabil)** |
 | **8. Analiză Realizabilitate** | **Evaluare completă piața română iGaming** | **Realizabil cu ajustări - Vezi Secțiunea VI** |
 
 ### Next Steps - Action Items Critice
 
 | Prioritate | Acțiune | Owner | Deadline | Status |
 |:---:|:---|:---|:---|:---|
-| **🔴 P0** | Aprobare buget 55.000 RON (optimist) / 100.000 RON (realist) - CFO sign-off | CMO | D-30 | ⏳ Pending |
+| **🔴 P0** | Aprobare buget - CFO sign-off | CMO | D-30 | ⏳ Pending |
 | **🔴 P0** | **Verificare Conformitate ONJN** - Licență în materiale promoționale | Legal Counsel | D-25 | ⏳ Pending |
 | **🔴 P0** | Contract Eveniment Grand Tour (confirmare dată + branding) | Event Manager | D-25 | ⏳ Pending |
 | **🔴 P0** | **Parteneriat VMax - Contract & Branding** | **Marketing Team + Event Manager** | **D-25** | **⏳ Pending** |
@@ -855,7 +855,7 @@ Versiunea: 1.0
 ├─────────────────────────────────────────────────────────────┤
 │  GAME PERFORMANCE                                            │
 │  ├─ Slot Wagering %:     XX%         (target: 80%+)        │
-│  ├─ Avg Deposit Value:   XXX RON     (target: 200+)         │
+│  ├─ Avg Deposit Value:   XXX     (target: 200+)         │
 │  ├─ Affiliate FTD:       XXX         (target: 400)          │
 │  └─ Press Mentions:      X           (target: 3)           │
 ├─────────────────────────────────────────────────────────────┤

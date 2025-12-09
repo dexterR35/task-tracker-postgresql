@@ -1,14 +1,3 @@
-/**
- * Task Filtering Utilities
- * Shared utilities for filtering and matching tasks
- */
-
-/**
- * Check if a task matches a user ID
- * @param {Object} task - Task object
- * @param {string} userId - User ID to match
- * @returns {boolean}
- */
 export const matchesUser = (task, userId) => {
   if (!userId) return false;
   // Convert both to strings for reliable comparison
@@ -18,30 +7,14 @@ export const matchesUser = (task, userId) => {
   return taskUserUID === normalizedUserId || taskCreatebyUID === normalizedUserId;
 };
 
-/**
- * Get reporter ID from a task
- * @param {Object} task - Task object
- * @returns {string|null} Reporter ID or null
- */
 export const getTaskReporterId = (task) => {
   return task.data_task?.reporters || task.data_task?.reporterUID || task.reporters || task.reporterUID || null;
 };
 
-/**
- * Get reporter name from a task
- * @param {Object} task - Task object
- * @returns {string|null} Reporter name or null
- */
 export const getTaskReporterName = (task) => {
   return task.data_task?.reporterName || task.reporterName || null;
 };
 
-/**
- * Check if a task matches a reporter ID
- * @param {Object} task - Task object
- * @param {string} reporterId - Reporter ID to match
- * @returns {boolean}
- */
 export const matchesReporter = (task, reporterId) => {
   if (!reporterId) return false;
   const taskReporterId = getTaskReporterId(task);
@@ -50,12 +23,6 @@ export const matchesReporter = (task, reporterId) => {
   return String(taskReporterId) === String(reporterId);
 };
 
-/**
- * Check if a task matches a reporter name (fuzzy match)
- * @param {Object} task - Task object
- * @param {string} reporterName - Reporter name to match
- * @returns {boolean}
- */
 export const matchesReporterName = (task, reporterName) => {
   if (!reporterName) return false;
 
@@ -72,12 +39,6 @@ export const matchesReporterName = (task, reporterName) => {
   return false;
 };
 
-/**
- * Check if a task matches a user name (fuzzy match)
- * @param {Object} task - Task object
- * @param {string} userName - User name to match
- * @returns {boolean}
- */
 export const matchesUserName = (task, userName) => {
   if (!userName) return false;
 
@@ -93,26 +54,10 @@ export const matchesUserName = (task, userName) => {
   return userMatch;
 };
 
-/**
- * Get task data (handles both data_task and direct task properties)
- * @param {Object} task - Task object
- * @returns {Object} Task data object
- */
 export const getTaskData = (task) => {
   return task.data_task || task;
 };
 
-/**
- * Filter tasks by user and reporter
- * @param {Array} tasks - Array of tasks
- * @param {Object} options - Filtering options
- * @param {string|null} options.selectedUserId - Selected user ID
- * @param {string|null} options.selectedReporterId - Selected reporter ID
- * @param {string|null} options.currentMonthId - Current month ID
- * @param {boolean} options.isUserAdmin - Whether user is admin
- * @param {string|null} options.currentUserUID - Current user UID (for non-admin filtering)
- * @returns {Array} Filtered tasks
- */
 export const filterTasksByUserAndReporter = (tasks, options = {}) => {
   const {
     selectedUserId = null,
