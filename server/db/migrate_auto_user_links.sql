@@ -122,3 +122,4 @@ CREATE TRIGGER trigger_auto_create_default_permissions
 -- already exist (useful for manual inserts or migrations).
 
 
+
