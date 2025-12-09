@@ -1,8 +1,14 @@
 -- Task Tracker Database Schema
 -- PostgreSQL initialization script
 -- Organized by dependency order for proper relational structure
+--
+-- PostgreSQL Native UUID Support:
+-- PostgreSQL treats UUID as a native data type (not VARCHAR or string)
+-- This makes generating, storing, and indexing UUIDs more efficient
+-- UUID columns are stored as 16-byte binary values, not text
+-- Foreign key relationships between UUID columns are optimized by PostgreSQL
 
--- Enable UUID extension
+-- Enable UUID extension for uuid_generate_v4() function
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- ============================================================================
@@ -11,8 +17,9 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Users table (BASE TABLE - no dependencies)
 -- This must be created first as all other tables reference it
+-- Uses PostgreSQL native UUID type for primary key
 CREATE TABLE users (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),  -- Native UUID type, auto-generated
     email VARCHAR(255) UNIQUE NOT NULL CHECK (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'),
     name VARCHAR(255) NOT NULL,
     role VARCHAR(50) DEFAULT 'user' CHECK (role IN ('admin', 'user')),
@@ -44,16 +51,17 @@ CREATE INDEX IF NOT EXISTS idx_users_created_by_id ON users(created_by_id);
 -- Departments table (BASE REFERENCE - no dependencies)
 -- Base structure: department/design/year/month/taskdata/idtask
 -- Multiple departments supported (design, marketing, development, etc.)
+-- Uses PostgreSQL native UUID type for primary key
 CREATE TABLE departments (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),  -- Native UUID type, auto-generated
     name VARCHAR(100) UNIQUE NOT NULL, -- e.g., 'design', 'marketing', 'development'
     display_name VARCHAR(255), -- e.g., 'Design Department'
     description TEXT,
     is_active BOOLEAN DEFAULT true,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    created_by_id UUID REFERENCES users(id) ON DELETE SET NULL,
-    updated_by_id UUID REFERENCES users(id) ON DELETE SET NULL
+    created_by_id UUID,  -- FK: Will reference user_permissions(user_id) - added via ALTER TABLE
+    updated_by_id UUID   -- FK: Will reference user_permissions(user_id) - added via ALTER TABLE
 );
 
 CREATE INDEX IF NOT EXISTS idx_departments_name ON departments(name);
@@ -64,24 +72,32 @@ CREATE INDEX IF NOT EXISTS idx_departments_is_active ON departments(is_active);
 -- ============================================================================
 
 -- User permissions table (CENTRAL RELATIONSHIP POINT)
--- This is the gateway that connects users to departments and controls access
--- Structure: users.id (UUID) → user_permissions.user_id → departments.id
--- Logic: Check user → check department (is_active) → check user_permissions → allow access
+-- This is the gateway that controls user access and permissions
+-- Structure: users.id (UUID) → user_permissions.user_id
+-- Logic: Check user → check user_permissions → allow access
 -- From user_permissions, relations to months and tasks start
 -- UUID from user_permissions proves user can CRUD and see data
+--
+-- Foreign Key Relationships (PostgreSQL native UUID to UUID):
+--   user_id (UUID) → users.id (UUID) - Foreign key reference
 CREATE TABLE user_permissions (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,  -- References users.id (UUID)
-    department_id UUID REFERENCES departments(id) ON DELETE CASCADE,  -- References departments.id (check is_active)
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),  -- Native UUID type, auto-generated
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,  -- FK: References users.id (UUID → UUID)
     permission VARCHAR(100) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE(user_id, department_id, permission)
+    UNIQUE(user_id, permission)
 );
 
 CREATE INDEX IF NOT EXISTS idx_user_permissions_user_id ON user_permissions(user_id);
-CREATE INDEX IF NOT EXISTS idx_user_permissions_department_id ON user_permissions(department_id);
 CREATE INDEX IF NOT EXISTS idx_user_permissions_permission ON user_permissions(permission);
-CREATE INDEX IF NOT EXISTS idx_user_permissions_user_dept ON user_permissions(user_id, department_id);
+
+-- Add foreign key constraints for departments.created_by_id and updated_by_id
+-- Note: user_permissions.user_id = users.id (same value, same user)
+ALTER TABLE departments 
+    ADD CONSTRAINT fk_departments_created_by FOREIGN KEY (created_by_id) 
+    REFERENCES user_permissions(user_id) ON DELETE SET NULL,
+    ADD CONSTRAINT fk_departments_updated_by FOREIGN KEY (updated_by_id) 
+    REFERENCES user_permissions(user_id) ON DELETE SET NULL;
 
 -- ============================================================================
 -- TIER 4: DEPARTMENT-RELATED TABLES (depend on departments only)
@@ -107,8 +123,8 @@ CREATE TABLE months (
     year INTEGER, -- YYYY
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    created_by_id UUID REFERENCES users(id) ON DELETE SET NULL,
-    updated_by_id UUID REFERENCES users(id) ON DELETE SET NULL
+    created_by_id UUID REFERENCES user_permissions(user_id) ON DELETE SET NULL,
+    updated_by_id UUID REFERENCES user_permissions(user_id) ON DELETE SET NULL
 );
 
 CREATE INDEX IF NOT EXISTS idx_months_month_id ON months(month_id);
@@ -133,8 +149,8 @@ CREATE TABLE reporters (
     country VARCHAR(10),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    created_by_id UUID REFERENCES users(id) ON DELETE SET NULL,
-    updated_by_id UUID REFERENCES users(id) ON DELETE SET NULL
+    created_by_id UUID REFERENCES user_permissions(user_id) ON DELETE SET NULL,
+    updated_by_id UUID REFERENCES user_permissions(user_id) ON DELETE SET NULL
 );
 
 CREATE INDEX IF NOT EXISTS idx_reporters_name ON reporters(name);
@@ -155,8 +171,8 @@ CREATE TABLE deliverables (
     requires_quantity BOOLEAN DEFAULT false,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    created_by_id UUID REFERENCES users(id) ON DELETE SET NULL,
-    updated_by_id UUID REFERENCES users(id) ON DELETE SET NULL
+    created_by_id UUID REFERENCES user_permissions(user_id) ON DELETE SET NULL,
+    updated_by_id UUID REFERENCES user_permissions(user_id) ON DELETE SET NULL
 );
 
 CREATE INDEX IF NOT EXISTS idx_deliverables_name ON deliverables(name);
@@ -176,8 +192,8 @@ CREATE TABLE team_days_off (
     monthly_accrual DECIMAL(10, 2) DEFAULT 1.75,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    created_by_id UUID REFERENCES users(id) ON DELETE SET NULL,
-    updated_by_id UUID REFERENCES users(id) ON DELETE SET NULL
+    created_by_id UUID REFERENCES user_permissions(user_id) ON DELETE SET NULL,
+    updated_by_id UUID REFERENCES user_permissions(user_id) ON DELETE SET NULL
 );
 
 CREATE INDEX IF NOT EXISTS idx_team_days_off_user_id ON team_days_off(user_id);
@@ -210,15 +226,15 @@ CREATE INDEX IF NOT EXISTS idx_team_days_off_dates_year_month ON team_days_off_d
 -- Core task records with relationships
 -- Structure: department/year/month/taskdata/idtask
 -- Access: Check user_permissions (user_id + department_id) → then access tasks
--- Relations: user_permissions.user_id → tasks.user_id, user_permissions.department_id → tasks.department_id
--- NO direct relation from users table - only through user_permissions
+-- Relations: user_permissions.user_id → tasks.user_id (FK reference)
+-- User information (name, id) accessed via: tasks → user_permissions → users
 CREATE TABLE tasks (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    -- Foreign key relationships (all relations start from user_permissions)
-    month_id VARCHAR(50) NOT NULL REFERENCES months(month_id) ON DELETE CASCADE,  -- Access via user_permissions → months.department_id
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE NO ACTION,  -- From user_permissions.user_id (NOT directly from users)
+    -- Foreign key relationships
+    month_id VARCHAR(50) NOT NULL REFERENCES months(month_id) ON DELETE CASCADE,
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE NO ACTION,  -- FK: References users.id (same as user_permissions.user_id)
     reporter_id UUID REFERENCES reporters(id) ON DELETE SET NULL,  -- Links to reporters (which links to departments)
-    department_id UUID REFERENCES departments(id) ON DELETE SET NULL,  -- Must match user_permissions.department_id for access
+    department_id UUID REFERENCES departments(id) ON DELETE SET NULL,  -- Links to departments
     -- Task identification
     board_id VARCHAR(255),
     task_name VARCHAR(255),
@@ -236,9 +252,10 @@ CREATE TABLE tasks (
     -- Timestamps
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    -- Auditing
-    created_by_id UUID REFERENCES users(id) ON DELETE SET NULL,
-    updated_by_id UUID REFERENCES users(id) ON DELETE SET NULL
+    -- Auditing: created_by_id and updated_by_id reference user_permissions.user_id
+    -- Note: user_permissions.user_id = users.id (same value, same user)
+    created_by_id UUID REFERENCES user_permissions(user_id) ON DELETE SET NULL,
+    updated_by_id UUID REFERENCES user_permissions(user_id) ON DELETE SET NULL
 );
 
 -- Task indexes for filtering and queries
@@ -348,6 +365,101 @@ CREATE TRIGGER update_departments_updated_at BEFORE UPDATE ON departments
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 -- ============================================================================
+-- TRIGGERS: Auto-create user links when user is created
+-- ============================================================================
+
+-- Function: Auto-create team_days_off when user is created
+CREATE OR REPLACE FUNCTION auto_create_team_days_off()
+RETURNS TRIGGER AS $$
+DECLARE
+    default_dept_id UUID;
+BEGIN
+    -- Get the default 'design' department ID
+    SELECT id INTO default_dept_id 
+    FROM departments 
+    WHERE name = 'design' AND is_active = true 
+    LIMIT 1;
+    
+    -- Create team_days_off record for the new user
+    INSERT INTO team_days_off (
+        user_id,
+        department_id,
+        base_days,
+        days_off,
+        days_remaining,
+        days_total,
+        monthly_accrual,
+        created_by_id
+    ) VALUES (
+        NEW.id,
+        default_dept_id,
+        0,
+        0,
+        0,
+        0,
+        1.75,
+        NEW.created_by_id
+    )
+    ON CONFLICT (user_id) DO NOTHING; -- Prevent errors if record already exists
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Function: Auto-create default user_permissions when user is created
+CREATE OR REPLACE FUNCTION auto_create_default_permissions()
+RETURNS TRIGGER AS $$
+DECLARE
+    default_dept_id UUID;
+    default_permissions TEXT[] := ARRAY[
+        'view_tasks',
+        'create_tasks',
+        'update_tasks',
+        'view_analytics'
+    ];
+    perm TEXT;
+BEGIN
+    -- Get the default 'design' department ID
+    SELECT id INTO default_dept_id 
+    FROM departments 
+    WHERE name = 'design' AND is_active = true 
+    LIMIT 1;
+    
+    -- Only create default permissions if department exists
+    IF default_dept_id IS NOT NULL THEN
+        -- Create default permissions for the default department
+        FOREACH perm IN ARRAY default_permissions
+        LOOP
+            INSERT INTO user_permissions (
+                user_id,
+                department_id,
+                permission
+            ) VALUES (
+                NEW.id,
+                default_dept_id,
+                perm
+            )
+            ON CONFLICT (user_id, department_id, permission) DO NOTHING;
+        END LOOP;
+    END IF;
+    
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Trigger: Auto-create team_days_off after user creation
+CREATE TRIGGER trigger_auto_create_team_days_off
+    AFTER INSERT ON users
+    FOR EACH ROW
+    EXECUTE FUNCTION auto_create_team_days_off();
+
+-- Trigger: Auto-create default permissions after user creation
+CREATE TRIGGER trigger_auto_create_default_permissions
+    AFTER INSERT ON users
+    FOR EACH ROW
+    EXECUTE FUNCTION auto_create_default_permissions();
+
+-- ============================================================================
 -- INITIAL DATA: Default Department
 -- ============================================================================
 
@@ -386,7 +498,8 @@ ON CONFLICT (name) DO NOTHING;
 --    ⭐ ALL RELATIONS TO TASKS AND MONTHS START FROM HERE ⭐
 --
 -- 4. From user_permissions (PRINCIPAL RELATION):
---    - user_id → tasks.user_id (can access tasks)
+--    - user_id → tasks.user_id (FK: tasks.user_id references user_permissions.user_id)
+--    - User information (name, id) accessed via: tasks → user_permissions → users
 --    - department_id → months.department_id (can access months)
 --    - department_id → tasks.department_id (can access tasks for that department)
 --
@@ -401,10 +514,11 @@ ON CONFLICT (name) DO NOTHING;
 -- PERMISSION CHECK FLOW:
 -- 1. Check user exists (users.id)
 -- 2. Check department exists and is_active (departments.id, is_active)
--- 3. Check user_permissions: user_id + department_id + permission → ALLOW CRUD
+-- 3. Check user_permissions: user_id + permission → ALLOW CRUD
 -- 4. If permission OK → can access months for that department
 -- 5. If permission OK → can access tasks for that month/department
--- 6. Tasks relation: user_permissions.user_id → tasks.user_id (principal relation)
+-- 6. Tasks relation: user_permissions.user_id → tasks.user_id (FK: principal relation)
+--    User information (name, id) for filtering: tasks → user_permissions → users
 --
 -- HIERARCHY STRUCTURE:
 -- department/design/year/month/taskdata/idtask

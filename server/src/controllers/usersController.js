@@ -1,14 +1,10 @@
 import pool from '../config/database.js';
-import { fetchUserPermissions, setUserPermissions, parsePermissions } from '../utils/permissions.js';
 
-// Helper to format user response (fetches permissions from normalized table)
-const parseUser = async (user) => {
+// Helper to format user response with department info
+const parseUser = (user) => {
   if (!user) return user;
   
-  // Fetch permissions from normalized table
-  const permissions = await fetchUserPermissions(user.id, pool);
-  
-  // Format response to match Firebase structure
+  // Format response
   return {
     id: user.id, // UUID id (primary key)
     color_set: user.color_set || user.colorSet || null,
@@ -33,28 +29,44 @@ const parseUser = async (user) => {
     })(),
     name: user.name,
     occupation: user.occupation || null,
-    permissions: permissions,
-    role: user.role
+    role: user.role,
+    // Department info
+    department_id: user.department_id,
+    department_name: user.department_name,
+    department_display_name: user.department_display_name
   };
 };
 
 export const getUsers = async (req, res, next) => {
   try {
-    const { role, search, active } = req.query;
+    const { role, search, active, department_id } = req.query;
     
-    let query = 'SELECT id, email, name, role, color_set, is_active, occupation, created_at, created_by_id FROM users WHERE 1=1';
+    let query = `
+      SELECT u.id, u.email, u.name, u.role, u.color_set, u.is_active, u.occupation, 
+             u.created_at, u.created_by_id, u.department_id,
+             d.name as department_name, d.display_name as department_display_name
+      FROM users u
+      JOIN departments d ON u.department_id = d.id
+      WHERE 1=1
+    `;
     const params = [];
     let paramCount = 1;
 
     // Filter by role
     if (role) {
-      query += ` AND role = $${paramCount++}`;
+      query += ` AND u.role = $${paramCount++}`;
       params.push(role);
+    }
+
+    // Filter by department
+    if (department_id) {
+      query += ` AND u.department_id = $${paramCount++}`;
+      params.push(department_id);
     }
 
     // Search by name or email
     if (search) {
-      query += ` AND (LOWER(name) LIKE $${paramCount} OR LOWER(email) LIKE $${paramCount})`;
+      query += ` AND (LOWER(u.name) LIKE $${paramCount} OR LOWER(u.email) LIKE $${paramCount})`;
       params.push(`%${search.toLowerCase()}%`);
       paramCount++;
     }
@@ -62,14 +74,14 @@ export const getUsers = async (req, res, next) => {
     // Filter by active status
     if (active !== undefined) {
       const activeBool = active === 'true' || active === true;
-      query += ` AND is_active = $${paramCount++}`;
+      query += ` AND u.is_active = $${paramCount++}`;
       params.push(activeBool);
     }
 
-    query += ' ORDER BY created_at DESC';
+    query += ' ORDER BY u.created_at DESC';
 
     const result = await pool.query(query, params);
-    const users = await Promise.all(result.rows.map(user => parseUser(user)));
+    const users = result.rows.map(user => parseUser(user));
     res.json(users);
   } catch (error) {
     next(error);
@@ -83,7 +95,12 @@ export const getUserById = async (req, res, next) => {
 
     // Authorization: Users can only view their own profile, admins can view any
     const result = await pool.query(
-      'SELECT id, email, name, role, color_set, is_active, occupation, created_at, created_by_id FROM users WHERE id = $1',
+      `SELECT u.id, u.email, u.name, u.role, u.color_set, u.is_active, u.occupation, 
+              u.created_at, u.created_by_id, u.department_id,
+              d.name as department_name, d.display_name as department_display_name
+       FROM users u
+       JOIN departments d ON u.department_id = d.id
+       WHERE u.id = $1`,
       [id]
     );
 
@@ -98,7 +115,7 @@ export const getUserById = async (req, res, next) => {
       return res.status(403).json({ error: 'Insufficient permissions to view this user' });
     }
 
-    res.json(await parseUser(requestedUser));
+    res.json(parseUser(requestedUser));
   } catch (error) {
     next(error);
   }
@@ -110,7 +127,12 @@ export const getUserByUID = async (req, res, next) => {
     const currentUser = req.user;
 
     const result = await pool.query(
-      'SELECT id, email, name, role, color_set, is_active, occupation, created_at, created_by_id FROM users WHERE id = $1',
+      `SELECT u.id, u.email, u.name, u.role, u.color_set, u.is_active, u.occupation, 
+              u.created_at, u.created_by_id, u.department_id,
+              d.name as department_name, d.display_name as department_display_name
+       FROM users u
+       JOIN departments d ON u.department_id = d.id
+       WHERE u.id = $1`,
       [uid]
     );
 
@@ -125,7 +147,7 @@ export const getUserByUID = async (req, res, next) => {
       return res.status(403).json({ error: 'Insufficient permissions to view this user' });
     }
 
-    res.json(await parseUser(requestedUser));
+    res.json(parseUser(requestedUser));
   } catch (error) {
     next(error);
   }
@@ -133,11 +155,15 @@ export const getUserByUID = async (req, res, next) => {
 
 export const createUser = async (req, res, next) => {
   try {
-    const { email, name, role, permissions, password, color_set, isActive, occupation } = req.body;
+    const { email, name, role, password, color_set, isActive, occupation, department_id } = req.body;
     const adminUser = req.user;
 
     if (!email || !password) {
       return res.status(400).json({ error: 'Email and password are required' });
+    }
+
+    if (!department_id) {
+      return res.status(400).json({ error: 'Department ID is required' });
     }
 
     // Check if email already exists
@@ -146,14 +172,23 @@ export const createUser = async (req, res, next) => {
       return res.status(409).json({ error: 'User with this email already exists' });
     }
 
+    // Verify department exists and is active
+    const deptCheck = await pool.query('SELECT id, is_active FROM departments WHERE id = $1', [department_id]);
+    if (deptCheck.rows.length === 0) {
+      return res.status(400).json({ error: 'Invalid department ID' });
+    }
+    if (!deptCheck.rows[0].is_active) {
+      return res.status(400).json({ error: 'Cannot assign user to inactive department' });
+    }
+
     // Hash password
     const bcrypt = await import('bcryptjs');
     const passwordHash = await bcrypt.default.hash(password, 10);
 
     const result = await pool.query(
-      `INSERT INTO users (email, name, role, password_hash, color_set, is_active, occupation, created_by_id)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-       RETURNING id, email, name, role, color_set, is_active, occupation, created_at, created_by_id`,
+      `INSERT INTO users (email, name, role, password_hash, color_set, is_active, occupation, department_id, created_by_id)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+       RETURNING id, email, name, role, color_set, is_active, occupation, department_id, created_at, created_by_id`,
       [
         email.toLowerCase().trim(),
         name,
@@ -162,18 +197,23 @@ export const createUser = async (req, res, next) => {
         color_set || null,
         isActive !== undefined ? isActive : true,
         occupation || null,
+        department_id,
         adminUser.id || null
       ]
     );
 
     const newUser = result.rows[0];
 
-    // Set permissions in normalized table
-    if (permissions && Array.isArray(permissions) && permissions.length > 0) {
-      await setUserPermissions(newUser.id, permissions, pool);
-    }
+    // Get department info for the response
+    const userWithDept = await pool.query(
+      `SELECT u.*, d.name as department_name, d.display_name as department_display_name
+       FROM users u
+       JOIN departments d ON u.department_id = d.id
+       WHERE u.id = $1`,
+      [newUser.id]
+    );
 
-    const formattedUser = await parseUser(newUser);
+    const formattedUser = parseUser(userWithDept.rows[0]);
 
     // Emit WebSocket event
     const wsManager = req.app.locals.wsManager;
@@ -183,6 +223,9 @@ export const createUser = async (req, res, next) => {
 
     res.status(201).json(formattedUser);
   } catch (error) {
+    if (error.code === '23503') { // Foreign key violation
+      return res.status(400).json({ error: 'Invalid department ID' });
+    }
     next(error);
   }
 };
@@ -190,7 +233,7 @@ export const createUser = async (req, res, next) => {
 export const updateUser = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { email, name, role, permissions, password } = req.body;
+    const { email, name, role, password, department_id } = req.body;
     const adminUser = req.user;
 
     // Check if user exists
@@ -207,6 +250,17 @@ export const updateUser = async (req, res, next) => {
       );
       if (emailCheck.rows.length > 0) {
         return res.status(409).json({ error: 'User with this email already exists' });
+      }
+    }
+
+    // Verify department if being updated
+    if (department_id) {
+      const deptCheck = await pool.query('SELECT id, is_active FROM departments WHERE id = $1', [department_id]);
+      if (deptCheck.rows.length === 0) {
+        return res.status(400).json({ error: 'Invalid department ID' });
+      }
+      if (!deptCheck.rows[0].is_active) {
+        return res.status(400).json({ error: 'Cannot assign user to inactive department' });
       }
     }
 
@@ -245,6 +299,10 @@ export const updateUser = async (req, res, next) => {
       updates.push(`occupation = $${paramCount++}`);
       values.push(req.body.occupation || null);
     }
+    if (department_id) {
+      updates.push(`department_id = $${paramCount++}`);
+      values.push(department_id);
+    }
 
     values.push(id);
 
@@ -252,17 +310,21 @@ export const updateUser = async (req, res, next) => {
       UPDATE users
       SET ${updates.join(', ')}
       WHERE id = $${paramCount}
-      RETURNING id, email, name, role, color_set, is_active, occupation, created_at, created_by_id
+      RETURNING id, email, name, role, color_set, is_active, occupation, department_id, created_at, created_by_id
     `;
 
     const result = await pool.query(query, values);
     
-    // Update permissions in normalized table if provided
-    if (permissions !== undefined) {
-      await setUserPermissions(id, permissions, pool);
-    }
+    // Get department info for the response
+    const userWithDept = await pool.query(
+      `SELECT u.*, d.name as department_name, d.display_name as department_display_name
+       FROM users u
+       JOIN departments d ON u.department_id = d.id
+       WHERE u.id = $1`,
+      [id]
+    );
     
-    const updatedUser = await parseUser(result.rows[0]);
+    const updatedUser = parseUser(userWithDept.rows[0]);
 
     // Emit WebSocket event
     const wsManager = req.app.locals.wsManager;
@@ -272,6 +334,9 @@ export const updateUser = async (req, res, next) => {
 
     res.json(updatedUser);
   } catch (error) {
+    if (error.code === '23503') { // Foreign key violation
+      return res.status(400).json({ error: 'Invalid department ID' });
+    }
     next(error);
   }
 };
