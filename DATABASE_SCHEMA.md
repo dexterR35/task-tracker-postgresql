@@ -246,14 +246,7 @@ tasks (1) ──→ (many) task_departments
 tasks (1) ──→ (many) task_deliverables
 tasks (1) ──→ (many) task_ai_usage
 
-team_days_off (1) ──→ (many) team_days_off_dates
+team_days_off (1) ─ ─→ (many) team_days_off_dates
 ```
 
-## Total Statistics
-
-- **12 Tables** total
-- **6 Core Tables**: users, months, tasks, reporters, deliverables, team_days_off
-- **6 Junction/Related Tables**: task_markets, task_departments, task_deliverables, task_ai_usage, team_days_off_dates, user_permissions
-- **All tables use UUID primary keys** (except `deliverables` which uses VARCHAR)
-- **Foreign keys reference business identifiers** (`user_UID`, `reporter_UID`, `month_id`)
 

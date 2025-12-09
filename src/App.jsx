@@ -14,11 +14,7 @@ import ErrorBoundary from '@/components/layout/ErrorBoundary';
  * This ensures all route components have access to context providers
  */
 const RouterWrapper = () => {
-  // Create router using useMemo to prevent recreation on re-renders
-  // Router components are only rendered when routes match,
-  // at which point they'll have access to all context providers
-  const router = useMemo(() => createRouter(), []);
-  
+ const router = useMemo(() => createRouter(), []);
   return <RouterProvider router={router} />;
 };
 
