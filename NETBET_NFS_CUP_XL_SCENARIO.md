@@ -1,3 +1,5 @@
+![Need for Speed NetBet Cup - Promotional Artwork](need-for-speed-netbet-cup.jpg)
+
 # 📄 Plan de Campanie: NetBet NFS Cup - Ediția București (Scenario XL)
 
 ---
@@ -910,8 +912,12 @@ Versiunea: 1.0
 
 ---
 
+![Need for Speed NetBet Cup - Indoor Racing Scene](need-for-speed-netbet-cup-indoor.jpg)
+
+---
+
 *Document Versiunea 2.0 - Scenario XL*  
-*Creat: 01 Decembrie 2025*  
+*Creat: 01 Decembrie 2025* 
  
 
 
