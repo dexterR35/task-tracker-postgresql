@@ -917,7 +917,7 @@ Versiunea: 1.0
 ---
 
 *Document Versiunea 2.0 - Scenario XL*  
-*Creat: 01 Decembrie 2025* 
+*Creat: 04 Decembrie 2025* 
  
 
 
