@@ -254,6 +254,139 @@ Margin of Safety = (1000 - 453) / 1000 = 54.7%
 
 **Concluzie:** Acest scenariu este singurul valid pentru piața română de iGaming. Reflectă parametrii realiști (CPA 90 RON, wagering mediu 6.500 RON/utilizator în 28 zile ≈232 RON/zi) și generează profit real pentru NetBet: **61.330 RON după taxe (ROI 1.6x)**. **Vezi secțiunea VI pentru analiza detaliată de realizabilitate.**
 
+### Scenarii Optimizate pentru ROI Mai Mare (Opțiuni Realiste)
+
+**⚠️ IMPORTANT:** Aceste scenarii presupun optimizări reale și execuție excelentă. Sunt realizabile, dar necesită eforturi suplimentare.
+
+#### Scenario Optimizat 1: CPA Redus (CPA 80 RON/FTD)
+
+**Optimizări necesare:**
+- Focus major pe afiliați (CPA mai mic: 75-80 RON)
+- Reducere dependență de Media Buy (CPA mai mare)
+- Referrals agresive (cost 0 RON)
+- SEO și content marketing pentru trafic organic
+
+| Indicator | Valoare | Impact |
+|:---|---:|---:|
+| **CPA Mediu** | **80 RON** (vs 90 RON) | Reducere costuri cu 10.000 RON |
+| **Cost Total** | **90.000 RON** (vs 100.000 RON) | - |
+| **Wagering Mediu** | **6.500 RON** (același) | - |
+| **Venit Net (NR)** | **221.000 RON** (același) | - |
+| **Profit fără taxe** | **131.000 RON** (vs 121.000 RON) | +10.000 RON |
+| **Taxa GGR (27%)** | **-59.670 RON** | - |
+| **Profit după taxe** | **71.330 RON** (vs 61.330 RON) | **+10.000 RON** |
+| **ROI după taxe** | **1.79x** (vs 1.6x) | **+11.9% ROI** |
+
+**Probabilitate realizare:** 40% (necesită execuție excelentă)
+
+#### Scenario Optimizat 2: Wagering Crescut (7.000 RON/utilizator)
+
+**Optimizări necesare:**
+- Engagement mai bun (target zilnic 500 RON mai bine atins)
+- Retenție mai bună (D7 retention 75%+)
+- Bonusuri progresive pentru utilizatori activi
+- Push notifications optimizate
+
+| Indicator | Valoare | Impact |
+|:---|---:|---:|
+| **CPA Mediu** | **90 RON** (același) | - |
+| **Cost Total** | **100.000 RON** (același) | - |
+| **Wagering Mediu** | **7.000 RON** (vs 6.500 RON) | +7.7% wagering |
+| **Volum Total Wagering** | **7.000.000 RON** (vs 6.500.000 RON) | +500.000 RON |
+| **Venit Net (NR)** | **238.000 RON** (vs 221.000 RON) | +17.000 RON |
+| **Profit fără taxe** | **138.000 RON** (vs 121.000 RON) | +17.000 RON |
+| **Taxa GGR (27%)** | **-64.260 RON** (vs -59.670 RON) | - |
+| **Profit după taxe** | **73.740 RON** (vs 61.330 RON) | **+12.410 RON** |
+| **ROI după taxe** | **1.74x** (vs 1.6x) | **+8.8% ROI** |
+
+**Probabilitate realizare:** 35% (necesită engagement excelent)
+
+#### Scenario Optimizat 3: CPA Redus + Wagering Crescut (Combinat)
+
+**Optimizări necesare:**
+- Toate optimizările din Scenario 1 + Scenario 2
+- Execuție perfectă a campaniei
+
+| Indicator | Valoare | Impact |
+|:---|---:|---:|
+| **CPA Mediu** | **80 RON** (vs 90 RON) | -10.000 RON costuri |
+| **Cost Total** | **90.000 RON** (vs 100.000 RON) | - |
+| **Wagering Mediu** | **7.000 RON** (vs 6.500 RON) | +500 RON/user |
+| **Volum Total Wagering** | **7.000.000 RON** | - |
+| **Venit Net (NR)** | **238.000 RON** | +17.000 RON |
+| **Profit fără taxe** | **148.000 RON** (vs 121.000 RON) | +27.000 RON |
+| **Taxa GGR (27%)** | **-64.260 RON** | - |
+| **Profit după taxe** | **83.740 RON** (vs 61.330 RON) | **+22.410 RON** |
+| **ROI după taxe** | **1.93x** (vs 1.6x) | **+20.6% ROI** |
+
+**Probabilitate realizare:** 25% (necesită execuție perfectă)
+
+#### Scenario Optimizat 4: NR Rate Optimizat (3.6% vs 3.4%)
+
+**Optimizări necesare:**
+- Optimizare game mix (focus pe sloturi cu house edge mai mare)
+- Reducere jocuri cu RTP foarte mare
+- Promovare jocuri cu margine mai bună
+
+| Indicator | Valoare | Impact |
+|:---|---:|---:|
+| **CPA Mediu** | **90 RON** (același) | - |
+| **Cost Total** | **100.000 RON** (același) | - |
+| **Wagering Mediu** | **6.500 RON** (același) | - |
+| **NR Rate** | **3.6%** (vs 3.4%) | +0.2% |
+| **Venit Net (NR)** | **234.000 RON** (vs 221.000 RON) | +13.000 RON |
+| **Profit fără taxe** | **134.000 RON** (vs 121.000 RON) | +13.000 RON |
+| **Taxa GGR (27%)** | **-63.180 RON** (vs -59.670 RON) | - |
+| **Profit după taxe** | **70.820 RON** (vs 61.330 RON) | **+9.490 RON** |
+| **ROI după taxe** | **1.71x** (vs 1.6x) | **+6.9% ROI** |
+
+**Probabilitate realizare:** 30% (necesită optimizare game mix)
+
+### Tabel Comparativ Scenarii Optimizate
+
+| Scenariu | CPA | Wagering | NR Rate | Profit După Taxe | ROI | Probabilitate |
+|:---|---:|---:|---:|---:|---:|---:|
+| **Realist (Bază)** | 90 RON | 6.500 RON | 3.4% | **61.330 RON** | **1.6x** | **60%** |
+| **Optimizat 1: CPA Redus** | 80 RON | 6.500 RON | 3.4% | **71.330 RON** | **1.79x** | 40% |
+| **Optimizat 2: Wagering Crescut** | 90 RON | 7.000 RON | 3.4% | **73.740 RON** | **1.74x** | 35% |
+| **Optimizat 3: Combinat** | 80 RON | 7.000 RON | 3.4% | **83.740 RON** | **1.93x** | 25% |
+| **Optimizat 4: NR Rate** | 90 RON | 6.500 RON | 3.6% | **70.820 RON** | **1.71x** | 30% |
+
+### Recomandări pentru ROI Mai Mare
+
+#### 🔴 P0 - Critice pentru ROI 1.8x+
+
+1. **Optimizare CPA**
+   - Focus 70% buget pe afiliați (CPA mai mic: 75-80 RON)
+   - Reducere Media Buy la 30% (CPA mai mare: 85-95 RON)
+   - Campanie agresivă referrals (cost 0 RON, bonus 400 puncte)
+   - SEO și content marketing pentru trafic organic (CPA 0 RON)
+
+2. **Creștere Wagering**
+   - Target zilnic 500 RON/zi mai bine comunicat
+   - Push notifications optimizate pentru reminder-uri wagering
+   - Bonusuri progresive pentru utilizatori activi (fără gamification complexă)
+   - Retenție D7 target: 75%+ (vs 70%)
+
+3. **Optimizare Game Mix**
+   - Focus pe sloturi cu house edge 4-5% (vs 3-4%)
+   - Promovare jocuri cu margine mai bună
+   - Reducere promovare jocuri cu RTP foarte mare (>97%)
+
+#### 🟡 P1 - Importante pentru ROI 2.0x+
+
+4. **Reducere Costuri Fixe**
+   - Premii secundare optimizate (locurile 11-100): 40 RON mediu (vs 50 RON)
+   - Reducere costuri eveniment Grand Tour: 500 RON (vs 600 RON)
+   - **Economie:** ~1.500 RON
+
+5. **Optimizare Continuă**
+   - Monitorizare zilnică CPA și wagering
+   - Ajustare rapidă dacă parametrii deviază
+   - Kill underperformers rapid (CPA >110 RON)
+
+**Concluzie:** Da, poți atinge un ROI mai mare (1.7x-1.9x) prin optimizări realiste, dar probabilitatea de realizare scade la 25-40%. Scenariul realist (ROI 1.6x) rămâne cel mai probabil (60% probabilitate).
+
 ---
 
 ## VI. Analiză Realizabilitate - Piața Română de iGaming
