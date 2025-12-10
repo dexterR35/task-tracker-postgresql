@@ -8,7 +8,7 @@
 
 | Aspect | Detalii |
 |:---|:---|
-| **Obiectiv Principal** | **Profit real pentru NetBet** prin atragerea de **1000 utilizatori noi** (conturi noi) din piața română, fiecare generând un volum minim de **500 RON wagering pe zi** (14.000 RON total în 28 zile) pe jocuri slot de la afiliați. |
+| **Obiectiv Principal** | **Profit real pentru NetBet** prin atragerea de **1000 utilizatori noi** (conturi noi) din piața română. **Target minim:** 500 RON wagering/zi pentru participare activă (14.000 RON în 28 zile). **Wagering mediu realist:** 6.500 RON/utilizator (≈232 RON/zi mediu) pe jocuri slot de la afiliați. |
 | **Perioada Campaniei** | **28 de zile** de joc + **2 zile** pentru Evenimentul Final Grand Tour. |
 | **Buget Total (Cheltuieli Externe)** | **100.000 RON** (10.000 RON Fix Premii + 90.000 RON Variabil Marketing - CPA realist 80-100 RON/FTD) |
 | **Venit Net Așteptat (NR)** | **221.000 RON** |
@@ -39,7 +39,7 @@ Oferta se concentrează pe **jocuri slot de la afiliați** - utilizatorii joacă
 |:---|:---|:---|
 | **Depunere Min. Calificativă** | **100 RON** (Depunere Min. cu Codul `NFSRACE100`) | Menținerea **ADV (Average Deposit Value)** la un nivel care să acopere costul de achiziție și bonusul. |
 | **Pachet Premiu Imediat** (Valoare 30 RON) | **1. 150 Rotiri Gratuite** (0.20 RON/rotire) <br> **2. 50 Puncte NFS Bonus** (Suplimentar la Start Rapid) | Creșterea percepției de valoare. Punctele bonus alimentează imediat dorința de a urca în clasament. |
-| **Jocuri Aplicabile** | **Exclusiv jocuri slot de la afiliați** (Marjă de Profit Stabilă) | Optimizarea Marjei de Profit (NR Rate ≈ **3.4%**). Utilizatorii trebuie să joace sloturi pentru a câștiga puncte. |
+| **Jocuri Aplicabile** | **Exclusiv jocuri slot de la afiliați** (Marjă de Profit Stabilă) | Optimizarea Marjei de Profit (NR Rate ≈ **3.4%**). Utilizatorii trebuie să joace sloturi pentru a câștiga puncte. Vezi lista completă de jocuri eligibile mai jos. |
 
 #### Cost Efectiv per Conversie
 
@@ -50,7 +50,58 @@ Oferta se concentrează pe **jocuri slot de la afiliați** - utilizatorii joacă
 | **Puncte Bonus (50 puncte)** | 0.00 | 0 (Cost virtual) |
 | **TOTAL COST PER USER** | **18.00 RON** | **18.000 RON** |
 
-> **Notă:** Costul de 18.000 RON pentru Free Spins este inclus în bugetul variabil de marketing (45.000 RON), lăsând 27.000 RON pentru achiziția efectivă de trafic.
+> **Notă:** Costul de 18.000 RON pentru Free Spins este inclus în bugetul variabil de marketing (90.000 RON), lăsând 72.000 RON pentru achiziția efectivă de trafic.
+
+#### Lista Jocurilor Slot Eligibile pentru Campanie
+
+**Utilizatorii trebuie să joace exclusiv jocuri slot eligibile pentru a acumula puncte. Lista completă include jocuri de la următorii provideri:**
+
+##### Pragmatic Play (Provider Principal)
+- **Gates of Olympus** - RTP: 96.5%, House Edge: 3.5%
+- **Sweet Bonanza** - RTP: 96.5%, House Edge: 3.5%
+- **The Dog House** - RTP: 96.5%, House Edge: 3.5%
+- **Sugar Rush** - RTP: 96.5%, House Edge: 3.5%
+- **Wild West Gold** - RTP: 96.5%, House Edge: 3.5%
+- **Big Bass Bonanza** - RTP: 96.5%, House Edge: 3.5%
+- **Fire Strike** - RTP: 96.5%, House Edge: 3.5%
+- **Starlight Princess** - RTP: 96.5%, House Edge: 3.5%
+- **Gems Bonanza** - RTP: 96.5%, House Edge: 3.5%
+- **Aztec Gems** - RTP: 96.5%, House Edge: 3.5%
+
+##### NetEnt (NetBet Exclusive)
+- **Starburst** - RTP: 96.1%, House Edge: 3.9%
+- **Gonzo's Quest** - RTP: 95.97%, House Edge: 4.03%
+- **Dead or Alive 2** - RTP: 96.8%, House Edge: 3.2%
+- **Book of Dead** - RTP: 96.21%, House Edge: 3.79%
+- **Reactoonz** - RTP: 96.51%, House Edge: 3.49%
+
+##### Play'n GO
+- **Book of Dead** - RTP: 96.21%, House Edge: 3.79%
+- **Rise of Olympus** - RTP: 96.5%, House Edge: 3.5%
+- **Fire Joker** - RTP: 96.15%, House Edge: 3.85%
+- **Reactoonz** - RTP: 96.51%, House Edge: 3.49%
+
+##### Evolution Gaming (Sloturi)
+- **Lightning Dice** - RTP: 97.3%, House Edge: 2.7%
+- **Dream Catcher** - RTP: 96.58%, House Edge: 3.42%
+
+##### Yggdrasil
+- **Valley of the Gods** - RTP: 96.3%, House Edge: 3.7%
+- **Vikings Go Berzerk** - RTP: 96.1%, House Edge: 3.9%
+
+##### Quickspin
+- **Big Bad Wolf** - RTP: 96.58%, House Edge: 3.42%
+- **Sakura Fortune** - RTP: 96.58%, House Edge: 3.42%
+
+##### Red Tiger
+- **Mystery Reels** - RTP: 96.1%, House Edge: 3.9%
+- **Dragon's Luck** - RTP: 96.1%, House Edge: 3.9%
+
+**Notă Importantă:**
+- **Toate jocurile slot eligibile** au RTP între 96% și 97.3%, asigurând un NR Rate mediu de **3.4%**
+- **Jocuri EXCLUSE:** Table games (Blackjack, Roulette, Baccarat), Live Casino, Sports Betting, Virtual Sports
+- **Lista completă** de jocuri eligibile este disponibilă pe netbet.ro/nfs-cup/games
+- **Free Spins** din oferta NFSRACE100 pot fi folosite doar pe jocuri slot eligibile Pragmatic Play
 
 ### B. Oferte Complementare pentru Maximizarea Wagering-ului
 
@@ -76,7 +127,7 @@ Se menține structura bazată pe profit pentru a asigura că numai jucătorii ac
 
 #### Calculul Punctajului pentru Top 10 (Estimări Realiste)
 
-**Bazat pe minim 500 RON wagering pe zi × 28 zile = 14.000 RON minim pentru utilizatori obișnuiți**
+**Target minim pentru participare activă:** 500 RON wagering/zi × 28 zile = 14.000 RON (pentru utilizatorii care participă activ). **Wagering mediu realist pentru toți utilizatorii:** 6.500 RON/utilizator (≈232 RON/zi mediu), reflectând distribuția realistă a utilizatorilor.**
 
 **Pentru Top 10, target-urile sunt accesibile pentru a selecta cei mai activi jucători:**
 
@@ -369,9 +420,9 @@ Margin of Safety = (1000 - 453) / 1000 = 54.7%
    - Retenție D7 target: 75%+ (vs 70%)
 
 3. **Optimizare Game Mix**
-   - Focus pe sloturi cu house edge 4-5% (vs 3-4%)
-   - Promovare jocuri cu margine mai bună
-   - Reducere promovare jocuri cu RTP foarte mare (>97%)
+   - Focus pe sloturi Pragmatic Play (house edge 3.5%) și NetEnt (house edge 3.2-4%)
+   - Promovare jocuri populare: Gates of Olympus, Sweet Bonanza, Starburst, Book of Dead
+   - Reducere promovare jocuri cu RTP foarte mare (>97.3%)
 
 #### 🟡 P1 - Importante pentru ROI 2.0x+
 
@@ -461,14 +512,14 @@ Campania este **realizabilă** pe piața română de iGaming cu parametrii reali
 
 | Canal | Buget Planificat (RON) | CPA Target (RON) | Estimare Reală (RON) | Verdict |
 |:---|:---:|:---:|:---:|:---|
-| **Media Buy** | 24.000 | 40 | 50-60 | Necesită optimizare excelentă |
-| **Afiliați** | 18.000 | 45 | 45 | Aliniat cu piața (cu bonus +20%) |
-| **CRM** | 3.000 | - | 3.000 | Buget rezonabil pentru reactivare |
+| **Media Buy** | 50.000 | 83 | 80-100 | Realist pentru piața română |
+| **Afiliați** | 35.000 | 87.50 | 85-90 | Aliniat cu piața (cu bonus +20%) |
+| **CRM** | 5.000 | - | 5.000 | Buget rezonabil pentru reactivare |
 
 **Concluzie Buget Marketing:**
-- ⚠️ **Media Buy CPA 40 RON** necesită optimizare excelentă - estimare reală 50-60 RON
-- ✅ **Afiliați CPA 45 RON** este realist cu bonus +20%
-- 📊 **Bugetul pentru 1000 FTD** se estimează la **50.000-60.000 RON**
+- ✅ **Media Buy CPA 83 RON** este realist pentru piața română (range 80-100 RON)
+- ✅ **Afiliați CPA 87.50 RON** este realist cu bonus +20%
+- 📊 **Bugetul pentru 1000 FTD** este **90.000 RON** (CPA mediu 90 RON/FTD)
 
 #### 2. Geotargeting București & Ilfov
 
@@ -516,7 +567,7 @@ Campania este **realizabilă** pe piața română de iGaming cu parametrii reali
 4. **Geotargeting** - Strategic corect (București)
 5. **Risk Management** - Bine identificat și planificat
 6. **Engagement Simplu** - Focus pe target wagering zilnic, fără gamification complexă
-7. **Break-Even** - Marja de siguranță bună (81%)
+7. **Break-Even** - Marja de siguranță bună (54.7%)
 
 #### ⚠️ Slabiciuni & Riscuri
 
@@ -589,10 +640,12 @@ Campania este **realizabilă** pe piața română de iGaming cu parametrii reali
 |:---|:---|:---|:---|---:|
 | **Pre-Launch** | 7 zile înainte | Teasing, anticipație, pre-înregistrare | Teaser video, landing page, email warming | 1.500 |
 | **Launch Week** | Zile 1-7 | Maximizarea FTD | Ads agresive, afiliați push, urgency messaging | 8.000 |
-| **Mid-Campaign** | Zile 8-21 | Creștere wagering, retenție | Daily missions, leaderboard updates, retargeting | 10.000 |
+| **Mid-Campaign** | Zile 8-21 | Creștere wagering, retenție | Target wagering zilnic, leaderboard updates, retargeting | 10.000 |
 | **Final Sprint** | Zile 22-28 | Push final pentru Top 50, hype Grand Tour | Triple points weekends, countdown content | 3.000 |
 | **Post-Event** | După ziua 30 | Retenție | Thank you campaign, retention offers | 2.500 |
-| **TOTAL** | 35 zile | - | - | **25.000** |
+| **TOTAL Timeline** | 35 zile | - | - | **25.000** |
+
+**Notă:** Bugetul timeline-ului (25.000 RON) este pentru activități operaționale (creativități, email, push notifications) și este inclus în bugetul total de marketing de 90.000 RON. Restul de 65.000 RON este pentru achiziția efectivă de trafic (Media Buy + Afiliați).
 
 ### B. Strategia de Conținut & Messaging
 
@@ -622,7 +675,7 @@ Campania este **realizabilă** pe piața română de iGaming cu parametrii reali
 
 ---
 
-## VII. Mecanisme de Engagement Simplificate (Focus pe Profit)
+## VIII. Mecanisme de Engagement Simplificate (Focus pe Profit)
 
 ### A. Target Zilnic Simplu (Fără Missions Complexe)
 
@@ -645,7 +698,7 @@ Campania este **realizabilă** pe piața română de iGaming cu parametrii reali
 
 ---
 
-## VIII. Strategia de Engagement (Fără UGC)
+## IX. Strategia de Engagement (Fără UGC)
 
 **IMPORTANT: Nu există cerințe de postare pe social media, video sau story. Utilizatorii se concentrează exclusiv pe jocuri slot de la afiliați pentru a acumula puncte.**
 
@@ -680,16 +733,16 @@ Campania este **realizabilă** pe piața română de iGaming cu parametrii reali
 
 ---
 
-## IX. Risk Management & Mitigation Strategies
+## X. Risk Management & Mitigation Strategies
 
 ### A. Riscuri Identificate & Probabilitate
 
 | Risc | Probabilitate | Impact | Severitate | Strategie de Mitigare |
 |:---|:---:|:---:|:---:|:---|
-| **Wagering sub 500 RON/zi (14.000 RON/user)** | Medie (35%) | Ridicat | 🔴 Critic | Daily missions agresive, bonus wagering pentru top performers, personalizate push notifications, reminder-uri pentru target-ul zilnic de 500 RON. |
+| **Wagering sub 500 RON/zi (14.000 RON/user)** | Medie (35%) | Ridicat | 🔴 Critic | Reminder-uri agresive pentru target zilnic 500 RON, bonus wagering pentru top performers, push notifications personalizate, oferte speciale pentru utilizatori cu potențial. |
 | **FTD sub 1.000 utilizatori** | Scăzută (20%) | Ridicat | 🔴 Critic | A/B ads continu, buget flexibil pentru best performers, ofertă "Last Chance" în week 3. |
 | **Bonus Abuse & Fraud** | Medie (30%) | Mediu | 🟡 Moderat | KYC strict după primele 1.000 puncte, limitare conturi duplicate (IP tracking), monitoring anomalii. |
-| **Engagement scăzut pe sloturi** | Medie (30%) | Ridicat | 🔴 Critic | Bonus wagering pentru sloturi, missions zilnice, push notifications. |
+| **Engagement scăzut pe sloturi** | Medie (30%) | Ridicat | 🔴 Critic | Bonus wagering pentru sloturi, reminder-uri pentru target zilnic, push notifications, oferte speciale pentru sloturi. |
 | **Budget overrun premii secundare** | Foarte scăzută (10%) | Scăzut | 🟢 Minor | Cap fix la 10.000 RON premii, no additional prizes unless pre-approved. |
 | **Performance slabă canale ads** | Medie (25%) | Ridicat | 🔴 Critic | Daily monitoring, realocare buget după primele 48h, kill underperformers rapid. |
 
@@ -703,18 +756,18 @@ Campania este **realizabilă** pe piața română de iGaming cu parametrii reali
 3. **Afiliați Emergency Push:** Contactare afiliați top pentru boost trafic (budget 1.000 RON)
 4. **Email blast entire database** (nu doar București) cu mesaj urgency: *"Ultimele 48h Early Bird!"*
 
-#### Scenario 2: La Ziua 20, wagering mediu/user <350 RON/zi (<9.800 RON total)
+#### Scenario 2: La Ziua 20, wagering mediu/user <200 RON/zi (<5.600 RON total la ziua 20)
 
 **🚨 Acțiuni Imediate:**
 1. **Triple Points Weekend:** Toate punctele ×3 în weekend-ul 22-23
 2. **Leaderboard Bonus:** Top 50 current primesc +500 puncte bonus instant (motivație să continue)
 3. **Personalized Offers:** Segmentare users după wagering actual:
-   - High potential (300-350 RON/zi): Ofertă deposit 500 RON → +1.000 puncte
-   - Low engagement (<250 RON/zi): Last chance 200 RON → +500 puncte + 50 Free Spins
+   - High potential (200-232 RON/zi mediu): Ofertă deposit 500 RON → +1.000 puncte
+   - Low engagement (<150 RON/zi): Last chance 200 RON → +500 puncte + 50 Free Spins
    - Reminder target zilnic: "Ai nevoie de 500 RON wagering/zi pentru participare activă!"
 4. **Push Notifications Agresive:** "Ești la doar X RON wagering de target-ul zilnic de 500 RON!"
 
-#### Scenario 3: La Ziua 28, Wagering Total <8.000.000 RON
+#### Scenario 3: La Ziua 28, Wagering Total <6.000.000 RON
 
 **🚨 Acțiuni Imediate:**
 1. **Extindere campanie:** Prelungire cu 3 zile pentru a atinge target-ul de wagering
@@ -724,7 +777,7 @@ Campania este **realizabilă** pe piața română de iGaming cu parametrii reali
 
 ---
 
-## X. KPI Dashboard & Tracking Metrics
+## XI. KPI Dashboard & Tracking Metrics
 
 ### A. KPI-uri Primare (Financiare) - Monitorizare Zilnică
 
@@ -759,7 +812,7 @@ Campania este **realizabilă** pe piața română de iGaming cu parametrii reali
 
 ---
 
-## XI. Post-Campaign: Thank You & Retention
+## XII. Post-Campaign: Thank You & Retention
 
 ### A. Thank You Journey (Immediate Post-Event)
 
@@ -772,7 +825,7 @@ Campania este **realizabilă** pe piața română de iGaming cu parametrii reali
 
 ---
 
-## XII. Legal Compliance & Terms and Conditions
+## XIII. Legal Compliance & Terms and Conditions
 
 ### A. Cerințe Regulatorii
 
@@ -808,8 +861,9 @@ TERMENI ȘI CONDIȚII - NetBet NFS Cup Ediția București
 4. ACUMULARE PUNCTE NFS
    - 1 Punct NFS = 10 RON wagering pe sloturi eligible.
    - Puncte Bonus: Start Rapid (100 puncte), Streak (1.000 puncte la 7 zile consecutive).
-   - Jocuri eligible: Exclusiv categoria "Sloturi" (lista completă pe netbet.ro/nfs-cup/games).
-   - Jocuri EXCLUSE: Table games, Live Casino, Sports Betting.
+   - Jocuri eligible: Exclusiv categoria "Sloturi" de la provideri eligibili (Pragmatic Play, NetEnt, Play'n GO, Evolution Gaming, Yggdrasil, Quickspin, Red Tiger). Lista completă pe netbet.ro/nfs-cup/games.
+   - Jocuri EXCLUSE: Table games (Blackjack, Roulette, Baccarat), Live Casino, Sports Betting, Virtual Sports.
+   - Free Spins pot fi folosite doar pe jocuri slot Pragmatic Play eligibile.
 
 5. PREMII
    - Top 10: Participare eveniment Grand Tour (experiență exclusivă).
@@ -859,11 +913,11 @@ Versiunea: 1.0
 |:---|:---|:---|
 | **1. Targeting Precis** | București (zona cu cel mai mare potențial din România pentru iGaming) | +30% conversie vs. campanii nationale |
 | **2. Ofertă Irezistibilă** | Experiență Grand Tour (tangible + aspirational) > bonus generic | +45% engagement vs. standard promos |
-| **3. Gamification Puternic** | Missions, achievements, leaderboard live → addiction loop | +60% retention, +35% session length |
+| **3. Engagement Simplu** | Target wagering zilnic, leaderboard simplu, bonusuri reale | Retenție bazată pe profit real, nu gamification fantomă |
 | **4. Focus pe Jocuri Slot Afiliați** | Utilizatorii joacă exclusiv sloturi de la afiliați pentru puncte | Corelare directă între joc și puncte |
 | **5. Parteneriat VMax - Branding & Amplificare** | **Parteneriat strategic cu VMax pentru branding și reclame în perioada evenimentului Grand Tour** | **+20% brand awareness, asociere cu experiență premium, reach extins** |
-| **6. Focus pe Profitabilitate** | Campaign profit variabil: **61k-171k RON** (după taxe GGR 27%) | ROI 1.6x-3.1x (după taxe) |
-| **7. Scenariu Realist Ajustat** | **Parametri conservatori (CPA 80-100 RON, wagering 6.500 RON/user)** | **ROI 1.6x după taxe, Profit 61k RON (cel mai probabil)** |
+| **6. Focus pe Profitabilitate** | **Profit real: 61.330 RON** (după taxe GGR 27%) | **ROI 1.6x (profitabil pentru NetBet)** |
+| **7. Scenariu Realist** | **Parametri realiști piața română (CPA 90 RON, wagering 6.500 RON/user în 28 zile ≈232 RON/zi)** | **ROI 1.6x după taxe, Profit 61.330 RON** |
 | **8. Analiză Realizabilitate** | **Evaluare completă piața română iGaming** | **Realizabil cu ajustări - Vezi Secțiunea VI** |
 
 ### Metrici de Succes - Dashboard Executiv (Weekly Report)
@@ -883,7 +937,7 @@ Versiunea: 1.0
 │  ENGAGEMENT                                                 │
 │  ├─ DAU:              XXX / 600      (XX%)                 │
 │  ├─ Avg Session:      XX min         (target: 30)          │
-│  ├─ Mission Complete: XX%            (target: 45%)         │
+│  ├─ Wagering Target: XX% ating 500 RON/zi (target: 60%)   │
 │  └─ Retention D7:     XX%            (target: 70%)         │
 ├─────────────────────────────────────────────────────────────┤
 │  GAME PERFORMANCE                                            │
