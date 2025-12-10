@@ -9,11 +9,11 @@
 | Aspect | Detalii |
 |:---|:---|
 | **Obiectiv Principal** | **Profit real pentru NetBet** prin atragerea de **1000 utilizatori noi** (conturi noi) din piața română. **Target minim:** 500 RON wagering/zi pentru participare activă (14.000 RON în 28 zile). **Wagering mediu realist:** 6.500 RON/utilizator (≈232 RON/zi mediu) pe jocuri slot de la afiliați. |
-| **Perioada Campaniei** | **28 de zile** de joc + **2 zile** pentru Evenimentul Final Grand Tour. |
-| **Buget Total (Cheltuieli Externe)** | **100.000 RON** (10.000 RON Fix Premii + 90.000 RON Variabil Marketing - CPA realist 80-100 RON/FTD) |
+| **Perioada Campaniei** | **28 de zile** de joc + **2 zile** pentru Turneul Final Grand Prix NetBet + VMax. |
+| **Buget Total (Cheltuieli Externe)** | **101.000 RON** (11.000 RON Fix Premii + 90.000 RON Variabil Marketing - CPA realist 80-100 RON/FTD) |
 | **Venit Net Așteptat (NR)** | **221.000 RON** |
 | **Profit Net Așteptat (fără taxe)** | **121.000 RON** |
-| **Profit Net Așteptat (după taxe GGR 27%)** | **61.330 RON** |
+| **Profit Net Așteptat (după taxe GGR 27%)** | **60.330 RON** |
 | **ROI Realist** | **1.6x** după taxe (profit real pentru NetBet) |
 | **Măsurarea Succesului** | Volum Wagering (Turnover), Net Revenue (NR), Profit Net după taxe, Număr utilizatori noi (1000 conturi). |
 | **Notă Importantă** | **Parametri realiști pentru piața română**: CPA 80-100 RON/FTD, Wagering mediu 6.500 RON/utilizator în 28 zile (≈232 RON/zi mediu), cu 45% Regular Players și 35% Active Players. Utilizatorii trebuie să joace exclusiv jocuri slot de la afiliați pentru a acumula puncte. |
@@ -21,8 +21,8 @@
 ### Rezumat Vizual - ROI Realist pentru Piața Română
 
 ```
-Scenario Realist Ajustat (1000 users):  Rentabilitate 2.2x  → Profit: 121.000 RON (fără taxe)
-                                        Rentabilitate 1.6x  → Profit: 61.330 RON (după taxe GGR 27%) ✅
+Scenario Realist Ajustat (1000 users):  Rentabilitate 2.2x  → Profit: 120.000 RON (fără taxe)
+                                        Rentabilitate 1.6x  → Profit: 60.330 RON (după taxe GGR 27%) ✅
 ```
 
 **⚠️ IMPORTANT:** **Doar Scenario 4 (Realist Ajustat)** este valid pentru piața română de iGaming. Scenariile 1-3 sunt nerealiste și nu reflectă realitățile pieței (CPA 45 RON este imposibil, wagering 8.500 RON/utilizator este prea optimist). **Focus exclusiv pe scenariul realist care generează profit real pentru NetBet.**
@@ -155,18 +155,21 @@ Se menține structura bazată pe profit pentru a asigura că numai jucătorii ac
 
 ## III. Premiile și Strategia de Premiere
 
-**IMPORTANT: Nu există premii cash.** Toate premiile sunt experiențiale sau sub formă de cadouri simple.
+**IMPORTANT: Nu există premii cash.** Toate premiile sunt experiențiale, trofee și bonusuri de joc.
 
 ### A. Structura Premiilor Principale
 
 | Premiu | Buget Alocat | Detalii & Valoare |
 |:---|---:|:---|
-| **Grand Tour (Locurile 1-10)** | 5.000 RON | **10 utilizatori selectați** pentru experiență Grand Tour (eveniment exclusiv, experiență premium). Valoare maximă: **500 RON per utilizator**. |
+| **🥇 Locul 1 - Câștigător** | 1.500 RON | **Cupă NetBet NFS Cup** (trofeu premium) + **1.000 RON bonus de joc** + Participare la **Turneu Grand Prix NetBet + VMax** |
+| **🥈 Locul 2 - Vice-Campion** | 1.200 RON | **Cupă NetBet NFS Cup** (trofeu premium) + **800 RON bonus de joc** + Participare la **Turneu Grand Prix NetBet + VMax** |
+| **🥉 Locul 3 - Locul Trei** | 1.000 RON | **Cupă NetBet NFS Cup** (trofeu premium) + **600 RON bonus de joc** + Participare la **Turneu Grand Prix NetBet + VMax** |
+| **Locurile 4-10** | 1.800 RON | **7 × Participare la Turneu Grand Prix NetBet + VMax** (fără cupe, doar participare la eveniment) |
 | **Premii Secundare (Locurile 11-100)** | 4.500 RON | **90 × Cadouri simple** (valoare medie 50 RON per cadou - produse promoționale, merch NetBet, vouchere). Range: **100-500 RON** per premiu. |
-| **Logistică Eveniment Grand Tour** | 300 RON | Organizare eveniment pentru Top 10. |
-| **Trofee & Branding** | 150 RON | 10 trofee personalizate + bannere NetBet. |
-| **Catering & Experiență** | 50 RON | Băuturi, snacks pentru eveniment. |
-| **TOTAL PREMII** | **10.000 RON** | Buget optimizat fără premii cash. Range premii: **100-500 RON** per premiu. |
+| **Logistică Turneu Grand Prix NetBet + VMax** | 500 RON | Organizare turneu Grand Prix pentru Top 10 (parteneriat NetBet + VMax). |
+| **Trofee & Branding** | 500 RON | 3 cupe premium pentru primii 3 + bannere NetBet + branding VMax. |
+| **Catering & Experiență** | 0 RON | Băuturi, snacks pentru eveniment (asigurate de VMax prin parteneriat). |
+| **TOTAL PREMII** | **11.000 RON** | Buget optimizat: 3 cupe + bonusuri de joc + participare turneu Grand Prix. |
 
 ### B. Strategia de Branding (Fără UGC)
 
@@ -174,12 +177,12 @@ Se menține structura bazată pe profit pentru a asigura că numai jucătorii ac
 
 | Element Branding | Implementare | Impact Așteptat |
 |:---|:---|:---|
-| **1. Branding Eveniment Grand Tour** | La evenimentul Grand Tour, branding NetBet vizibil (bannere, logo-uri). | Vizibilitate brand la eveniment. |
-| **2. Parteneriat VMax - Branding & Reclame** | **Parteneriat strategic cu VMax**: În perioada evenimentului Grand Tour, NetBet va avea branding și reclame vizibile la VMax (bannere, logo-uri, materiale promoționale). Acest parteneriat oferă expunere suplimentară pentru brandul NetBet în contextul evenimentului premium. | Amplificare brand awareness, asociere cu experiență premium, reach extins pentru audiența VMax. |
+| **1. Branding Turneu Grand Prix** | La turneul Grand Prix NetBet + VMax, branding comun NetBet + VMax vizibil (bannere, logo-uri). | Vizibilitate brand la eveniment premium. |
+| **2. Parteneriat VMax - Branding & Reclame** | **Parteneriat strategic cu VMax**: În perioada turneului Grand Prix, NetBet va avea branding și reclame vizibile la VMax (bannere, logo-uri, materiale promoționale). Acest parteneriat oferă expunere suplimentară pentru brandul NetBet în contextul evenimentului premium. | Amplificare brand awareness, asociere cu experiență premium, reach extins pentru audiența VMax. |
 | **3. Materiale Promoționale** | Merchandise NetBet pentru participanți (tricouri, căni, etc.). | Brand recall după eveniment. |
-| **4. Experiență Premium** | Eveniment exclusiv pentru Top 10 cu atmosferă premium. | Retenție utilizatori high-value. |
+| **4. Experiență Premium** | Turneu Grand Prix exclusiv pentru Top 10 cu atmosferă premium (parteneriat NetBet + VMax). | Retenție utilizatori high-value. |
 
-**Notă:** Nu există cerințe de postare social media, video sau story. Focus-ul este pe experiența jocului și acumularea de puncte prin jocuri slot de la afiliați. **Parteneriatul cu VMax oferă oportunitate de branding și expunere în perioada evenimentului Grand Tour.**
+**Notă:** Nu există cerințe de postare social media, video sau story. Focus-ul este pe experiența jocului și acumularea de puncte prin jocuri slot de la afiliați. **Parteneriatul cu VMax oferă oportunitate de branding și expunere în perioada turneului Grand Prix NetBet + VMax.**
 
 ---
 
@@ -208,39 +211,39 @@ Strategia se concentrează pe atragerea de **1000 utilizatori noi (conturi noi)*
 
 | Indicator Analitic | Valoare | Formula de Calcul / Concluzie |
 |:---|:---|:---|
-| **Cost Total (C_T)** | **100.000 RON** | Cost Fix (10.000 RON) + Cost Variabil (90.000 RON - CPA realist 90 RON/FTD) |
+| **Cost Total (C_T)** | **101.000 RON** | Cost Fix (11.000 RON) + Cost Variabil (90.000 RON - CPA realist 90 RON/FTD) |
 | **Utilizatori Noi Necesari** | **1000** | Ținta de volum pentru a garanta profitul. |
 | **Wagering Mediu / Utilizator (28 zile)** | **6.500 RON** | **Realist pentru piața română** - Wagering mediu zilnic: ~232 RON/zi (6.500 RON ÷ 28 zile). Minim 500 RON/zi pentru participare activă. **Distribuție realistă**: Majoritatea utilizatorilor sunt regular players (45%) și active players (35%), cu doar 1% ultra high rollers. |
 | **Volum Total Wagering (Turnover)** | **6.500.000 RON** | \( 1000 \text{ utilizatori} \times 6.500 \text{ RON/utilizator} \) (distribuție realistă piață română) |
 | **Venit Net Așteptat (NR)** | **221.000 RON** | \( 6.500.000 \text{ RON Wagering} \times 3.4\% \text{ NR Rate} \) |
-| **Profit Net Așteptat (fără taxe)** | **121.000 RON** | \( \text{NR} (221.000) - \text{C\_T} (100.000) \) |
+| **Profit Net Așteptat (fără taxe)** | **120.000 RON** | \( \text{NR} (221.000) - \text{C\_T} (101.000) \) |
 | **Taxa GGR (27%)** | **-59.670 RON** | \( 221.000 \times 27\% \) |
-| **Profit Net Real (după taxe)** | **61.330 RON** | Profit real pentru NetBet |
-| **ROI Realist (după taxe)** | **1.6x** | \( \text{Profit Real} / \text{C\_T} = 61.330 / 100.000 \) - **PROFITABIL**
+| **Profit Net Real (după taxe)** | **60.330 RON** | Profit real pentru NetBet |
+| **ROI Realist (după taxe)** | **1.6x** | \( \text{Profit Real} / \text{C\_T} = 60.330 / 101.000 \) - **PROFITABIL**
 
 #### Analiza Break-Even (Parametri Realisti)
 
 ```
 Break-Even Wagering Total = Cost Total / NR Rate
-                          = 100.000 RON / 3.4%
-                          = 2.941.176 RON
+                          = 101.000 RON / 3.4%
+                          = 2.970.588 RON
 
 Break-Even Utilizatori = Break-Even Wagering / Wagering Mediu per User
-                       = 2.941.176 RON / 6.500 RON
-                       = 453 utilizatori
+                       = 2.970.588 RON / 6.500 RON
+                       = 457 utilizatori
 
-Margin of Safety = (1000 - 453) / 1000 = 54.7%
+Margin of Safety = (1000 - 457) / 1000 = 54.3%
 ```
 
-**Concluzie:** Campania devine profitabilă cu **453 utilizatori** (45% din ținta de 1000). Orice peste acest număr generează **profit net real pentru NetBet**. **Notă:** Parametrii realiști (CPA 90 RON, wagering mediu 6.500 RON/utilizator în 28 zile ≈232 RON/zi mediu) reflectă realitățile pieței române de iGaming.
+**Concluzie:** Campania devine profitabilă cu **457 utilizatori** (46% din ținta de 1000). Orice peste acest număr generează **profit net real pentru NetBet**. **Notă:** Parametrii realiști (CPA 90 RON, wagering mediu 6.500 RON/utilizator în 28 zile ≈232 RON/zi mediu) reflectă realitățile pieței române de iGaming.
 
 **⚠️ Notă Importantă - Scenariu Realist pentru Piața Română:**
 **Scenario 4 (Realist Ajustat)** este singurul scenariu valid pentru piața română de iGaming și reflectă:
 - **CPA real:** 80-100 RON/FTD (media pieței: 85-120 RON)
 - **Wagering mediu realist:** 6.500 RON/utilizator (range piață: 5.000-7.000 RON)
-- **Costuri totale:** 100.000 RON
-- **Profit net așteptat:** 121.000 RON (ROI 2.2x) fără taxe
-- **Profit net după taxe GGR (27%):** 61.330 RON (ROI 1.6x) - **PROFITABIL pentru NetBet**
+- **Costuri totale:** 101.000 RON
+- **Profit net așteptat:** 120.000 RON (ROI 2.2x) fără taxe
+- **Profit net după taxe GGR (27%):** 60.330 RON (ROI 1.6x) - **PROFITABIL pentru NetBet**
 
 ---
 
@@ -261,11 +264,11 @@ Margin of Safety = (1000 - 453) / 1000 = 54.7%
 | **CPA Mediu** | **80-100 RON** (media: 90 RON) |
 | **Wagering Mediu / Utilizator (28 zile)** | **6.500 RON** (≈232 RON/zi mediu) - realist pentru piața română |
 | **Volum Total Wagering (Turnover)** | **6.500.000 RON** |
-| **Cost Total (C_T)** | **100.000 RON** |
+| **Cost Total (C_T)** | **101.000 RON** |
 | **Venit Net Așteptat (NR)** | **221.000 RON** |
-| **Profit Net Așteptat (fără taxe)** | **121.000 RON** |
+| **Profit Net Așteptat (fără taxe)** | **120.000 RON** |
 | **Taxa GGR (27%)** | **-59.670 RON** |
-| **Profit Net Real (după taxe)** | **61.330 RON** |
+| **Profit Net Real (după taxe)** | **60.330 RON** |
 | **ROI Realist (după taxe)** | **1.6x** |
 | **Probabilitate de Realizare** | **60%** |
 | **Notă** | **Singurul scenariu valid pentru piața română. Parametrii reflectă realitățile pieței: CPA 80-100 RON, wagering mediu 6.500 RON/utilizator în 28 zile (≈232 RON/zi mediu).**
@@ -275,7 +278,7 @@ Margin of Safety = (1000 - 453) / 1000 = 54.7%
 #### Scenario Realist Ajustat (1000 utilizatori noi) ✅ **SINGURUL VALID**
 
 **Context:** Scenariu ajustat cu parametri mai conservatori, bazat pe realitățile pieței iGaming din România. Reflectă:
-- **CPA real**: 80-100 RON/FTD → Costuri totale: 100.000 RON
+- **CPA real**: 80-100 RON/FTD → Costuri totale: 101.000 RON
 - **Wagering mediu realist**: 6.500 RON/utilizator în 28 zile (≈232 RON/zi mediu)
 - **1000 utilizatori noi** în total pentru campanie (nu per zi)
 - Acest scenariu este cel mai probabil să se realizeze în practică, având în vedere riscurile identificate și experiența din campaniile anterioare.
@@ -292,18 +295,18 @@ Margin of Safety = (1000 - 453) / 1000 = 54.7%
 **Calcul Costuri Ajustate:**
 - **CPA mediu**: 90 RON/FTD (media între 80-100)
 - **Cost achiziție utilizatori**: 1000 × 90 RON = 90.000 RON
-- **Costuri fixe (premii)**: 10.000 RON
+- **Costuri fixe (premii)**: 11.000 RON
 - **Costuri CRM & Reactivare**: 0 RON (inclus în bugetul de achiziție)
-- **TOTAL COSTURI**: **100.000 RON**
+- **TOTAL COSTURI**: **101.000 RON**
 
-**Rezultat:** ROI 2.2x, Profit 121.000 RON (fără taxe GGR). **Scenariul cel mai realist și cel mai probabil să se realizeze în practică. Profitabil chiar și cu parametri conservatori.**
+**Rezultat:** ROI 2.2x, Profit 120.000 RON (fără taxe GGR). **Scenariul cel mai realist și cel mai probabil să se realizeze în practică. Profitabil chiar și cu parametri conservatori.**
 
 **⚠️ Impact Taxe GGR (27%):**
-- Profit după taxe: **61.330 RON**
+- Profit după taxe: **60.330 RON**
 - ROI după taxe: **1.6x**
 - **PROFITABIL pentru NetBet!**
 
-**Concluzie:** Acest scenariu este singurul valid pentru piața română de iGaming. Reflectă parametrii realiști (CPA 90 RON, wagering mediu 6.500 RON/utilizator în 28 zile ≈232 RON/zi) și generează profit real pentru NetBet: **61.330 RON după taxe (ROI 1.6x)**. **Vezi secțiunea VI pentru analiza detaliată de realizabilitate.**
+**Concluzie:** Acest scenariu este singurul valid pentru piața română de iGaming. Reflectă parametrii realiști (CPA 90 RON, wagering mediu 6.500 RON/utilizator în 28 zile ≈232 RON/zi) și generează profit real pentru NetBet: **60.330 RON după taxe (ROI 1.6x)**. **Vezi secțiunea VI pentru analiza detaliată de realizabilitate.**
 
 ### Scenarii Optimizate pentru ROI Mai Mare (Opțiuni Realiste)
 
@@ -320,13 +323,13 @@ Margin of Safety = (1000 - 453) / 1000 = 54.7%
 | Indicator | Valoare | Impact |
 |:---|---:|---:|
 | **CPA Mediu** | **80 RON** (vs 90 RON) | Reducere costuri cu 10.000 RON |
-| **Cost Total** | **90.000 RON** (vs 100.000 RON) | - |
+| **Cost Total** | **91.000 RON** (vs 101.000 RON) | - |
 | **Wagering Mediu** | **6.500 RON** (același) | - |
 | **Venit Net (NR)** | **221.000 RON** (același) | - |
-| **Profit fără taxe** | **131.000 RON** (vs 121.000 RON) | +10.000 RON |
+| **Profit fără taxe** | **130.000 RON** (vs 120.000 RON) | +10.000 RON |
 | **Taxa GGR (27%)** | **-59.670 RON** | - |
-| **Profit după taxe** | **71.330 RON** (vs 61.330 RON) | **+10.000 RON** |
-| **ROI după taxe** | **1.79x** (vs 1.6x) | **+11.9% ROI** |
+| **Profit după taxe** | **70.330 RON** (vs 60.330 RON) | **+10.000 RON** |
+| **ROI după taxe** | **1.77x** (vs 1.6x) | **+10.6% ROI** |
 
 **Probabilitate realizare:** 40% (necesită execuție excelentă)
 
@@ -341,14 +344,14 @@ Margin of Safety = (1000 - 453) / 1000 = 54.7%
 | Indicator | Valoare | Impact |
 |:---|---:|---:|
 | **CPA Mediu** | **90 RON** (același) | - |
-| **Cost Total** | **100.000 RON** (același) | - |
+| **Cost Total** | **101.000 RON** (același) | - |
 | **Wagering Mediu** | **7.000 RON** (vs 6.500 RON) | +7.7% wagering |
 | **Volum Total Wagering** | **7.000.000 RON** (vs 6.500.000 RON) | +500.000 RON |
 | **Venit Net (NR)** | **238.000 RON** (vs 221.000 RON) | +17.000 RON |
-| **Profit fără taxe** | **138.000 RON** (vs 121.000 RON) | +17.000 RON |
+| **Profit fără taxe** | **137.000 RON** (vs 120.000 RON) | +17.000 RON |
 | **Taxa GGR (27%)** | **-64.260 RON** (vs -59.670 RON) | - |
-| **Profit după taxe** | **73.740 RON** (vs 61.330 RON) | **+12.410 RON** |
-| **ROI după taxe** | **1.74x** (vs 1.6x) | **+8.8% ROI** |
+| **Profit după taxe** | **72.740 RON** (vs 60.330 RON) | **+12.410 RON** |
+| **ROI după taxe** | **1.72x** (vs 1.6x) | **+7.5% ROI** |
 
 **Probabilitate realizare:** 35% (necesită engagement excelent)
 
@@ -367,8 +370,8 @@ Margin of Safety = (1000 - 453) / 1000 = 54.7%
 | **Venit Net (NR)** | **238.000 RON** | +17.000 RON |
 | **Profit fără taxe** | **148.000 RON** (vs 121.000 RON) | +27.000 RON |
 | **Taxa GGR (27%)** | **-64.260 RON** | - |
-| **Profit după taxe** | **83.740 RON** (vs 61.330 RON) | **+22.410 RON** |
-| **ROI după taxe** | **1.93x** (vs 1.6x) | **+20.6% ROI** |
+| **Profit după taxe** | **82.740 RON** (vs 60.330 RON) | **+22.410 RON** |
+| **ROI după taxe** | **1.92x** (vs 1.6x) | **+20% ROI** |
 
 **Probabilitate realizare:** 25% (necesită execuție perfectă)
 
@@ -382,14 +385,14 @@ Margin of Safety = (1000 - 453) / 1000 = 54.7%
 | Indicator | Valoare | Impact |
 |:---|---:|---:|
 | **CPA Mediu** | **90 RON** (același) | - |
-| **Cost Total** | **100.000 RON** (același) | - |
+| **Cost Total** | **101.000 RON** (același) | - |
 | **Wagering Mediu** | **6.500 RON** (același) | - |
 | **NR Rate** | **3.6%** (vs 3.4%) | +0.2% |
 | **Venit Net (NR)** | **234.000 RON** (vs 221.000 RON) | +13.000 RON |
-| **Profit fără taxe** | **134.000 RON** (vs 121.000 RON) | +13.000 RON |
+| **Profit fără taxe** | **133.000 RON** (vs 120.000 RON) | +13.000 RON |
 | **Taxa GGR (27%)** | **-63.180 RON** (vs -59.670 RON) | - |
-| **Profit după taxe** | **70.820 RON** (vs 61.330 RON) | **+9.490 RON** |
-| **ROI după taxe** | **1.71x** (vs 1.6x) | **+6.9% ROI** |
+| **Profit după taxe** | **69.820 RON** (vs 60.330 RON) | **+9.490 RON** |
+| **ROI după taxe** | **1.69x** (vs 1.6x) | **+5.6% ROI** |
 
 **Probabilitate realizare:** 30% (necesită optimizare game mix)
 
@@ -397,11 +400,11 @@ Margin of Safety = (1000 - 453) / 1000 = 54.7%
 
 | Scenariu | CPA | Wagering | NR Rate | Profit După Taxe | ROI | Probabilitate |
 |:---|---:|---:|---:|---:|---:|---:|
-| **Realist (Bază)** | 90 RON | 6.500 RON | 3.4% | **61.330 RON** | **1.6x** | **60%** |
-| **Optimizat 1: CPA Redus** | 80 RON | 6.500 RON | 3.4% | **71.330 RON** | **1.79x** | 40% |
-| **Optimizat 2: Wagering Crescut** | 90 RON | 7.000 RON | 3.4% | **73.740 RON** | **1.74x** | 35% |
-| **Optimizat 3: Combinat** | 80 RON | 7.000 RON | 3.4% | **83.740 RON** | **1.93x** | 25% |
-| **Optimizat 4: NR Rate** | 90 RON | 6.500 RON | 3.6% | **70.820 RON** | **1.71x** | 30% |
+| **Realist (Bază)** | 90 RON | 6.500 RON | 3.4% | **60.330 RON** | **1.6x** | **60%** |
+| **Optimizat 1: CPA Redus** | 80 RON | 6.500 RON | 3.4% | **70.330 RON** | **1.78x** | 40% |
+| **Optimizat 2: Wagering Crescut** | 90 RON | 7.000 RON | 3.4% | **72.740 RON** | **1.72x** | 35% |
+| **Optimizat 3: Combinat** | 80 RON | 7.000 RON | 3.4% | **82.740 RON** | **1.92x** | 25% |
+| **Optimizat 4: NR Rate** | 90 RON | 6.500 RON | 3.6% | **69.820 RON** | **1.69x** | 30% |
 
 ### Recomandări pentru ROI Mai Mare
 
@@ -428,8 +431,8 @@ Margin of Safety = (1000 - 453) / 1000 = 54.7%
 
 4. **Reducere Costuri Fixe**
    - Premii secundare optimizate (locurile 11-100): 40 RON mediu (vs 50 RON)
-   - Reducere costuri eveniment Grand Tour: 500 RON (vs 600 RON)
-   - **Economie:** ~1.500 RON
+   - Optimizare costuri turneu Grand Prix prin parteneriat VMax (catering asigurat de VMax)
+   - **Economie:** ~500 RON
 
 5. **Optimizare Continuă**
    - Monitorizare zilnică CPA și wagering
@@ -496,13 +499,13 @@ Campania este **realizabilă** pe piața română de iGaming cu parametrii reali
 | **NR Brut** | 221.000 RON | 221.000 RON | - |
 | **Taxa GGR (27%)** | - | -59.670 RON | Reducere profit |
 | **NR Net După Taxe** | 221.000 RON | **161.330 RON** | -27% |
-| **Costuri Totale** | 100.000 RON | 100.000 RON | - |
-| **Profit Net Real** | 121.000 RON | **61.330 RON** | ⚠️ Reducere cu 49% |
+| **Costuri Totale** | 101.000 RON | 101.000 RON | - |
+| **Profit Net Real** | 120.000 RON | **60.330 RON** | ⚠️ Reducere cu 50% |
 | **ROI Real** | 2.2x | **1.6x** | ⚠️ Reducere ROI |
 
 **Concluzie Taxe:**
 - ⚠️ **Profitul real** va fi mai mic din cauza taxelor GGR (27%)
-- 📊 Profit net după taxe pentru Scenario Ajustat: **61.330 RON**
+- 📊 Profit net după taxe pentru Scenario Ajustat: **60.330 RON**
 - 📊 ROI real după taxe: **~1.6x**
 - ✅ **Tot profitabil!** Dar necesită ajustare așteptări
 
@@ -553,9 +556,9 @@ Campania este **realizabilă** pe piața română de iGaming cu parametrii reali
 
 | Scenariu | Profit Fără Taxe (RON) | Taxa GGR (27%) (RON) | Profit După Taxe (RON) | ROI Real |
 |:---|:---:|:---:|:---:|:---:|
-| **Realist Ajustat (1000)** | 121.000 | -59.670 | **61.330** | **1.6x** ✅ |
+| **Realist Ajustat (1000)** | 120.000 | -59.670 | **60.330** | **1.6x** ✅ |
 
-**✅ PROFITABIL:** Scenariul realist generează profit net de **61.330 RON** după taxe (ROI 1.6x), ceea ce este acceptabil pentru o campanie de marketing pe piața română.
+**✅ PROFITABIL:** Scenariul realist generează profit net de **60.330 RON** după taxe (ROI 1.6x), ceea ce este acceptabil pentru o campanie de marketing pe piața română.
 
 ### G. Puncte Forte & Slabiciuni
 
@@ -567,7 +570,7 @@ Campania este **realizabilă** pe piața română de iGaming cu parametrii reali
 4. **Geotargeting** - Strategic corect (București)
 5. **Risk Management** - Bine identificat și planificat
 6. **Engagement Simplu** - Focus pe target wagering zilnic, fără gamification complexă
-7. **Break-Even** - Marja de siguranță bună (54.7%)
+7. **Break-Even** - Marja de siguranță bună (54.3%)
 
 #### ⚠️ Slabiciuni & Riscuri
 
@@ -583,12 +586,12 @@ Campania este **realizabilă** pe piața română de iGaming cu parametrii reali
 #### 🔴 P0 - Critice
 
 1. **Buget Marketing**
-   - Bugetul este **100.000 RON** (CPA realist 90 RON/FTD)
+   - Bugetul este **101.000 RON** (CPA realist 90 RON/FTD)
    - Include buffer pentru fluctuații
    - CPA real pentru piața română: **80-100 RON/FTD**
 
 2. **Profit Real Așteptat**
-   - Profitul real după taxe GGR (27%): **61.330 RON**
+   - Profitul real după taxe GGR (27%): **60.330 RON**
    - ROI real: **1.6x** (profitabil pentru NetBet)
 
 3. **Verificare Conformitate**
@@ -619,16 +622,16 @@ Campania este **realizabilă** pe piața română de iGaming cu parametrii reali
 **Scenariul Realist (ROI 1.6x după taxe):**
 - ✅ **Singurul valid** pentru piața română
 - Probabilitate: **60%**
-- Profit net după taxe: **61.330 RON**
+- Profit net după taxe: **60.330 RON**
 - **PROFITABIL pentru NetBet!**
 
 **Concluzie:**
-1. **Bugetul** este **100.000 RON** (CPA realist 90 RON/FTD)
-2. **Profitul real** după taxe GGR (27%): **61.330 RON**
+1. **Bugetul** este **101.000 RON** (CPA realist 90 RON/FTD)
+2. **Profitul real** după taxe GGR (27%): **60.330 RON**
 3. **Scenariul realist** este singurul valid pentru piața română
 4. **ROI real așteptat:** **1.6x** (profitabil!)
 
-**Recomandare:** Proceed cu campania cu buget realist (100.000 RON) și așteptări realiste. Scenariul realist oferă un profit net de **61.330 RON** după taxe, ceea ce este profitabil pentru NetBet pe piața română.
+**Recomandare:** Proceed cu campania cu buget realist (101.000 RON) și așteptări realiste. Scenariul realist oferă un profit net de **60.330 RON** după taxe, ceea ce este profitabil pentru NetBet pe piața română.
 
 ---
 
@@ -641,7 +644,7 @@ Campania este **realizabilă** pe piața română de iGaming cu parametrii reali
 | **Pre-Launch** | 7 zile înainte | Teasing, anticipație, pre-înregistrare | Teaser video, landing page, email warming | 1.500 |
 | **Launch Week** | Zile 1-7 | Maximizarea FTD | Ads agresive, afiliați push, urgency messaging | 8.000 |
 | **Mid-Campaign** | Zile 8-21 | Creștere wagering, retenție | Target wagering zilnic, leaderboard updates, retargeting | 10.000 |
-| **Final Sprint** | Zile 22-28 | Push final pentru Top 50, hype Grand Tour | Triple points weekends, countdown content | 3.000 |
+| **Final Sprint** | Zile 22-28 | Push final pentru Top 50, hype Turneu Grand Prix | Triple points weekends, countdown content | 3.000 |
 | **Post-Event** | După ziua 30 | Retenție | Thank you campaign, retention offers | 2.500 |
 | **TOTAL Timeline** | 35 zile | - | - | **25.000** |
 
@@ -653,10 +656,10 @@ Campania este **realizabilă** pe piața română de iGaming cu parametrii reali
 
 | Canal | Mesaj Principal | Call-to-Action | Creative Format |
 |:---|:---|:---|:---|
-| **Facebook/Instagram** | *"Câștigă un loc la Grand Tour NetBet!"* | "Depune 100 RON și Joacă Sloturi!" | Carousel cu jocuri slot + experiență premium |
-| **Google Search** | *"Câștigă Grand Tour - Competiția NetBet NFS Cup București"* | "Înscrie-te Acum cu Bonus!" | Text ads + sitelinks către regulament |
-| **Email (CRM)** | *"[Nume], Ești Invitat la Grand Tour NetBet în București!"* | "Activează Codul NFSRACE100" | HTML responsive cu countdown timer |
-| **Affiliate** | *"Comision Sporit 20% + Bonus Performanță - Campanie Grand Tour!"* | "Promovează Acum!" | Landing page dedicată pentru afiliați |
+| **Facebook/Instagram** | *"Câștigă un loc la Turneu Grand Prix NetBet + VMax!"* | "Depune 100 RON și Joacă Sloturi!" | Carousel cu jocuri slot + experiență premium |
+| **Google Search** | *"Câștigă Turneu Grand Prix - Competiția NetBet NFS Cup București"* | "Înscrie-te Acum cu Bonus!" | Text ads + sitelinks către regulament |
+| **Email (CRM)** | *"[Nume], Ești Invitat la Turneu Grand Prix NetBet + VMax în București!"* | "Activează Codul NFSRACE100" | HTML responsive cu countdown timer |
+| **Affiliate** | *"Comision Sporit 20% + Bonus Performanță - Campanie Grand Prix!"* | "Promovează Acum!" | Landing page dedicată pentru afiliați |
 
 ### C. Strategia Afiliați Realistă (Buget Integrat în Media Buy)
 
@@ -710,16 +713,18 @@ Campania este **realizabilă** pe piața română de iGaming cu parametrii reali
 | **Depuneri** | Cu cât depui mai mult, cu atât primești mai multe puncte (proporțional) | Motivație pentru depuneri mai mari |
 | **Wagering** | 1 Punct = 10 RON wagering pe jocuri slot eligible | Corelare directă între joc și puncte (formulă generoasă pentru accesibilitate) |
 
-### B. Setup Eveniment Grand Tour (Top 10)
+### B. Setup Turneu Grand Prix NetBet + VMax (Top 10)
+
+**Eveniment:** Turneu Grand Prix organizat în parteneriat NetBet + VMax pentru Top 10 câștigători.
 
 | Element | Specificații | Cost | Responsabil |
 |:---|:---|---:|:---|
-| **Logistică Eveniment** | Organizare eveniment exclusiv pentru Top 10 | 300 | Event Manager |
-| **Branding NetBet** | Bannere, logo-uri pentru eveniment | 100 | Marketing Team |
-| **Parteneriat VMax - Branding & Reclame** | **Parteneriat cu VMax**: Branding NetBet și reclame în perioada evenimentului Grand Tour (bannere, logo-uri, materiale promoționale la VMax). Acest parteneriat oferă expunere suplimentară pentru brandul NetBet. | 0 (parteneriat) | Marketing Team + Event Manager |
-| **Trofee** | 10 trofee personalizate | 150 | Procurement |
-| **Catering** | Băuturi, snacks pentru eveniment | 50 | Event Manager |
-| **TOTAL SETUP** | - | **600** | Inclus în bugetul fix (parteneriatul VMax nu implică costuri suplimentare) |
+| **Logistică Turneu Grand Prix** | Organizare turneu Grand Prix pentru Top 10 (parteneriat NetBet + VMax) | 500 | Event Manager + VMax |
+| **Branding NetBet + VMax** | Bannere, logo-uri pentru eveniment (branding comun) | 200 | Marketing Team + VMax |
+| **Parteneriat VMax - Branding & Reclame** | **Parteneriat strategic cu VMax**: Branding NetBet și reclame în perioada turneului Grand Prix (bannere, logo-uri, materiale promoționale la VMax). Acest parteneriat oferă expunere suplimentară pentru brandul NetBet. | 0 (parteneriat) | Marketing Team + Event Manager |
+| **Cupe Premium (Primii 3)** | 3 cupe premium NetBet NFS Cup pentru locurile 1, 2, 3 | 300 | Procurement |
+| **Catering** | Băuturi, snacks pentru eveniment (asigurate de VMax prin parteneriat) | 0 (VMax) | VMax |
+| **TOTAL SETUP** | - | **1.000** | Inclus în bugetul fix (parteneriatul VMax reduce costurile de catering) |
 
 ### C. Strategia Post-Event (Fără Amplificare Social Media)
 
@@ -818,7 +823,7 @@ Campania este **realizabilă** pe piața română de iGaming cu parametrii reali
 
 | Ziua Post-Event | Touchpoint | Conținut | Obiectiv | Conversion Target |
 |:---|:---|:---|:---|:---|
-| **D+1** | Email personalizat | "Mulțumim pentru participare! Iată clasamentul final + detalii Grand Tour" | Emotional connection, closure | 80% open rate |
+| **D+1** | Email personalizat | "Mulțumim pentru participare! Iată clasamentul final + detalii Turneu Grand Prix NetBet + VMax" | Emotional connection, closure | 80% open rate |
 | **D+3** | SMS + Push Notification | "Cadou special pentru tine: 50 RON bonus la deposit 100+" | Re-engagement, quick win | 25% conversion |
 | **D+7** | Email + In-app message | "Mulțumim pentru participare! Continuă să joci sloturi pentru bonusuri speciale" | Re-engagement, continuare joc | 20% click rate |
 | **D+14** | Email exclusive | "Ai acces Early Bird la NFS Cup Season 2! Pre-înscrie-te acum." | Retention long-term | 20% pre-registration |
@@ -851,7 +856,7 @@ TERMENI ȘI CONDIȚII - NetBet NFS Cup Ediția București
 2. PERIOD CAMPANIE
    - Start: [DATA] ora 00:00 EET
    - Sfârșit: [DATA + 28 zile] ora 23:59 EET
-   - Eveniment Grand Tour: [DATA + 30 zile]
+   - Turneu Grand Prix NetBet + VMax: [DATA + 30 zile]
 
 3. MECANISM CALIFICARE
    - Depunere minimă calificativă: 100 RON cu codul promoțional NFSRACE100.
@@ -866,16 +871,19 @@ TERMENI ȘI CONDIȚII - NetBet NFS Cup Ediția București
    - Free Spins pot fi folosite doar pe jocuri slot Pragmatic Play eligibile.
 
 5. PREMII
-   - Top 10: Participare eveniment Grand Tour (experiență exclusivă).
-   - Locurile 11-50: Cadouri simple (produse promoționale, merch NetBet, vouchere mici).
-   - **NU EXISTĂ PREMII CASH.**
+   - **🥇 Locul 1:** Cupă NetBet NFS Cup + 1.000 RON bonus de joc + Participare Turneu Grand Prix NetBet + VMax
+   - **🥈 Locul 2:** Cupă NetBet NFS Cup + 800 RON bonus de joc + Participare Turneu Grand Prix NetBet + VMax
+   - **🥉 Locul 3:** Cupă NetBet NFS Cup + 600 RON bonus de joc + Participare Turneu Grand Prix NetBet + VMax
+   - **Locurile 4-10:** Participare Turneu Grand Prix NetBet + VMax (fără cupe)
+   - **Locurile 11-100:** Cadouri simple (produse promoționale, merch NetBet, vouchere mici).
+   - **NU EXISTĂ PREMII CASH.** Bonusurile de joc sunt creditate în cont NetBet.
    - Premiile sunt necesionabile și netransferabile.
 
-6. PARTICIPARE EVENIMENT GRAND TOUR (Top 10)
-   - Participarea la evenimentul Grand Tour este OBLIGATORIE pentru primirea premiului principal.
+6. PARTICIPARE TURNEU GRAND PRIX NETBET + VMAX (Top 10)
+   - Participarea la turneul Grand Prix NetBet + VMax este OBLIGATORIE pentru primirea premiului principal.
    - Abența nemotivată = pierderea premiului (transfer la următorul clasat).
    - **NU EXISTĂ CERINȚE DE POSTARE PE SOCIAL MEDIA, VIDEO SAU STORY.**
-   - Fiecare câștigător Top 10 primește invitație pentru evenimentul Grand Tour.
+   - Fiecare câștigător Top 10 primește invitație pentru turneul Grand Prix NetBet + VMax.
 
 7. FRAUDĂ & BONUS ABUSE
    - NetBet își rezervă dreptul de a exclude jucători suspectați de:
@@ -888,7 +896,7 @@ TERMENI ȘI CONDIȚII - NetBet NFS Cup Ediția București
 8. MODIFICĂRI & ANULARE
    - NetBet își rezervă dreptul de a modifica, suspenda sau anula campania în orice moment,
      cu notificare prealabilă de minimum 24 ore.
-   - În caz de forță majoră (ex: restricții guvernamentale), evenimentul Grand Tour poate fi
+   - În caz de forță majoră (ex: restricții guvernamentale), turneul Grand Prix NetBet + VMax poate fi
      amânat sau înlocuit cu experiență echivalentă.
 
 9. RESPONSABILITATE
@@ -912,12 +920,12 @@ Versiunea: 1.0
 | Pillar Strategic | Execuție | Impact ROI |
 |:---|:---|:---|
 | **1. Targeting Precis** | București (zona cu cel mai mare potențial din România pentru iGaming) | +30% conversie vs. campanii nationale |
-| **2. Ofertă Irezistibilă** | Experiență Grand Tour (tangible + aspirational) > bonus generic | +45% engagement vs. standard promos |
+| **2. Ofertă Irezistibilă** | Turneu Grand Prix NetBet + VMax + Cupe pentru primii 3 (tangible + aspirational) > bonus generic | +45% engagement vs. standard promos |
 | **3. Engagement Simplu** | Target wagering zilnic, leaderboard simplu, bonusuri reale | Retenție bazată pe profit real, nu gamification fantomă |
 | **4. Focus pe Jocuri Slot Afiliați** | Utilizatorii joacă exclusiv sloturi de la afiliați pentru puncte | Corelare directă între joc și puncte |
-| **5. Parteneriat VMax - Branding & Amplificare** | **Parteneriat strategic cu VMax pentru branding și reclame în perioada evenimentului Grand Tour** | **+20% brand awareness, asociere cu experiență premium, reach extins** |
-| **6. Focus pe Profitabilitate** | **Profit real: 61.330 RON** (după taxe GGR 27%) | **ROI 1.6x (profitabil pentru NetBet)** |
-| **7. Scenariu Realist** | **Parametri realiști piața română (CPA 90 RON, wagering 6.500 RON/user în 28 zile ≈232 RON/zi)** | **ROI 1.6x după taxe, Profit 61.330 RON** |
+| **5. Parteneriat VMax - Branding & Amplificare** | **Parteneriat strategic cu VMax pentru turneul Grand Prix NetBet + VMax** | **+20% brand awareness, asociere cu experiență premium, reach extins** |
+| **6. Focus pe Profitabilitate** | **Profit real: 60.330 RON** (după taxe GGR 27%) | **ROI 1.6x (profitabil pentru NetBet)** |
+| **7. Scenariu Realist** | **Parametri realiști piața română (CPA 90 RON, wagering 6.500 RON/user în 28 zile ≈232 RON/zi)** | **ROI 1.6x după taxe, Profit 60.330 RON** |
 | **8. Analiză Realizabilitate** | **Evaluare completă piața română iGaming** | **Realizabil cu ajustări - Vezi Secțiunea VI** |
 
 ### Metrici de Succes - Dashboard Executiv (Weekly Report)
