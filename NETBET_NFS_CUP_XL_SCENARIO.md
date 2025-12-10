@@ -849,17 +849,6 @@ Actualizat la: [DATA]
 Versiunea: 1.0
 ```
 
-### C. Checklist Legal Pre-Launch
-
-| Task | Responsabil | Deadline | Status |
-|:---|:---|:---|:---|
-| Aprobare T&C de către departamentul legal | Legal Counsel | D-14 | ⏳ |
-| Upload T&C pe site (pagină dedicată) | Web Team | D-10 | ⏳ |
-| Verificare conformitate pentru toate comunicările | Compliance Officer | D-7 | ⏳ |
-| Pregătire Release Form digital (Eveniment) | Legal + Event Team | D-7 | ⏳ |
-| Briefing echipă support pentru întrebări legale frecvente | Head of Support | D-3 | ⏳ |
-| Test complet flow user (signup → deposit → T&C accept) | QA Team | D-2 | ⏳ |
-
 ---
 
 ## XIV. Conclusion & Executive Summary
@@ -876,21 +865,6 @@ Versiunea: 1.0
 | **6. Focus pe Profitabilitate** | Campaign profit variabil: **61k-171k RON** (după taxe GGR 27%) | ROI 1.6x-3.1x (după taxe) |
 | **7. Scenariu Realist Ajustat** | **Parametri conservatori (CPA 80-100 RON, wagering 6.500 RON/user)** | **ROI 1.6x după taxe, Profit 61k RON (cel mai probabil)** |
 | **8. Analiză Realizabilitate** | **Evaluare completă piața română iGaming** | **Realizabil cu ajustări - Vezi Secțiunea VI** |
-
-### Next Steps - Action Items Critice
-
-| Prioritate | Acțiune | Owner | Deadline | Status |
-|:---:|:---|:---|:---|:---|
-| **🔴 P0** | Aprobare buget - CFO sign-off | CMO | D-30 | ⏳ Pending |
-| **🔴 P0** | **Verificare Conformitate** - Licență în materiale promoționale | Legal Counsel | D-25 | ⏳ Pending |
-| **🔴 P0** | Contract Eveniment Grand Tour (confirmare dată + branding) | Event Manager | D-25 | ⏳ Pending |
-| **🔴 P0** | **Parteneriat VMax - Contract & Branding** | **Marketing Team + Event Manager** | **D-25** | **⏳ Pending** |
-| **🟡 P1** | Finalizare T&C + aprobare legal (inclusiv verificare restricții publicitate 2025) | Legal Counsel | D-14 | ⏳ Pending |
-| **🟡 P1** | Briefing influenceri (contract + brief creativ) | Influencer Manager | D-12 | ⏳ Pending |
-| **🟡 P1** | Setup campanii ads (Facebook/Google) + Afiliați | Media Buyer | D-7 | ⏳ Pending |
-| **🟡 P1** | **Coordonare branding VMax - Materiale promoționale pentru eveniment** | **Marketing Team** | **D-14** | **⏳ Pending** |
-| **🟢 P2** | Creare creativități (video/static) - 10 variante | Creative Team | D-10 | ⏳ Pending |
-| **🟢 P2** | Email sequence (teaser + launch + nurture) | CRM Manager | D-7 | ⏳ Pending |
 
 ### Metrici de Succes - Dashboard Executiv (Weekly Report)
 
@@ -924,44 +898,6 @@ Versiunea: 1.0
 │  ✅  [Action Taken: Description]                            │
 └─────────────────────────────────────────────────────────────┘
 ```
-
----
-
-## XV. Appendix - Resurse Suplimentare
-
-### A. Template-uri și Documente de Lucru
-
-1. **Influencer Brief Template** → `docs/influencer_brief_nfs_cup.pdf`
-2. **Email Sequence Copy** → `docs/email_campaign_nfs.docx`
-3. **Landing Page Wireframe** → `design/landing_page_v1.figma`
-4. **Ad Creative Guidelines** → `creative/ad_guidelines_nfs_cup.pdf`
-5. **Release Form (Eveniment)** → `legal/release_form_event.pdf` (opțional)
-6. **KPI Tracking Spreadsheet** → `analytics/kpi_dashboard_nfs_cup.xlsx`
-
-### B. Contact & Ownership
-
-| Rol | Nume | Email | Telefon | Responsabilități |
-|:---|:---|:---|:---|:---|
-| **Campaign Lead** | [Nume] | campaign.lead@netbet.ro | +40 7XX XXX XXX | Coordonare generală, raportare executivă |
-| **Marketing Director** | [Nume] | marketing.director@netbet.ro | +40 7XX XXX XXX | Aprobare buget, strategie, escalation point |
-| **Event Manager Grand Tour** | [Nume] | events@netbet.ro | +40 7XX XXX XXX | Logistică eveniment Grand Tour |
-| **Campaign Manager** | [Nume] | campaign.manager@netbet.ro | +40 7XX XXX XXX | Coordonare executare campanie |
-| **Legal Counsel** | [Nume] | legal@netbet.ro | +40 7XX XXX XXX | T&C, compliance, fraud management |
-
-### C. Glossary - Termeni Cheie
-
-| Termen | Definiție |
-|:---|:---|
-| **FTD** | First-Time Deposit - Prima depunere a unui utilizator nou |
-| **ADV** | Average Deposit Value - Valoarea medie a unei depuneri |
-| **Wagering** | Volumul total de pariuri plasat de un jucător |
-| **NR (Net Revenue)** | Venitul net = Wagering × House Edge (după plata câștigurilor) |
-| **RTP** | Return to Player - Procentul returnat jucătorului pe termen lung (ex: 96%) |
-| **House Edge** | Marja cazinoului = 100% - RTP (ex: 4%) |
-| **CPA** | Cost per Acquisition - Costul de achiziție per utilizator |
-| **ROI** | Return on Investment - Rentabilitatea investiției = NR / Cost Total |
-| **Grand Tour** | Eveniment exclusiv pentru Top 10 câștigători |
-| **KYC** | Know Your Customer - Verificare identitate jucător |
 
 ---
 
